@@ -129,8 +129,8 @@ export default function Result({
               Dates
             </Heading>
             {entry.dates.map((date: any, i: number) => (
-              <Skeleton isLoaded={!isLoading}>
-                <Flex key={i}>
+              <Skeleton key={i} isLoaded={!isLoading}>
+                <Flex>
                   <Text>{date.label || date.type}</Text>
                   <Spacer />
                   <Text>{date.dateString}</Text>
@@ -156,14 +156,19 @@ function ResponseDrawer({ children }: { children: any }) {
 
   return (
     <>
-      <Button ref={btnRef} colorScheme="gray" onClick={onOpen} size="xs">
+      <Button
+        ref={btnRef.current}
+        colorScheme="gray"
+        onClick={onOpen}
+        size="xs"
+      >
         View Raw Search Entry
       </Button>
       <Drawer
         isOpen={isOpen}
         placement="right"
         onClose={onClose}
-        finalFocusRef={btnRef}
+        finalFocusRef={btnRef.current}
         size={"xl"}
       >
         <DrawerOverlay />

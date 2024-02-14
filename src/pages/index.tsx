@@ -24,12 +24,25 @@ import { contents } from "../../static.json";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 
+type SearchResponse = {
+  total: number;
+  gmeta: {
+    subject: string;
+    entries: {
+      content: {
+        title: string;
+        summary: string;
+      };
+    }[];
+  }[];
+};
+
 export default function Index() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
 
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<null | SearchResponse>(null);
 
   const updateQueryParam = (key: string, value: string) => {
     const currentParams = new URLSearchParams(searchParams.toString());
