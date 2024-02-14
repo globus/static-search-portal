@@ -20,7 +20,7 @@ import {
   StatNumber,
 } from "@chakra-ui/react";
 
-import { contents } from "../../static.json";
+import STATIC from "../../static.json";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 
@@ -56,11 +56,14 @@ export default function Index() {
         setResults(null);
         return;
       }
-      const response = await search.query.get(contents.globus.search.index, {
-        query: {
-          q: query,
+      const response = await search.query.get(
+        STATIC.contents.globus.search.index,
+        {
+          query: {
+            q: query,
+          },
         },
-      });
+      );
       const results = await response.json();
       setResults(results);
     };
@@ -73,13 +76,13 @@ export default function Index() {
       <Box bg="brand.800">
         <HStack p={4} spacing="24px">
           <Image
-            src={contents.logo.src}
-            alt={contents.logo.alt}
+            src={STATIC.contents.logo.src}
+            alt={STATIC.contents.logo.alt}
             boxSize="100px"
             objectFit="contain"
           />
           <Heading size="md" color="white">
-            {contents.headline}
+            {STATIC.contents.headline}
           </Heading>
         </HStack>
       </Box>

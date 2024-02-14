@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Container, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-import { contents } from "../../../static.json";
+import STATIC from "../../../static.json";
 
 import Result from "../../components/Result";
 import { search } from "@globus/sdk";
@@ -24,7 +24,7 @@ export default function ResultPage() {
         return;
       }
       const response = await (
-        await search.subject.get(contents.globus.search.index, {
+        await search.subject.get(STATIC.contents.globus.search.index, {
           query: {
             subject: Array.isArray(router.query.subject)
               ? router.query.subject[0]
