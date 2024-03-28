@@ -1,0 +1,7 @@
+cff-version: 1.2.0
+authors:
+- family-names: "Bottigliero"
+  given-names: "Joe"
+  orcid: "https://orcid.org/0009-0009-9663-0050"
+title: "Static Search Portal"
+url: "https://github.com/globus/static-search-portal"

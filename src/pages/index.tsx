@@ -1,7 +1,7 @@
-import { useEffect, useState, FormEvent } from "react";
+import React, { useEffect, useState, FormEvent } from "react";
 import NextLink from "next/link";
 
-import { search, authorization } from "@globus/sdk";
+import { search } from "@globus/sdk";
 import {
   Input,
   Container,
@@ -20,7 +20,7 @@ import {
   StatNumber,
 } from "@chakra-ui/react";
 
-import STATIC from "../../static.json";
+import { STATIC } from "../../static";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 
@@ -57,7 +57,7 @@ export default function Index() {
         return;
       }
       const response = await search.query.get(
-        STATIC.contents.globus.search.index,
+        STATIC.data.attributes.globus.search.index,
         {
           query: {
             q: query,
@@ -71,18 +71,22 @@ export default function Index() {
     fetchResults();
   }, [query]);
 
+  const { logo, headline } = STATIC.data.attributes.content;
+
   return (
     <>
       <Box bg="brand.800">
         <HStack p={4} spacing="24px">
-          <Image
-            src={STATIC.contents.logo.src}
-            alt={STATIC.contents.logo.alt}
-            boxSize="100px"
-            objectFit="contain"
-          />
+          {logo && (
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              boxSize="100px"
+              objectFit="contain"
+            />
+          )}
           <Heading size="md" color="white">
-            {STATIC.contents.headline}
+            {headline}
           </Heading>
         </HStack>
       </Box>

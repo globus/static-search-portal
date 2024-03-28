@@ -24,7 +24,6 @@ import {
   VStack,
   StackDivider,
   Skeleton,
-  SkeletonText,
 } from "@chakra-ui/react";
 
 import { ChevronLeftIcon } from "@chakra-ui/icons";
@@ -169,12 +168,12 @@ function ResponseDrawer({ children }: { children: any }) {
         placement="right"
         onClose={onClose}
         finalFocusRef={btnRef.current}
-        size={"xl"}
+        size="xl"
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader></DrawerHeader>
+          <DrawerHeader />
 
           <DrawerBody>{children}</DrawerBody>
         </DrawerContent>
