@@ -8,7 +8,7 @@
 
 #### Defined in
 
-[src/components/Result.tsx:31](https://github.com/globus/static-search-portal/blob/d2fbf9e/src/components/Result.tsx#L31)
+[src/components/Result.tsx:31](https://github.com/globus/static-search-portal/blob/d69c034/src/components/Result.tsx#L31)
 
 ___
 
@@ -26,4 +26,4 @@ ___
 
 #### Defined in
 
-[src/components/Result.tsx:42](https://github.com/globus/static-search-portal/blob/d2fbf9e/src/components/Result.tsx#L42)
+[src/components/Result.tsx:42](https://github.com/globus/static-search-portal/blob/d69c034/src/components/Result.tsx#L42)

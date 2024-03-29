@@ -171,10 +171,16 @@ export function getRedirectUri() {
   return `${baseURL}/authenticate`;
 }
 
+/**
+ * @private
+ */
 export function getAttribute(key: string, defaultValue?: any) {
   return get(STATIC, `data.attributes.${key}`, defaultValue);
 }
 
+/**
+ * @private
+ */
 export function getAttributeFrom<T>(
   obj: Record<string, any>,
   key: string,

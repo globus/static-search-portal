@@ -30,7 +30,7 @@ The base type for a `static.json` file.
 
 #### Defined in
 
-[static.ts:9](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L9)
+[static.ts:9](https://github.com/globus/static-search-portal/blob/d69c034/static.ts#L9)
 
 ___
 
@@ -68,7 +68,7 @@ The type used for `data` by the [@globus/static-search-portal generator](https:/
 
 #### Defined in
 
-[static.ts:39](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L39)
+[static.ts:39](https://github.com/globus/static-search-portal/blob/d69c034/static.ts#L39)
 
 ___
 
@@ -78,53 +78,4 @@ ___
 
 #### Defined in
 
-[static.ts:110](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L110)
-
-## Functions
-
-### getAttribute
-
-▸ **getAttribute**(`key`, `defaultValue?`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
-| `defaultValue?` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[static.ts:174](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L174)
-
-___
-
-### getAttributeFrom
-
-▸ **getAttributeFrom**\<`T`\>(`obj`, `key`, `defaultValue?`): `T` \| `undefined`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `obj` | `Record`\<`string`, `any`\> |
-| `key` | `string` |
-| `defaultValue?` | `T` |
-
-#### Returns
-
-`T` \| `undefined`
-
-#### Defined in
-
-[static.ts:178](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L178)
+[static.ts:110](https://github.com/globus/static-search-portal/blob/d69c034/static.ts#L110)
