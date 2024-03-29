@@ -1,4 +1,7 @@
 import _STATIC from "./static.json";
+import { get } from "lodash";
+
+import type { GMetaResult } from "static-search/pages";
 
 /**
  * The base type for a `static.json` file.
@@ -51,6 +54,32 @@ export type Data = {
         src: string;
         alt?: string;
       };
+    };
+    /**
+     * The result object is used to determine how the portal will render the search results.
+     * - All fields are optional, but recommended for a better user experience.
+     * - Values are expected to be paths to the desired field in the Globus `GMetaResult` object.
+     *
+     * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
+     */
+    result?: {
+      /**
+       * The field to use as the identifier for the result.
+       * This field is used to generate the URL for the result (e.g., `/results/:identifier`).
+       * @default "subject"
+       */
+      identifier?: string;
+      /**
+       * The field to use as the title for the result.
+       * @default "subject"
+       * @example "entries[0].content.title"
+       */
+      title?: string;
+      /**
+       * The field to use as the summary for the result.
+       * @example "entries[0].content.summary"
+       */
+      summary?: string;
     };
     globus: {
       /**
@@ -123,4 +152,27 @@ export function getRedirectUri() {
     ? `${globalThis.location.protocol}//${globalThis.location.host}`
     : "";
   return `${baseURL}/authenticate`;
+}
+
+const FIELD_LOOKUPS = {
+  result: {
+    identifier:
+      STATIC.data.attributes.result &&
+      "identifier" in STATIC.data.attributes.result
+        ? STATIC.data.attributes.result.identifier
+        : "subject",
+    title:
+      STATIC.data.attributes.result && "title" in STATIC.data.attributes.result
+        ? STATIC.data.attributes.result.title
+        : "subject",
+    summary:
+      STATIC.data.attributes.result &&
+      "summary" in STATIC.data.attributes.result
+        ? STATIC.data.attributes.result.summary
+        : null,
+  },
+};
+
+export function getStaticField(result: GMetaResult, field: string) {
+  return get(result, get(FIELD_LOOKUPS, field));
 }

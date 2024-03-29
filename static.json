@@ -18,6 +18,10 @@
         },
         "headline": "ScienceBase Data Releases"
       },
+      "result": {
+        "title": "entries[0].content.title",
+        "summary": "entries[0].content.summary"
+      },
       "globus": {
         "search": {
           "index": "6d222eba-980f-410c-9a58-52a785d660ea"

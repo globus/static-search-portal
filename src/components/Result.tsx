@@ -1,12 +1,10 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/router";
 import {
   Heading,
   Text,
   Box,
   Code,
-  Link,
   Flex,
   Button,
   Drawer,
@@ -16,40 +14,64 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
-  Tag,
-  Spacer,
-  Wrap,
-  WrapItem,
   Divider,
-  VStack,
-  StackDivider,
   Skeleton,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Spinner,
+  Center,
+  Alert,
 } from "@chakra-ui/react";
 
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { getStaticField } from "../../static";
+
+import type { GError, GMetaResult } from "../pages/index";
 
 export default function Result({
-  entry,
+  result,
   isLoading,
 }: {
-  entry: any;
+  result?: GMetaResult | GError;
   isLoading: boolean;
 }) {
-  const router = useRouter();
+  if (!result) {
+    return (
+      <Center>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />{" "}
+      </Center>
+    );
+  }
+
+  if (result["@datatype"] === "GError") {
+    return (
+      <Alert
+        status="error"
+        flexDirection="column"
+        alignItems="start"
+        justifyContent="center"
+        padding={10}
+      >
+        <AlertIcon boxSize="40px" />
+        <AlertTitle mt={4} mb={1} fontSize="lg">
+          Error Encountered
+        </AlertTitle>
+        <AlertDescription>{result.message}</AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
     <>
-      <Link onClick={() => router.back()}>
-        <Flex alignItems="center" mb={4}>
-          <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-        </Flex>
-      </Link>
-
-      <Divider my={2} />
-
       <Skeleton isLoaded={!isLoading}>
         <Heading as="h1" size="md" color="brand">
-          {entry.title}
+          {getStaticField(result, "result.title")}
         </Heading>
       </Skeleton>
 
@@ -62,22 +84,22 @@ export default function Result({
               Summary
             </Heading>
             <Skeleton isLoaded={!isLoading}>
-              <Text as="p">{entry.summary}</Text>
+              <Text as="p">{getStaticField(result, "result.summary")}</Text>
             </Skeleton>
           </Box>
-
+          {/* 
           <Box my="2">
             <Heading as="h2" size="sm" my={2}>
               Purpose
             </Heading>
             <Skeleton isLoaded={!isLoading}>
-              <Text as="p">{entry.purpose}</Text>
+              <Text as="p">{result.purpose}</Text>
             </Skeleton>
           </Box>
 
           <Box my="2">
             <Wrap>
-              {entry.tags.map((tag: any, i: number) => (
+              {result.tags.map((tag: any, i: number) => (
                 <WrapItem key={i}>
                   <Skeleton isLoaded={!isLoading}>
                     <Tag>{tag.name}</Tag>
@@ -96,7 +118,7 @@ export default function Result({
               spacing={2}
               align="stretch"
             >
-              {entry.contacts.map((contact: any, i: number) => (
+              {result.contacts.map((contact: any, i: number) => (
                 <Box key={i}>
                   <Text>
                     {contact.email ? (
@@ -111,15 +133,15 @@ export default function Result({
                 </Box>
               ))}
             </VStack>
-          </Box>
+          </Box> */}
         </Box>
         <Box p="2">
-          <Box my="2">
+          {/* <Box my="2">
             <Heading as="h2" size="xs" my={2}>
               Citation
             </Heading>
             <Skeleton isLoaded={!isLoading}>
-              <Text as="cite">{entry.citation}</Text>
+              <Text as="cite">{result.citation}</Text>
             </Skeleton>
           </Box>
 
@@ -127,7 +149,7 @@ export default function Result({
             <Heading as="h2" size="xs" my={2}>
               Dates
             </Heading>
-            {entry.dates.map((date: any, i: number) => (
+            {result.dates.map((date: any, i: number) => (
               <Skeleton key={i} isLoaded={!isLoading}>
                 <Flex>
                   <Text>{date.label || date.type}</Text>
@@ -136,11 +158,11 @@ export default function Result({
                 </Flex>
               </Skeleton>
             ))}
-          </Box>
+          </Box> */}
 
           {!isLoading && (
             <ResponseDrawer>
-              <Code as="pre">{JSON.stringify(entry, null, 2)}</Code>
+              <Code as="pre">{JSON.stringify(result, null, 2)}</Code>
             </ResponseDrawer>
           )}
         </Box>
@@ -161,7 +183,7 @@ function ResponseDrawer({ children }: { children: any }) {
         onClick={onOpen}
         size="xs"
       >
-        View Raw Search Entry
+        View Raw Search result
       </Button>
       <Drawer
         isOpen={isOpen}

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { Container } from "@chakra-ui/react";
+import { Container, Text, Link, Flex, Divider } from "@chakra-ui/react";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 import { STATIC } from "../../../static";
 
 import Result from "../../components/Result";
 import { search } from "@globus/sdk";
 
+import { GMetaResult } from "..";
+
 export default function ResultPage() {
   const router = useRouter();
 
-  const [entry, setEntry] = useState({
-    tags: [],
-    dates: [],
-    contacts: [],
-  });
+  const [result, setResult] = useState<GMetaResult>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +32,7 @@ export default function ResultPage() {
         })
       ).json();
       setIsLoading(false);
-      setEntry(response.entries[0].content);
+      setResult(response);
     }
 
     fetchResult();
@@ -41,7 +40,13 @@ export default function ResultPage() {
 
   return (
     <Container maxW="container.xl" p={4}>
-      <Result entry={entry} isLoading={isLoading} />
+      <Link onClick={() => router.back()}>
+        <Flex alignItems="center" mb={4}>
+          <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
+        </Flex>
+      </Link>
+      <Divider my={2} />
+      <Result result={result} isLoading={isLoading} />{" "}
     </Container>
   );
 }
