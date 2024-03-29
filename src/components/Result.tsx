@@ -23,10 +23,97 @@ import {
   Center,
   Alert,
 } from "@chakra-ui/react";
-
-import { getStaticField } from "../../static";
+import { getAttribute, getAttributeFrom } from "../../static";
 
 import type { GError, GMetaResult } from "../pages/index";
+import { get } from "lodash";
+
+type FieldDefinition =
+  | string
+  | {
+      label: string;
+      property: string;
+    }
+  | {
+      label: string;
+      value: unknown;
+    };
+
+export type ResultComponentOptions = {
+  /**
+   * The field to use as the title for the result.
+   * @default "subject"
+   * @example "entries[0].content.title"
+   * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
+   */
+  heading?: string;
+  /**
+   * The field to use as the summary for the result.
+   * @example "entries[0].content.summary"
+   * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
+   */
+  summary?: string;
+  /**
+   * The fields to display in the result.
+   * A field can be a string, an object with a `label` and `property`, or an object with a `label` and `value`.
+   * @example
+   * ["entries[0].content.purpose", "entries[0].content.tags"]
+   * @example
+   * [
+   *    "entries[0].content.tags",
+   *    { label: "Purpose", "property": "entries[0].content.purpose" },
+   *    { label: "Note", value: "Lorem ipsum dolor sit amet."}
+   * ]
+   */
+  fields?: FieldDefinition[];
+};
+
+const FieldValue = ({ value }: { value: unknown }) => {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return <Text as="p">{value}</Text>;
+  }
+  if (Array.isArray(value)) {
+    return value.map((v, i) => (
+      <Box key={i}>
+        <FieldValue value={v} />
+      </Box>
+    ));
+  }
+  return <Code>{JSON.stringify(value, null, 2)}</Code>;
+};
+
+const Field = ({
+  field,
+  gmeta,
+  isLoading,
+}: {
+  field: FieldDefinition;
+  gmeta: GMetaResult;
+  isLoading: boolean;
+}) => {
+  const processedField =
+    typeof field === "string" ? { label: undefined, property: field } : field;
+  const value =
+    "value" in processedField
+      ? processedField.value
+      : get(gmeta, processedField.property, "–");
+  return (
+    <Box my="2">
+      {processedField.label && (
+        <Heading as="h2" size="sm" my={2}>
+          {processedField.label}
+        </Heading>
+      )}
+      <Skeleton isLoaded={!isLoading}>
+        <FieldValue value={value} />
+      </Skeleton>
+    </Box>
+  );
+};
 
 export default function Result({
   result,
@@ -66,12 +153,23 @@ export default function Result({
       </Alert>
     );
   }
+  const heading = getAttributeFrom<string>(
+    result,
+    "components.ResultListing.heading",
+  );
+
+  const summary = getAttributeFrom<string>(
+    result,
+    "components.ResultListing.summary",
+  );
+
+  const fields = getAttribute("components.Result.fields", []);
 
   return (
     <>
       <Skeleton isLoaded={!isLoading}>
         <Heading as="h1" size="md" color="brand">
-          {getStaticField(result, "result.title")}
+          {heading}
         </Heading>
       </Skeleton>
 
@@ -79,14 +177,21 @@ export default function Result({
 
       <Flex>
         <Box p="2">
-          <Box my="2">
-            <Heading as="h2" size="sm" my={2}>
-              Summary
-            </Heading>
-            <Skeleton isLoaded={!isLoading}>
-              <Text as="p">{getStaticField(result, "result.summary")}</Text>
-            </Skeleton>
-          </Box>
+          {summary && (
+            <Box my="2">
+              <Heading as="h2" size="sm" my={2}>
+                Summary
+              </Heading>
+              <Skeleton isLoaded={!isLoading}>
+                <Text as="p">{summary}</Text>
+              </Skeleton>
+            </Box>
+          )}
+
+          {fields.map((field: any, i: number) => (
+            <Field key={i} field={field} gmeta={result} isLoading={isLoading} />
+          ))}
+
           {/* 
           <Box my="2">
             <Heading as="h2" size="sm" my={2}>

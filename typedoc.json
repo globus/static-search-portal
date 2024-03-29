@@ -1,8 +1,10 @@
 {
   "entryPoints": ["static.ts"],
   "out": "docs",
-  "plugin": ["typedoc-plugin-markdown"],
+  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-missing-exports"],
   "excludePrivate": true,
+  "excludeExternals": true,
   "hideBreadcrumbs": true,
-  "hideInPageTOC": true
+  "hideInPageTOC": true,
+  "placeInternalsInOwningModule": false
 }

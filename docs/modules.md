@@ -1,5 +1,9 @@
 # @globus/static-search-portal
 
+## Modules
+
+- [\<internal\>](modules/internal_.md)
+
 ## Type Aliases
 
 ### Base
@@ -26,7 +30,7 @@ The base type for a `static.json` file.
 
 #### Defined in
 
-[static.ts:9](https://github.com/globus/static-search-portal/blob/ebf79bd/static.ts#L9)
+[static.ts:9](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L9)
 
 ___
 
@@ -40,7 +44,12 @@ The type used for `data` by the [@globus/static-search-portal generator](https:/
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributes` | \{ `content`: \{ `headline`: `string` ; `logo?`: \{ `alt?`: `string` ; `src`: `string`  }  } ; `globus`: \{ `application?`: \{ `client_id`: `string` ; `redirect_uri?`: `string`  } ; `search`: \{ `index`: `string`  }  } ; `metadata`: \{ `description`: `string` ; `title`: `string`  } ; `result?`: \{ `identifier?`: `string` ; `summary?`: `string` ; `title?`: `string`  }  } | - |
+| `attributes` | \{ `components?`: \{ `Result?`: [`ResultComponentOptions`](modules/internal_.md#resultcomponentoptions) ; `ResultListing?`: \{ `heading?`: `string` ; `summary?`: `string`  }  } ; `content`: \{ `headline`: `string` ; `logo?`: \{ `alt?`: `string` ; `src`: `string`  }  } ; `globus`: \{ `application?`: \{ `client_id`: `string` ; `redirect_uri?`: `string`  } ; `search`: \{ `index`: `string`  }  } ; `metadata`: \{ `description`: `string` ; `title`: `string`  }  } | - |
+| `attributes.components?` | \{ `Result?`: [`ResultComponentOptions`](modules/internal_.md#resultcomponentoptions) ; `ResultListing?`: \{ `heading?`: `string` ; `summary?`: `string`  }  } | - |
+| `attributes.components.Result?` | [`ResultComponentOptions`](modules/internal_.md#resultcomponentoptions) | - |
+| `attributes.components.ResultListing?` | \{ `heading?`: `string` ; `summary?`: `string`  } | - |
+| `attributes.components.ResultListing.heading?` | `string` | The field to use as the title for the result. **`Default`** ```ts "subject" ``` **`Example`** ```ts "entries[0].content.title" ``` **`See`** https://docs.globus.org/api/search/reference/get_subject/#gmetaresult |
+| `attributes.components.ResultListing.summary?` | `string` | The field to use as the summary for the result. **`Example`** ```ts "entries[0].content.summary" ``` **`See`** https://docs.globus.org/api/search/reference/get_subject/#gmetaresult |
 | `attributes.content` | \{ `headline`: `string` ; `logo?`: \{ `alt?`: `string` ; `src`: `string`  }  } | - |
 | `attributes.content.headline` | `string` | - |
 | `attributes.content.logo?` | \{ `alt?`: `string` ; `src`: `string`  } | - |
@@ -55,15 +64,11 @@ The type used for `data` by the [@globus/static-search-portal generator](https:/
 | `attributes.metadata` | \{ `description`: `string` ; `title`: `string`  } | - |
 | `attributes.metadata.description` | `string` | - |
 | `attributes.metadata.title` | `string` | - |
-| `attributes.result?` | \{ `identifier?`: `string` ; `summary?`: `string` ; `title?`: `string`  } | The result object is used to determine how the portal will render the search results. - All fields are optional, but recommended for a better user experience. - Values are expected to be paths to the desired field in the Globus `GMetaResult` object. **`See`** https://docs.globus.org/api/search/reference/get_subject/#gmetaresult |
-| `attributes.result.identifier?` | `string` | The field to use as the identifier for the result. This field is used to generate the URL for the result (e.g., `/results/:identifier`). **`Default`** ```ts "subject" ``` |
-| `attributes.result.summary?` | `string` | The field to use as the summary for the result. **`Example`** ```ts "entries[0].content.summary" ``` |
-| `attributes.result.title?` | `string` | The field to use as the title for the result. **`Default`** ```ts "subject" ``` **`Example`** ```ts "entries[0].content.title" ``` |
 | `version` | `string` | The version of the `data` object, which is used to determine how the generator will render its `attributes`. **`Example`** ```ts "1.0.0" ``` |
 
 #### Defined in
 
-[static.ts:39](https://github.com/globus/static-search-portal/blob/ebf79bd/static.ts#L39)
+[static.ts:39](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L39)
 
 ___
 
@@ -73,20 +78,20 @@ ___
 
 #### Defined in
 
-[static.ts:115](https://github.com/globus/static-search-portal/blob/ebf79bd/static.ts#L115)
+[static.ts:110](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L110)
 
 ## Functions
 
-### getStaticField
+### getAttribute
 
-▸ **getStaticField**(`result`, `field`): `any`
+▸ **getAttribute**(`key`, `defaultValue?`): `any`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `result` | `GMetaResult` |
-| `field` | `string` |
+| `key` | `string` |
+| `defaultValue?` | `any` |
 
 #### Returns
 
@@ -94,4 +99,32 @@ ___
 
 #### Defined in
 
-[static.ts:176](https://github.com/globus/static-search-portal/blob/ebf79bd/static.ts#L176)
+[static.ts:174](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L174)
+
+___
+
+### getAttributeFrom
+
+▸ **getAttributeFrom**\<`T`\>(`obj`, `key`, `defaultValue?`): `T` \| `undefined`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `obj` | `Record`\<`string`, `any`\> |
+| `key` | `string` |
+| `defaultValue?` | `T` |
+
+#### Returns
+
+`T` \| `undefined`
+
+#### Defined in
+
+[static.ts:178](https://github.com/globus/static-search-portal/blob/d2fbf9e/static.ts#L178)

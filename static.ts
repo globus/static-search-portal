@@ -1,7 +1,7 @@
 import _STATIC from "./static.json";
-import { get } from "lodash";
+import { defaultsDeep, get } from "lodash";
 
-import type { GMetaResult } from "static-search/pages";
+import type { ResultComponentOptions } from "@/components/Result";
 
 /**
  * The base type for a `static.json` file.
@@ -48,6 +48,7 @@ export type Data = {
       title: string;
       description: string;
     };
+
     content: {
       headline: string;
       logo?: {
@@ -55,32 +56,26 @@ export type Data = {
         alt?: string;
       };
     };
-    /**
-     * The result object is used to determine how the portal will render the search results.
-     * - All fields are optional, but recommended for a better user experience.
-     * - Values are expected to be paths to the desired field in the Globus `GMetaResult` object.
-     *
-     * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
-     */
-    result?: {
-      /**
-       * The field to use as the identifier for the result.
-       * This field is used to generate the URL for the result (e.g., `/results/:identifier`).
-       * @default "subject"
-       */
-      identifier?: string;
-      /**
-       * The field to use as the title for the result.
-       * @default "subject"
-       * @example "entries[0].content.title"
-       */
-      title?: string;
-      /**
-       * The field to use as the summary for the result.
-       * @example "entries[0].content.summary"
-       */
-      summary?: string;
+
+    components?: {
+      Result?: ResultComponentOptions;
+      ResultListing?: {
+        /**
+         * The field to use as the title for the result.
+         * @default "subject"
+         * @example "entries[0].content.title"
+         * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
+         */
+        heading?: string;
+        /**
+         * The field to use as the summary for the result.
+         * @example "entries[0].content.summary"
+         * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
+         */
+        summary?: string;
+      };
     };
+
     globus: {
       /**
        * Information about your registered Globus Auth Application (Client)
@@ -122,6 +117,28 @@ export type Static = Base & {
  */
 export const STATIC: Static = _STATIC;
 
+defaultsDeep(STATIC, {
+  data: {
+    attributes: {
+      slug: "subject",
+      components: {
+        Result: {
+          heading:
+            STATIC.data.attributes?.components?.ResultListing?.heading ||
+            "subject",
+          summary:
+            STATIC.data.attributes?.components?.ResultListing?.summary || null,
+        },
+        ResultListing: {
+          heading:
+            STATIC.data.attributes?.components?.Result?.heading || "subject",
+          summary: STATIC.data.attributes?.components?.Result?.summary || null,
+        },
+      },
+    },
+  },
+});
+
 const {
   data: { attributes },
 } = STATIC;
@@ -154,25 +171,14 @@ export function getRedirectUri() {
   return `${baseURL}/authenticate`;
 }
 
-const FIELD_LOOKUPS = {
-  result: {
-    identifier:
-      STATIC.data.attributes.result &&
-      "identifier" in STATIC.data.attributes.result
-        ? STATIC.data.attributes.result.identifier
-        : "subject",
-    title:
-      STATIC.data.attributes.result && "title" in STATIC.data.attributes.result
-        ? STATIC.data.attributes.result.title
-        : "subject",
-    summary:
-      STATIC.data.attributes.result &&
-      "summary" in STATIC.data.attributes.result
-        ? STATIC.data.attributes.result.summary
-        : null,
-  },
-};
+export function getAttribute(key: string, defaultValue?: any) {
+  return get(STATIC, `data.attributes.${key}`, defaultValue);
+}
 
-export function getStaticField(result: GMetaResult, field: string) {
-  return get(result, get(FIELD_LOOKUPS, field));
+export function getAttributeFrom<T>(
+  obj: Record<string, any>,
+  key: string,
+  defaultValue?: T,
+): T | undefined {
+  return get(obj, getAttribute(key), defaultValue);
 }

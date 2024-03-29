@@ -1,7 +1,7 @@
 {
   "_static": {
     "generator": {
-      "name": "@globus/static-search"
+      "name": "@globus/static-search-portal"
     }
   },
   "data": {
@@ -18,9 +18,25 @@
         },
         "headline": "ScienceBase Data Releases"
       },
-      "result": {
-        "title": "entries[0].content.title",
-        "summary": "entries[0].content.summary"
+      "components": {
+        "Result": {
+          "heading": "entries[0].content.title",
+          "summary": "entries[0].content.summary",
+          "fields": [
+            {
+              "label": "Purpose",
+              "property": "entries[0].content.purpose"
+            },
+            {
+              "label": "Material Request Instructions",
+              "property": "entries[0].content.materialRequestInstructions"
+            },
+            {
+              "label": "Tags",
+              "property": "entries[0].content.tags"
+            }
+          ]
+        }
       },
       "globus": {
         "search": {

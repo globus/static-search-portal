@@ -1,28 +1,23 @@
 import React, { useEffect, useState, FormEvent } from "react";
-import NextLink from "next/link";
 
 import { search } from "@globus/sdk";
 import {
   Input,
   Container,
   Box,
-  Card,
-  CardHeader,
-  CardBody,
-  Text,
   Heading,
   VStack,
   HStack,
   Image,
-  LinkBox,
   Stat,
   StatLabel,
   StatNumber,
 } from "@chakra-ui/react";
 
-import { STATIC, getStaticField } from "../../static";
+import { STATIC } from "../../static";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
+import ResultListing from "@/components/ResultListing";
 
 export type SearchEntry = {
   entry_id: string | null;
@@ -132,28 +127,9 @@ export default function Index() {
             )}
             <VStack py={2} spacing={5} align="stretch">
               {results &&
-                results.gmeta.map((gmeta, i) => {
-                  return (
-                    <LinkBox
-                      as={NextLink}
-                      href={`/results/${encodeURIComponent(gmeta.subject)}`}
-                      key={i}
-                    >
-                      <Card size="sm" w="full">
-                        <CardHeader>
-                          <Heading size="md" color="brand">
-                            {getStaticField(gmeta, "result.title")}
-                          </Heading>
-                        </CardHeader>
-                        <CardBody>
-                          <Text noOfLines={[3, 5, 10]}>
-                            {getStaticField(gmeta, "result.summary")}
-                          </Text>
-                        </CardBody>
-                      </Card>
-                    </LinkBox>
-                  );
-                })}
+                results.gmeta.map((gmeta, i) => (
+                  <ResultListing key={i} gmeta={gmeta} />
+                ))}
             </VStack>
           </Box>
         </main>
