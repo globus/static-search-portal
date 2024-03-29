@@ -16,7 +16,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@fontsource/ibm-plex-mono": "^5.0.8",
+    "@fontsource/ibm-plex-mono": "^5.0.12",
     "@fontsource/ibm-plex-sans": "^5.0.18",
     "@globus/sdk": "^3.0.0-alpha.8",
     "framer-motion": "^10.18.0",
