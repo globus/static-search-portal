@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { getAttribute, getAttributeFrom } from "../../static";
 
-import type { GError, GMetaResult } from "../pages/index";
+import type { GError, GMetaResult } from "../app/page";
 import { get } from "lodash";
 
 type FieldDefinition =

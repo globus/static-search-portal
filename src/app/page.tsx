@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState, FormEvent } from "react";
 
 import { search } from "@globus/sdk";
@@ -15,8 +17,7 @@ import {
 } from "@chakra-ui/react";
 
 import { STATIC } from "../../static";
-import { useRouter } from "next/router";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import ResultListing from "@/components/ResultListing";
 
 export type SearchEntry = {

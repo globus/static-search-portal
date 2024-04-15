@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { getAttributeFrom } from "../../static";
 
-import type { GMetaResult } from "@/pages";
+import type { GMetaResult } from "@/app/page";
 
 export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
   const heading = getAttributeFrom<string>(
@@ -26,7 +26,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
   return (
     <LinkBox
       as={NextLink}
-      href={`/results/${encodeURIComponent(gmeta.subject)}`}
+      href={`/results?subject=${encodeURIComponent(gmeta.subject)}`}
     >
       <Card size="sm" w="full">
         <CardHeader>
