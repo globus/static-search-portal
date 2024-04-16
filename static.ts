@@ -102,6 +102,12 @@ export type Data = {
          * The UUID of the Globus Search Index that will be used as the data source.
          */
         index: string;
+        facets?: {
+          name?: string;
+          field_name: string;
+          type: string;
+          size: number;
+        }[];
       };
     };
   };
