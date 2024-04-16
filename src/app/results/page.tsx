@@ -20,14 +20,10 @@ import { search } from "@globus/sdk";
 
 import { GMetaResult } from "../page";
 
-export default function ResultPage() {
-  const router = useRouter();
+const ClientSideResult = () => {
   const params = useSearchParams();
   const subject = params.get("subject");
-
   const [result, setResult] = useState<GMetaResult>();
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     async function fetchResult() {
       const response = await (
@@ -37,15 +33,24 @@ export default function ResultPage() {
           },
         })
       ).json();
-      setIsLoading(false);
       setResult(response);
     }
 
     fetchResult();
   }, [subject]);
+  return <Result result={result} />;
+};
 
+export default function ResultPage() {
+  const router = useRouter();
   return (
     <Container maxW="container.xl" p={4}>
+      <Link onClick={() => router.back()}>
+        <Flex alignItems="center" mb={4}>
+          <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
+        </Flex>
+      </Link>
+      <Divider my={2} />
       <Suspense
         fallback={
           <Center>
@@ -59,13 +64,7 @@ export default function ResultPage() {
           </Center>
         }
       >
-        <Link onClick={() => router.back()}>
-          <Flex alignItems="center" mb={4}>
-            <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-          </Flex>
-        </Link>
-        <Divider my={2} />
-        <Result result={result} isLoading={isLoading} />
+        <ClientSideResult />
       </Suspense>
     </Container>
   );

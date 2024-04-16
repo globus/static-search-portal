@@ -15,12 +15,9 @@ import {
   DrawerCloseButton,
   useDisclosure,
   Divider,
-  Skeleton,
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Spinner,
-  Center,
   Alert,
 } from "@chakra-ui/react";
 import { getAttribute, getAttributeFrom } from "../../static";
@@ -89,11 +86,9 @@ const FieldValue = ({ value }: { value: unknown }) => {
 const Field = ({
   field,
   gmeta,
-  isLoading,
 }: {
   field: FieldDefinition;
   gmeta: GMetaResult;
-  isLoading: boolean;
 }) => {
   const processedField =
     typeof field === "string" ? { label: undefined, property: field } : field;
@@ -108,34 +103,15 @@ const Field = ({
           {processedField.label}
         </Heading>
       )}
-      <Skeleton isLoaded={!isLoading}>
-        <FieldValue value={value} />
-      </Skeleton>
+      <FieldValue value={value} />
     </Box>
   );
 };
 
-export default function Result({
-  result,
-  isLoading,
-}: {
-  result?: GMetaResult | GError;
-  isLoading: boolean;
-}) {
+export default function Result({ result }: { result?: GMetaResult | GError }) {
   if (!result) {
-    return (
-      <Center>
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Center>
-    );
+    return null;
   }
-
   if (result["@datatype"] === "GError") {
     return (
       <Alert
@@ -167,11 +143,9 @@ export default function Result({
 
   return (
     <>
-      <Skeleton isLoaded={!isLoading}>
-        <Heading as="h1" size="md" color="brand">
-          {heading}
-        </Heading>
-      </Skeleton>
+      <Heading as="h1" size="md" color="brand">
+        {heading}
+      </Heading>
 
       <Divider my={2} />
 
@@ -182,14 +156,12 @@ export default function Result({
               <Heading as="h2" size="sm" my={2}>
                 Summary
               </Heading>
-              <Skeleton isLoaded={!isLoading}>
-                <Text as="p">{summary}</Text>
-              </Skeleton>
+              <Text as="p">{summary}</Text>
             </Box>
           )}
 
           {fields.map((field: any, i: number) => (
-            <Field key={i} field={field} gmeta={result} isLoading={isLoading} />
+            <Field key={i} field={field} gmeta={result} />
           ))}
 
           {/* 
@@ -265,11 +237,9 @@ export default function Result({
             ))}
           </Box> */}
 
-          {!isLoading && (
-            <ResponseDrawer>
-              <Code as="pre">{JSON.stringify(result, null, 2)}</Code>
-            </ResponseDrawer>
-          )}
+          <ResponseDrawer>
+            <Code as="pre">{JSON.stringify(result, null, 2)}</Code>
+          </ResponseDrawer>
         </Box>
       </Flex>
     </>
