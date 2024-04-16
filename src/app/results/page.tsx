@@ -1,8 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Container, Text, Link, Flex, Divider } from "@chakra-ui/react";
+import {
+  Container,
+  Text,
+  Link,
+  Flex,
+  Divider,
+  Center,
+  Spinner,
+} from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 import { STATIC } from "../../../static";
@@ -38,13 +46,27 @@ export default function ResultPage() {
 
   return (
     <Container maxW="container.xl" p={4}>
-      <Link onClick={() => router.back()}>
-        <Flex alignItems="center" mb={4}>
-          <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-        </Flex>
-      </Link>
-      <Divider my={2} />
-      <Result result={result} isLoading={isLoading} />
+      <Suspense
+        fallback={
+          <Center>
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          </Center>
+        }
+      >
+        <Link onClick={() => router.back()}>
+          <Flex alignItems="center" mb={4}>
+            <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
+          </Flex>
+        </Link>
+        <Divider my={2} />
+        <Result result={result} isLoading={isLoading} />
+      </Suspense>
     </Container>
   );
 }
