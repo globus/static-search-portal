@@ -40,7 +40,21 @@
       },
       "globus": {
         "search": {
-          "index": "6d222eba-980f-410c-9a58-52a785d660ea"
+          "index": "6d222eba-980f-410c-9a58-52a785d660ea",
+          "facets": [
+            {
+              "name": "Tags",
+              "field_name": "tags.name",
+              "type": "terms",
+              "size": 10
+            },
+            {
+              "name": "Categories",
+              "field_name": "browseCategories",
+              "type": "terms",
+              "size": 10
+            }
+          ]
         }
       }
     }

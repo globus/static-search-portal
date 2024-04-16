@@ -1,24 +1,12 @@
 "use client";
+import React from "react";
 
-import React, { useEffect, useState, FormEvent } from "react";
+import { Container, Box, Heading, HStack, Image } from "@chakra-ui/react";
 
-import { search } from "@globus/sdk";
-import {
-  Input,
-  Container,
-  Box,
-  Heading,
-  VStack,
-  HStack,
-  Image,
-  Stat,
-  StatLabel,
-  StatNumber,
-} from "@chakra-ui/react";
+import { getAttribute } from "../../static";
 
-import { STATIC } from "../../static";
-import { useSearchParams, useRouter } from "next/navigation";
-import ResultListing from "@/components/ResultListing";
+import SearchProvider from "./search-provider";
+import { Search } from "@/components/Search";
 
 export type SearchEntry = {
   entry_id: string | null;
@@ -35,12 +23,28 @@ export type GMetaResult = {
   entries: SearchEntry[];
 };
 
-type GSearchResult = {
+export type GBucket = {
+  "@datatype": "GBucket";
+  "@version": string;
+  value: string | Record<string, unknown>;
+  count: number;
+};
+
+export type GFacetResult = {
+  "@datatype": "GFacetResult";
+  "@version": string;
+  name: string;
+  value?: number;
+  buckets: GBucket[];
+};
+
+export type GSearchResult = {
   "@datatype": "GSearchResult";
   "@version": string;
   offset: number;
   total: number;
   has_next_page: boolean;
+  facet_results?: GFacetResult[];
   gmeta: GMetaResult[];
 };
 
@@ -53,86 +57,36 @@ export type GError = {
   error: Record<string, unknown> | Array<GError>;
 };
 
+const SEARCH_INDEX = getAttribute("globus.search.index");
+const LOGO = getAttribute("content.logo");
+const HEADLINE = getAttribute(
+  "content.headline",
+  `Search Index ${SEARCH_INDEX}`,
+);
+
 export default function Index() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q");
-
-  const [results, setResults] = useState<null | GSearchResult>(null);
-
-  const updateQueryParam = (key: string, value: string) => {
-    const currentParams = new URLSearchParams(searchParams.toString());
-    currentParams.set(key, value);
-    router.replace(`?${currentParams.toString()}`);
-  };
-
-  useEffect(() => {
-    const fetchResults = async () => {
-      if (!query) {
-        setResults(null);
-        return;
-      }
-      const response = await search.query.get(
-        STATIC.data.attributes.globus.search.index,
-        {
-          query: {
-            q: query,
-          },
-        },
-      );
-      const results = await response.json();
-      setResults(results);
-    };
-
-    fetchResults();
-  }, [query]);
-
-  const { logo, headline } = STATIC.data.attributes.content;
-
   return (
     <>
       <Box bg="brand.800">
         <HStack p={4} spacing="24px">
-          {logo && (
+          {LOGO && (
             <Image
-              src={logo.src}
-              alt={logo.alt}
+              src={LOGO.src}
+              alt={LOGO.alt}
               boxSize="100px"
               objectFit="contain"
             />
           )}
           <Heading size="md" color="white">
-            {headline}
+            {HEADLINE}
           </Heading>
         </HStack>
       </Box>
       <Container maxW="container.xl">
         <main>
-          <Box p={4}>
-            <Input
-              type="search"
-              placeholder="Start your search here..."
-              value={query || ""}
-              onInput={(e: FormEvent<HTMLInputElement>) => {
-                updateQueryParam("q", e.currentTarget.value);
-              }}
-            />
-          </Box>
-
-          <Box>
-            {results && (
-              <Stat size="sm">
-                <StatLabel>Results</StatLabel>
-                <StatNumber>{results.total} datasets found</StatNumber>
-              </Stat>
-            )}
-            <VStack py={2} spacing={5} align="stretch">
-              {results &&
-                results.gmeta.map((gmeta, i) => (
-                  <ResultListing key={i} gmeta={gmeta} />
-                ))}
-            </VStack>
-          </Box>
+          <SearchProvider>
+            <Search />
+          </SearchProvider>
         </main>
       </Container>
     </>
