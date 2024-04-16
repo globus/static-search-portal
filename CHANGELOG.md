@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 (2024-04-16)
+
+## What's Changed
+* feat: adds support for globus.search.facet to generate filter UI based on configured facets and responses from the index by @jbottigliero in https://github.com/globus/static-search-portal/pull/28
+* deps: bump the next group with 2 updates by @dependabot in https://github.com/globus/static-search-portal/pull/24
+* deps: bump @types/react from 18.2.78 to 18.2.79 in the react group by @dependabot in https://github.com/globus/static-search-portal/pull/23
+* deps: bump @emotion/styled from 11.11.0 to 11.11.5 by @dependabot in https://github.com/globus/static-search-portal/pull/27
+* deps: bump eslint from 8.56.0 to 8.57.0 by @dependabot in https://github.com/globus/static-search-portal/pull/25
+* deps: bump framer-motion from 10.18.0 to 11.1.1 by @dependabot in https://github.com/globus/static-search-portal/pull/30
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.1.1...0.2.0
+
 ## 0.1.1 (2024-04-15)
 
 ## What's Changed
