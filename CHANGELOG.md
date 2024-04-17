@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 (2024-04-17)
+
+## What's Changed
+* feat: adds basic pagination and improved loading state by @jbottigliero in https://github.com/globus/static-search-portal/pull/37
+* deps: bump @globus/sdk from 3.0.0-alpha.8 to 3.0.0-alpha.17 by @dependabot in https://github.com/globus/static-search-portal/pull/34
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.3.0...0.4.0
+
 ## 0.3.0 (2024-04-17)
 
 ## What's Changed
