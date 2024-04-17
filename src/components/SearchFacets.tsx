@@ -21,8 +21,13 @@ import {
   useMenuItem,
   InputProps,
   UseMenuItemProps,
+  Icon,
 } from "@chakra-ui/react";
-import { PlusSquareIcon, SearchIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import {
+  PlusCircleIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { getAttribute } from "../../static";
 
 import {
@@ -41,7 +46,7 @@ const BucketSearch = (props: UseMenuItemProps & InputProps) => {
     <Box role={role}>
       <InputGroup>
         <InputLeftElement pointerEvents="none">
-          <SearchIcon color="gray.300" />
+          <Icon as={MagnifyingGlassIcon} color="gray.300" />
         </InputLeftElement>
         <Input
           placeholder="Search"
@@ -91,7 +96,7 @@ function FacetMenu({ facet }: { facet: GFacetResult }) {
       <MenuButton
         as={Button}
         size="sm"
-        leftIcon={<PlusSquareIcon />}
+        leftIcon={<Icon as={PlusCircleIcon} />}
         variant="ghost"
         border="1px dashed"
         borderColor="gray.400"
@@ -180,7 +185,7 @@ export default function SearchFacets({
             size="sm"
             onClick={reset}
             variant="ghost"
-            rightIcon={<SmallCloseIcon />}
+            rightIcon={<Icon as={XMarkIcon} />}
           >
             Clear All Filters
           </Button>

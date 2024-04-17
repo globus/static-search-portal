@@ -20,7 +20,6 @@ import { get } from "lodash";
 
 import { getAttribute, getAttributeFrom } from "../../static";
 import { Error } from "./Error";
-
 import { isGError, type GError, type GMetaResult } from "@/globus/search";
 
 type FieldDefinition =

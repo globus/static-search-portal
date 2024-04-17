@@ -31,6 +31,7 @@ export type GFacetResult = {
 export type GSearchResult = {
   "@datatype": "GSearchResult";
   "@version": string;
+  count: number;
   offset: number;
   total: number;
   has_next_page: boolean;

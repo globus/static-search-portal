@@ -13,7 +13,11 @@ const FACETS = getAttribute("globus.search.facets", []);
 type Facet = NonNullable<
   Static["data"]["attributes"]["globus"]["search"]["facets"]
 >[0];
-
+/**
+ * Since a `GFacet` can be expressed with or without a `name`, when
+ * when processing a `GFacetResult` to map to a `GFilter`, we need to
+ * figure out what the configured `field_name` is for the facet.
+ */
 export function getFacetFieldNameByName(name: string) {
   let match = FACETS.find((facet: Facet) => facet.name === name)?.field_name;
   if (!match) {
@@ -25,6 +29,8 @@ export function getFacetFieldNameByName(name: string) {
 }
 
 export type SearchState = {
+  limit: number;
+  offset: number;
   facetFilters: Record<string, any>;
 };
 
@@ -38,23 +44,45 @@ type SearchAction =
     }
   | {
       type: "reset_facet_filters";
+    }
+  | {
+      type: "set_limit";
+      payload: number;
+    }
+  | {
+      type: "set_offset";
+      payload: number;
     };
 
 function searchReducer(state: SearchState, action: SearchAction) {
   switch (action.type) {
+    case "set_limit":
+      return { ...state, limit: action.payload, offset: 0 };
+    case "set_offset":
+      return { ...state, offset: action.payload };
     case "set_facet_filter": {
       const fieldName = getFacetFieldNameByName(action.payload.facet.name);
-      let filter;
-      if (action.payload.value.length !== 0) {
-        filter = {
-          type: "match_any",
-          field_name: fieldName,
-          values: action.payload.value,
-        };
+      const { facetFilters } = state;
+      /**
+       * If the incoming value is empty, remove the filter from the state.
+       */
+      if (action.payload.value.length === 0 && facetFilters[fieldName]) {
+        const { [fieldName]: _, ...rest } = facetFilters;
+        return { ...state, facetFilters: rest };
       }
+      /**
+       * Otherwise, update the filter in the state to the provided value.
+       */
       return {
         ...state,
-        facetFilters: { ...state.facetFilters, [fieldName]: filter },
+        facetFilters: {
+          ...facetFilters,
+          [fieldName]: {
+            type: "match_any",
+            field_name: fieldName,
+            values: action.payload.value,
+          },
+        },
       };
     }
     case "reset_facet_filters":
@@ -65,6 +93,8 @@ function searchReducer(state: SearchState, action: SearchAction) {
 }
 
 const initialState: SearchState = {
+  limit: 25,
+  offset: 0,
   facetFilters: {},
 };
 
