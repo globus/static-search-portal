@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 (2024-04-17)
+
+## What's Changed
+* deps: bump typescript from 5.3.3 to 5.4.5 by @dependabot in https://github.com/globus/static-search-portal/pull/35
+* deps: bump typedoc from 0.25.12 to 0.25.13 by @dependabot in https://github.com/globus/static-search-portal/pull/36
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.2.2...0.3.0
+
 ## 0.2.2 (2024-04-16)
 
 **Full Changelog**: https://github.com/globus/static-search-portal/compare/0.2.1...0.2.2
