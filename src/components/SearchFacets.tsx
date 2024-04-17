@@ -25,12 +25,13 @@ import {
 import { PlusSquareIcon, SearchIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { getAttribute } from "../../static";
 
-import { GSearchResult, GFacetResult } from "../app/page";
 import {
   getFacetFieldNameByName,
   useSearchDispatch,
   useSearch,
 } from "@/app/search-provider";
+
+import type { GSearchResult, GFacetResult } from "@/globus/search";
 
 const FACETS = getAttribute("globus.search.facets", []);
 const navigationKeys = ["ArrowUp", "ArrowDown", "Escape"];
@@ -46,6 +47,7 @@ const BucketSearch = (props: UseMenuItemProps & InputProps) => {
           placeholder="Search"
           variant="flush"
           {...rest}
+          type="search"
           onKeyDown={(e) => {
             if (!navigationKeys.includes(e.key)) {
               e.stopPropagation();

@@ -18,7 +18,7 @@ import { STATIC } from "../../../static";
 import Result from "../../components/Result";
 import { search } from "@globus/sdk";
 
-import { GMetaResult } from "../page";
+import type { GMetaResult } from "@/globus/search";
 
 const ClientSideResult = () => {
   const params = useSearchParams();

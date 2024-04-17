@@ -6,7 +6,8 @@ import React, {
   type Dispatch,
 } from "react";
 import { Static, getAttribute } from "../../static";
-import { GFacetResult } from "./page";
+
+import type { GFacetResult } from "@/globus/search";
 
 const FACETS = getAttribute("globus.search.facets", []);
 type Facet = NonNullable<
@@ -23,7 +24,7 @@ export function getFacetFieldNameByName(name: string) {
   return match;
 }
 
-type SearchState = {
+export type SearchState = {
   facetFilters: Record<string, any>;
 };
 

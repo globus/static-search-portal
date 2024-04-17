@@ -53,6 +53,12 @@
               "field_name": "browseCategories",
               "type": "terms",
               "size": 10
+            },
+            {
+              "name": "System Types",
+              "field_name": "systemTypes",
+              "type": "terms",
+              "size": 10
             }
           ]
         }

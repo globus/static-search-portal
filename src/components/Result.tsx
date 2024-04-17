@@ -15,15 +15,13 @@ import {
   DrawerCloseButton,
   useDisclosure,
   Divider,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Alert,
 } from "@chakra-ui/react";
-import { getAttribute, getAttributeFrom } from "../../static";
-
-import type { GError, GMetaResult } from "../app/page";
 import { get } from "lodash";
+
+import { getAttribute, getAttributeFrom } from "../../static";
+import { Error } from "./Error";
+
+import { isGError, type GError, type GMetaResult } from "@/globus/search";
 
 type FieldDefinition =
   | string
@@ -112,22 +110,8 @@ export default function Result({ result }: { result?: GMetaResult | GError }) {
   if (!result) {
     return null;
   }
-  if (result["@datatype"] === "GError") {
-    return (
-      <Alert
-        status="error"
-        flexDirection="column"
-        alignItems="start"
-        justifyContent="center"
-        padding={10}
-      >
-        <AlertIcon boxSize="40px" />
-        <AlertTitle mt={4} mb={1} fontSize="lg">
-          Error Encountered
-        </AlertTitle>
-        <AlertDescription>{result.message}</AlertDescription>
-      </Alert>
-    );
+  if (isGError(result)) {
+    return <Error error={result} />;
   }
   const heading = getAttributeFrom<string>(
     result,

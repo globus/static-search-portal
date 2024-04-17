@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { getAttributeFrom } from "../../static";
 
-import type { GMetaResult } from "@/app/page";
+import type { GMetaResult } from "@/globus/search";
 
 export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
   const heading = getAttributeFrom<string>(
