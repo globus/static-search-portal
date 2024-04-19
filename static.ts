@@ -1,4 +1,4 @@
-import _STATIC from "./static-flows.json";
+import _STATIC from "./static.json";
 import { defaultsDeep, get } from "lodash";
 
 import type { ResultComponentOptions } from "@/components/Result";
