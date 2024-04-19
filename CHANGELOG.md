@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 (2024-04-19)
+
+## What's Changed
+* deps: bump the next group with 2 updates by @dependabot in https://github.com/globus/static-search-portal/pull/39
+* deps: bump framer-motion from 11.1.1 to 11.1.7 by @dependabot in https://github.com/globus/static-search-portal/pull/43
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.4.0...0.5.0
+
 ## 0.4.0 (2024-04-17)
 
 ## What's Changed
