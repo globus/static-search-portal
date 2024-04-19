@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1 (2024-04-19)
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.5.0...0.5.1
+
 ## 0.5.0 (2024-04-19)
 
 ## What's Changed
