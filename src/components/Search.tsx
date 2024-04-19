@@ -5,7 +5,10 @@ import {
   Box,
   VStack,
   InputLeftElement,
-  useToast,
+  Spinner,
+  HStack,
+  Text,
+  Center,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { throttle, debounce } from "lodash";
@@ -15,13 +18,15 @@ import { search as gsearch } from "@globus/sdk";
 import { GSearchResult, isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
 import { SearchState, useSearch } from "../app/search-provider";
-import { getAttribute } from "../../static";
+import { getAttribute, isFeatureEnabled } from "../../static";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";
+import { useGlobusAuth } from "@/globus/globus-auth-context/useGlobusAuth";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
+const AUTENTICATION_ENABLED = isFeatureEnabled("authentication");
 
 function getSearchPayload(query: string, state: SearchState) {
   return {
@@ -34,31 +39,42 @@ function getSearchPayload(query: string, state: SearchState) {
 }
 
 export function Search() {
+  const auth = useGlobusAuth();
   const search = useSearch();
-  const toast = useToast({
-    position: "bottom-right",
-  });
-  const toastId = "search-status";
   const [query, setQuery] = useState<string>("");
   const [result, setResult] = useState<undefined | GSearchResult>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchResults = throttle(async () => {
-      const id = toast({
-        id: toastId,
-        title: "Fetching search results...",
-        status: "loading",
-        duration: null,
-      });
+      setIsLoading(true);
+
+      const headers =
+        AUTENTICATION_ENABLED &&
+        auth.isAuthenticated &&
+        auth.authorization?.tokens?.search?.access_token
+          ? {
+              Authorization: `Bearer ${auth.authorization.tokens.search.access_token}`,
+            }
+          : undefined;
+
       const response = await gsearch.query.post(SEARCH_INDEX, {
         payload: getSearchPayload(query, search),
+        headers,
       });
       const results = await response.json();
       setResult(results);
-      toast.close(id);
+      setIsLoading(false);
     }, 1000);
     fetchResults();
-  }, [query, search]);
+    return () => fetchResults.cancel();
+  }, [
+    query,
+    search,
+    AUTENTICATION_ENABLED
+      ? auth.authorization?.tokens?.search?.access_token
+      : undefined,
+  ]);
 
   return (
     <>
@@ -76,6 +92,14 @@ export function Search() {
           </InputGroup>
           <SearchFacets result={result} />
           <Pagination result={result} />
+          {isLoading && (
+            <Center>
+              <HStack>
+                <Spinner size="sm" />{" "}
+                <Text fontSize="sm">Fetching results...</Text>
+              </HStack>
+            </Center>
+          )}
         </VStack>
       </Box>
       <Box>
@@ -85,7 +109,7 @@ export function Search() {
             <>
               <VStack py={2} spacing={5} align="stretch">
                 {result.gmeta?.map((gmeta, i) => (
-                  <ResultListing key={i} gmeta={gmeta} />
+                  <ResultListing key={gmeta.subject} gmeta={gmeta} />
                 ))}
               </VStack>
             </>

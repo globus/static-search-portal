@@ -53,12 +53,14 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
         </Box>
       </HStack>
       <Spacer />
-      <Text fontSize="xs">
-        {search.offset > 0 ? search.offset : 1}-{search.offset + search.limit}{" "}
-        of {result.total}
+      <Text fontSize="xs" mr={2}>
+        <Text as="b">
+          {search.offset > 0 ? search.offset : 1}-
+          {Math.min(search.offset + search.limit, result.total)}
+        </Text>{" "}
+        of <Text as="b">{result.total}</Text>
       </Text>
-      <Spacer />
-      <ButtonGroup variant="outline" spacing="6">
+      <ButtonGroup variant="outline" spacing="2">
         <Button
           size="sm"
           isDisabled={search.offset === 0}
@@ -83,6 +85,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
 
         <Button
           size="sm"
+          isDisabled={search.offset + search.limit >= result.total}
           onClick={() => {
             dispatch({
               type: "set_offset",

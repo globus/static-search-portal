@@ -1,7 +1,8 @@
-import _STATIC from "./static.json";
+import _STATIC from "./static-flows.json";
 import { defaultsDeep, get } from "lodash";
 
 import type { ResultComponentOptions } from "@/components/Result";
+import { ResultListingComponentOptions } from "@/components/ResultListing";
 
 /**
  * The base type for a `static.json` file.
@@ -59,24 +60,19 @@ export type Data = {
 
     components?: {
       Result?: ResultComponentOptions;
-      ResultListing?: {
-        /**
-         * The field to use as the title for the result.
-         * @default "subject"
-         * @example "entries[0].content.title"
-         * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
-         */
-        heading?: string;
-        /**
-         * The field to use as the summary for the result.
-         * @example "entries[0].content.summary"
-         * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
-         */
-        summary?: string;
-      };
+      ResultListing?: ResultListingComponentOptions;
+    };
+
+    features?: {
+      authentication?: boolean;
     };
 
     globus: {
+      /**
+       * The Globus platform environment.
+       * @private
+       */
+      environment?: string;
       /**
        * Information about your registered Globus Auth Application (Client)
        * @see https://docs.globus.org/api/auth/developer-guide/#developing-apps
@@ -126,8 +122,19 @@ export const STATIC: Static = _STATIC;
 defaultsDeep(STATIC, {
   data: {
     attributes: {
-      slug: "subject",
+      features: {
+        /**
+         * If a Globus Auth client ID is provided, `authentication` is enabled by default.
+         */
+        authentication: Boolean(
+          STATIC.data.attributes?.globus?.application?.client_id,
+        ),
+      },
       components: {
+        /**
+         * For `summary` and `heading` properties the `Result` and `ResultListing` components
+         * fallback to one another if not provided...
+         */
         Result: {
           heading:
             STATIC.data.attributes?.components?.ResultListing?.heading ||
@@ -148,6 +155,10 @@ defaultsDeep(STATIC, {
 const {
   data: { attributes },
 } = STATIC;
+
+export function getEnvironment() {
+  return attributes.globus.environment || null;
+}
 
 /**
  * @returns The redirect URI for the Globus Auth login page.
@@ -193,4 +204,20 @@ export function getAttributeFrom<T>(
   defaultValue?: T,
 ): T | undefined {
   return get(obj, getAttribute(key), defaultValue);
+}
+
+/**
+ * Whether or not a feature is enabled in the `static.json`.
+ * @private
+ */
+export function isFeatureEnabled(key: string, defaultValue?: boolean) {
+  return Boolean(get(STATIC, `data.attributes.features.${key}`, defaultValue));
+}
+
+export function withFeature<T>(
+  key: string,
+  a: () => T,
+  b: () => T | null = () => null,
+) {
+  return isFeatureEnabled(key) ? a() : b();
 }

@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import {
   Heading,
@@ -15,23 +16,14 @@ import {
   DrawerCloseButton,
   useDisclosure,
   Divider,
+  Spacer,
 } from "@chakra-ui/react";
-import { get } from "lodash";
 
 import { getAttribute, getAttributeFrom } from "../../static";
 import { Error } from "./Error";
 import { isGError, type GError, type GMetaResult } from "@/globus/search";
 
-type FieldDefinition =
-  | string
-  | {
-      label: string;
-      property: string;
-    }
-  | {
-      label: string;
-      value: unknown;
-    };
+import { Field, type FieldDefinition } from "./Field";
 
 export type ResultComponentOptions = {
   /**
@@ -60,49 +52,6 @@ export type ResultComponentOptions = {
    * ]
    */
   fields?: FieldDefinition[];
-};
-
-const FieldValue = ({ value }: { value: unknown }) => {
-  if (
-    typeof value === "string" ||
-    typeof value === "number" ||
-    typeof value === "boolean"
-  ) {
-    return <Text as="p">{value}</Text>;
-  }
-  if (Array.isArray(value)) {
-    return value.map((v, i) => (
-      <Box key={i}>
-        <FieldValue value={v} />
-      </Box>
-    ));
-  }
-  return <Code>{JSON.stringify(value, null, 2)}</Code>;
-};
-
-const Field = ({
-  field,
-  gmeta,
-}: {
-  field: FieldDefinition;
-  gmeta: GMetaResult;
-}) => {
-  const processedField =
-    typeof field === "string" ? { label: undefined, property: field } : field;
-  const value =
-    "value" in processedField
-      ? processedField.value
-      : get(gmeta, processedField.property, "–");
-  return (
-    <Box my="2">
-      {processedField.label && (
-        <Heading as="h2" size="sm" my={2}>
-          {processedField.label}
-        </Heading>
-      )}
-      <FieldValue value={value} />
-    </Box>
-  );
 };
 
 export default function Result({ result }: { result?: GMetaResult | GError }) {
@@ -143,83 +92,12 @@ export default function Result({ result }: { result?: GMetaResult | GError }) {
             </Box>
           )}
 
-          {fields.map((field: any, i: number) => (
+          {fields.map((field: FieldDefinition, i: number) => (
             <Field key={i} field={field} gmeta={result} />
           ))}
-
-          {/* 
-          <Box my="2">
-            <Heading as="h2" size="sm" my={2}>
-              Purpose
-            </Heading>
-            <Skeleton isLoaded={!isLoading}>
-              <Text as="p">{result.purpose}</Text>
-            </Skeleton>
-          </Box>
-
-          <Box my="2">
-            <Wrap>
-              {result.tags.map((tag: any, i: number) => (
-                <WrapItem key={i}>
-                  <Skeleton isLoaded={!isLoading}>
-                    <Tag>{tag.name}</Tag>
-                  </Skeleton>
-                </WrapItem>
-              ))}
-            </Wrap>
-          </Box>
-
-          <Box my="2">
-            <Heading as="h2" size="sm" my={2}>
-              Contacts
-            </Heading>
-            <VStack
-              divider={<StackDivider borderColor="gray.200" />}
-              spacing={2}
-              align="stretch"
-            >
-              {result.contacts.map((contact: any, i: number) => (
-                <Box key={i}>
-                  <Text>
-                    {contact.email ? (
-                      <Link color="brand.500" href={`mailto:${contact.email}`}>
-                        {contact.name}
-                      </Link>
-                    ) : (
-                      contact.name
-                    )}
-                  </Text>
-                  <Text fontSize="xs">{contact.type}</Text>
-                </Box>
-              ))}
-            </VStack>
-          </Box> */}
         </Box>
+        <Spacer />
         <Box p="2">
-          {/* <Box my="2">
-            <Heading as="h2" size="xs" my={2}>
-              Citation
-            </Heading>
-            <Skeleton isLoaded={!isLoading}>
-              <Text as="cite">{result.citation}</Text>
-            </Skeleton>
-          </Box>
-
-          <Box my="2">
-            <Heading as="h2" size="xs" my={2}>
-              Dates
-            </Heading>
-            {result.dates.map((date: any, i: number) => (
-              <Skeleton key={i} isLoaded={!isLoading}>
-                <Flex>
-                  <Text>{date.label || date.type}</Text>
-                  <Spacer />
-                  <Text>{date.dateString}</Text>
-                </Flex>
-              </Skeleton>
-            ))}
-          </Box> */}
-
           <ResponseDrawer>
             <Code as="pre">{JSON.stringify(result, null, 2)}</Code>
           </ResponseDrawer>
@@ -254,7 +132,6 @@ function ResponseDrawer({ children }: { children: any }) {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader />
-
           <DrawerBody>{children}</DrawerBody>
         </DrawerContent>
       </Drawer>

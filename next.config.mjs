@@ -9,6 +9,12 @@ const nextConfig = {
    * as the `basePath` for the Next.js application.
    */
   basePath: STATIC._static?.host?.base_path || undefined,
+  images: {
+    /**
+     * @see https://nextjs.org/docs/pages/api-reference/components/image#unoptimized
+     */
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;

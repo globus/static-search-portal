@@ -22,6 +22,8 @@ import {
   InputProps,
   UseMenuItemProps,
   Icon,
+  Text,
+  Tag,
 } from "@chakra-ui/react";
 import {
   PlusCircleIcon,
@@ -101,15 +103,17 @@ function FacetMenu({ facet }: { facet: GFacetResult }) {
         border="1px dashed"
         borderColor="gray.400"
       >
-        {facet.name}
-        {value.length > 0 &&
-          value.length <= 2 &&
-          value.map((v: string) => (
-            <Badge key={v} ml={2}>
-              {v}
-            </Badge>
-          ))}
-        {value.length > 2 && <Badge ml={2}>{value.length} selected</Badge>}
+        <Flex align="center">
+          {facet.name}
+          {value.length > 0 &&
+            value.length <= 2 &&
+            value.map((v: string) => (
+              <Tag key={v} ml={2}>
+                {v}
+              </Tag>
+            ))}
+          {value.length > 2 && <Tag ml={2}>{value.length} selected</Tag>}
+        </Flex>
       </MenuButton>
       <MenuList p={0}>
         <BucketSearch
@@ -134,7 +138,11 @@ function FacetMenu({ facet }: { facet: GFacetResult }) {
             return (
               <MenuItemOption key={valueAsString} value={valueAsString}>
                 <Flex align="center">
-                  {valueAsString}
+                  {valueAsString === "" ? (
+                    <Text as="i">(Not Set)</Text>
+                  ) : (
+                    valueAsString
+                  )}
                   <Spacer />
                   <Badge ml={2}>{bucket.count}</Badge>
                 </Flex>
