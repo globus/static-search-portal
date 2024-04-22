@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.0 (2024-04-22)
+
+## What's Changed
+* deps: bump @fontsource/ibm-plex-mono from 5.0.12 to 5.0.13 by @dependabot in https://github.com/globus/static-search-portal/pull/46
+* deps: bump @fontsource/ibm-plex-sans from 5.0.19 to 5.0.20 by @dependabot in https://github.com/globus/static-search-portal/pull/45
+* feat: adds support for jsonata based references in static.json by @jbottigliero in https://github.com/globus/static-search-portal/pull/47
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.5.1...0.6.0
+
 ## 0.5.1 (2024-04-19)
 
 **Full Changelog**: https://github.com/globus/static-search-portal/compare/0.5.0...0.5.1
