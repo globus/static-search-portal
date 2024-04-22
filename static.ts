@@ -1,6 +1,5 @@
 import _STATIC from "./static.json";
 import { defaultsDeep, get } from "lodash";
-
 import type { ResultComponentOptions } from "@/components/Result";
 import { ResultListingComponentOptions } from "@/components/ResultListing";
 
@@ -64,6 +63,11 @@ export type Data = {
     };
 
     features?: {
+      /**
+       * Enable JSONata support for processing the `static.json` file.
+       * @see https://jsonata.org/
+       */
+      jsonnata?: boolean;
       authentication?: boolean;
     };
 
@@ -195,15 +199,25 @@ export function getAttribute(key: string, defaultValue?: any) {
   return get(STATIC, `data.attributes.${key}`, defaultValue);
 }
 
+let jsonata: typeof import("jsonata") | null = null;
 /**
  * @private
  */
-export function getAttributeFrom<T>(
+export async function getAttributeFrom<T>(
   obj: Record<string, any>,
   key: string,
   defaultValue?: T,
-): T | undefined {
-  return get(obj, getAttribute(key), defaultValue);
+): Promise<T | undefined> {
+  const useJSONata = isFeatureEnabled("jsonata");
+  if (useJSONata && !jsonata) {
+    jsonata = (await import("jsonata")).default;
+  }
+  const lookup = getAttribute(key);
+  if (useJSONata && jsonata && lookup) {
+    const expression = jsonata(lookup);
+    return (await expression.evaluate(obj)) || defaultValue;
+  }
+  return get(obj, lookup, defaultValue);
 }
 
 /**

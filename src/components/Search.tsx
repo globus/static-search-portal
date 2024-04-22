@@ -57,7 +57,6 @@ export function Search() {
               Authorization: `Bearer ${auth.authorization.tokens.search.access_token}`,
             }
           : undefined;
-
       const response = await gsearch.query.post(SEARCH_INDEX, {
         payload: getSearchPayload(query, search),
         headers,

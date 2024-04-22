@@ -55,20 +55,25 @@ export type ResultComponentOptions = {
 };
 
 export default function Result({ result }: { result?: GMetaResult | GError }) {
+  const [heading, setHeading] = React.useState<string>();
+  const [summary, setSummary] = React.useState<string>();
   if (!result) {
     return null;
   }
   if (isGError(result)) {
     return <Error error={result} />;
   }
-  const heading = getAttributeFrom<string>(
-    result,
-    "components.ResultListing.heading",
+
+  getAttributeFrom<string>(result, "components.ResultListing.heading").then(
+    (result) => {
+      setHeading(result);
+    },
   );
 
-  const summary = getAttributeFrom<string>(
-    result,
-    "components.ResultListing.summary",
+  getAttributeFrom<string>(result, "components.ResultListing.summary").then(
+    (result) => {
+      setSummary(result);
+    },
   );
 
   const fields = getAttribute("components.Result.fields", []);

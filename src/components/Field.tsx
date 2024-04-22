@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { get } from "lodash";
 import { Heading, Box, HStack } from "@chakra-ui/react";
+import jsonnata from "jsonata";
 
 import RgbaField from "./Fields/RgbaField";
 import ImageField from "./Fields/ImageField";
 import FallbackField from "./Fields/FallbackField";
 
 import type { GMetaResult } from "../globus/search";
+import { isFeatureEnabled } from "../../static";
 
 export type FieldDefinition =
   | string
@@ -21,16 +23,16 @@ export type FieldDefinition =
       type?: string;
     };
 
-type ProcessedField = {
+export type ProcessedField = {
   label: string | undefined;
   value: unknown;
   type: string | undefined;
 };
 
-export function getProcessedField(
+export async function getProcessedField(
   field: FieldDefinition,
   data: GMetaResult,
-): ProcessedField {
+): Promise<ProcessedField> {
   /**
    * Ensure we're working with a FieldDefinition object.
    */
@@ -39,7 +41,12 @@ export function getProcessedField(
   if ("value" in def) {
     value = def.value;
   } else {
-    value = get(data, def.property);
+    if (isFeatureEnabled("jsonata")) {
+      const expression = jsonnata(def.property);
+      value = await expression.evaluate(data);
+    } else {
+      value = get(data, def.property);
+    }
   }
   return {
     label: undefined,
@@ -74,7 +81,19 @@ export const Field = ({
   gmeta: GMetaResult;
   condensed?: boolean;
 }) => {
-  const processedField = getProcessedField(field, gmeta);
+  const [processedField, setProcessedField] = React.useState<ProcessedField>();
+
+  useEffect(() => {
+    getProcessedField(field, gmeta).then((result) => {
+      console.log(result);
+      setProcessedField(result);
+    });
+  }, [field, gmeta]);
+
+  if (!processedField) {
+    return null;
+  }
+
   if (condensed) {
     return (
       <HStack>

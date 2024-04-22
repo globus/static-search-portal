@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NextLink from "next/link";
 import {
   LinkBox,
@@ -17,7 +17,12 @@ import {
 import { getAttributeFrom, getAttribute } from "../../static";
 
 import type { GMetaResult } from "@/globus/search";
-import { FieldDefinition, FieldValue, getProcessedField } from "./Field";
+import {
+  FieldDefinition,
+  FieldValue,
+  ProcessedField,
+  getProcessedField,
+} from "./Field";
 import ImageField from "./Fields/ImageField";
 
 export type ResultListingComponentOptions = {
@@ -59,6 +64,35 @@ export type ResultListingComponentOptions = {
   fields?: FieldDefinition[];
 };
 
+function ResultListingFieldTableRow({
+  field,
+  gmeta,
+}: {
+  field: FieldDefinition;
+  gmeta: GMetaResult;
+}) {
+  const [processedField, setProcessedField] = React.useState<ProcessedField>();
+
+  useEffect(() => {
+    getProcessedField(field, gmeta).then((result) => {
+      setProcessedField(result);
+    });
+  }, [field, gmeta]);
+
+  if (!processedField) {
+    return null;
+  }
+
+  return (
+    <Tr>
+      <Td>{processedField.label}</Td>
+      <Td>
+        <FieldValue value={processedField.value} type={processedField.type} />
+      </Td>
+    </Tr>
+  );
+}
+
 function ResultListingFields({
   fields,
   gmeta,
@@ -74,17 +108,8 @@ function ResultListingFields({
       <Table size="sm">
         <Tbody>
           {fields.map((field: FieldDefinition, i: number) => {
-            const processedField = getProcessedField(field, gmeta);
             return (
-              <Tr key={i}>
-                <Td>{processedField.label}</Td>
-                <Td>
-                  <FieldValue
-                    value={processedField.value}
-                    type={processedField.type}
-                  />
-                </Td>
-              </Tr>
+              <ResultListingFieldTableRow key={i} field={field} gmeta={gmeta} />
             );
           })}
         </Tbody>
@@ -94,26 +119,38 @@ function ResultListingFields({
 }
 
 export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
-  const heading = getAttributeFrom<string>(
-    gmeta,
-    "components.ResultListing.heading",
+  const [heading, setHeading] = React.useState<string>();
+  const [summary, setSummary] = React.useState<string>();
+  const [image, setImage] = React.useState<{
+    src: string;
+    alt?: string;
+  }>();
+  getAttributeFrom<string>(gmeta, "components.ResultListing.heading").then(
+    (result) => {
+      console.log(result);
+      setHeading(result);
+    },
   );
 
-  const summary = getAttributeFrom<string>(
-    gmeta,
-    "components.ResultListing.summary",
+  getAttributeFrom<string>(gmeta, "components.ResultListing.summary").then(
+    (result) => {
+      setSummary(result);
+    },
   );
 
-  let image = getAttributeFrom<
+  getAttributeFrom<
     | string
     | {
         src: string;
         alt?: string;
       }
-  >(gmeta, "components.ResultListing.image");
-  if (typeof image === "string") {
-    image = { src: image };
-  }
+  >(gmeta, "components.ResultListing.image").then((result) => {
+    let image = result;
+    if (typeof image === "string") {
+      image = { src: image };
+    }
+    setImage(image);
+  });
 
   const fields = getAttribute("components.ResultListing.fields");
 
