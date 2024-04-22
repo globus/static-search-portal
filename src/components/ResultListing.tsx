@@ -127,7 +127,6 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
   }>();
   getAttributeFrom<string>(gmeta, "components.ResultListing.heading").then(
     (result) => {
-      console.log(result);
       setHeading(result);
     },
   );

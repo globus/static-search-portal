@@ -11,6 +11,22 @@
         "title": "Search | Globus",
         "description": "This is an example of a basis Globus Search interface generated from a static.json file."
       },
+      "theme": {
+        "colors": {
+          "brand": {
+            "50": "#e8f3ff",
+            "100": "#cfd8e3",
+            "200": "#b5bdcc",
+            "300": "#97a3b4",
+            "400": "#7b899d",
+            "500": "#626f84",
+            "600": "#4b5768",
+            "700": "#343e4b",
+            "800": "#1e2530",
+            "900": "#070c18"
+          }
+        }
+      },
       "content": {
         "logo": {
           "src": "https://www.usgs.gov/themes/custom/usgs_tantalum/usgs_logo.png",

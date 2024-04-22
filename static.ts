@@ -2,6 +2,7 @@ import _STATIC from "./static.json";
 import { defaultsDeep, get } from "lodash";
 import type { ResultComponentOptions } from "@/components/Result";
 import { ResultListingComponentOptions } from "@/components/ResultListing";
+import { ThemeSettings } from "@/theme";
 
 /**
  * The base type for a `static.json` file.
@@ -44,13 +45,25 @@ export type Data = {
    */
   version: string;
   attributes: {
-    metadata: {
-      title: string;
-      description: string;
+
+    features?: {
+      /**
+       * Enable JSONata support for processing the `static.json` file.
+       * @see https://jsonata.org/
+       */
+      jsonnata?: boolean;
+      authentication?: boolean;
     };
 
-    content: {
-      headline: string;
+    theme?: ThemeSettings;
+
+    metadata?: {
+      title?: string;
+      description?: string;
+    };
+
+    content?: {
+      headline?: string;
       logo?: {
         src: string;
         alt?: string;
@@ -60,15 +73,6 @@ export type Data = {
     components?: {
       Result?: ResultComponentOptions;
       ResultListing?: ResultListingComponentOptions;
-    };
-
-    features?: {
-      /**
-       * Enable JSONata support for processing the `static.json` file.
-       * @see https://jsonata.org/
-       */
-      jsonnata?: boolean;
-      authentication?: boolean;
     };
 
     globus: {
