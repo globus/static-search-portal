@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { get } from "lodash";
 import { Heading, Box, HStack } from "@chakra-ui/react";
-import jsonnata from "jsonata";
+import jsonata from "jsonata";
 
 import RgbaField from "./Fields/RgbaField";
 import ImageField from "./Fields/ImageField";
@@ -42,7 +42,7 @@ export async function getProcessedField(
     value = def.value;
   } else {
     if (isFeatureEnabled("jsonata")) {
-      const expression = jsonnata(def.property);
+      const expression = jsonata(def.property);
       value = await expression.evaluate(data);
     } else {
       value = get(data, def.property);
@@ -85,7 +85,6 @@ export const Field = ({
 
   useEffect(() => {
     getProcessedField(field, gmeta).then((result) => {
-      console.log(result);
       setProcessedField(result);
     });
   }, [field, gmeta]);

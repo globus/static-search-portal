@@ -51,7 +51,7 @@ export type Data = {
        * Enable JSONata support for processing the `static.json` file.
        * @see https://jsonata.org/
        */
-      jsonnata?: boolean;
+      jsonata?: boolean;
       authentication?: boolean;
     };
 
