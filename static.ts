@@ -1,5 +1,5 @@
 import _STATIC from "./static.json";
-import { defaultsDeep, get } from "lodash";
+import { defaultsDeep, get as _get } from "lodash";
 import type { ResultComponentOptions } from "@/components/Result";
 import { ResultListingComponentOptions } from "@/components/ResultListing";
 import { ThemeSettings } from "@/theme";
@@ -45,7 +45,6 @@ export type Data = {
    */
   version: string;
   attributes: {
-
     features?: {
       /**
        * Enable JSONata support for processing the `static.json` file.
@@ -197,17 +196,55 @@ export function getRedirectUri() {
 }
 
 /**
+ * Get a value by key (JSONPath) from the `static.json`.
+ * @private
+ */
+export function get(key: string, defaultValue?: any) {
+  return _get(STATIC, key, defaultValue);
+}
+/**
+ * Get an attribute (`data.attributes` member) by key from the `static.json`.
  * @private
  */
 export function getAttribute(key: string, defaultValue?: any) {
-  return get(STATIC, `data.attributes.${key}`, defaultValue);
+  return get(`data.attributes.${key}`, defaultValue);
 }
 
-let jsonata: typeof import("jsonata") | null = null;
+/**
+ * Whether or not a feature is enabled in the `static.json`.
+ * @private
+ */
+export function isFeatureEnabled(key: string, defaultValue?: boolean) {
+  return Boolean(get(`data.attributes.features.${key}`, defaultValue));
+}
 /**
  * @private
  */
-export async function getAttributeFrom<T>(
+export function withFeature<T>(
+  key: string,
+  a: () => T,
+  b: () => T | null = () => null,
+) {
+  return isFeatureEnabled(key) ? a() : b();
+}
+
+let jsonata: typeof import("jsonata") | null = null;
+
+/**
+ * - Resolve a value for the provided attribute`key` from the `static.json` file.
+ * - Call `getValueFrom` with the resolved key.
+ * @private
+ */
+export async function getValueFromAttribute<T>(
+  obj: Record<string, unknown>,
+  key: string,
+  defaultValue?: T,
+): Promise<T | undefined> {
+  const resolvedKey = getAttribute(key);
+  return await getValueFrom<T>(obj, resolvedKey, defaultValue);
+}
+
+export async function getValueFrom<T>(
   obj: Record<string, any>,
   key: string,
   defaultValue?: T,
@@ -216,26 +253,9 @@ export async function getAttributeFrom<T>(
   if (useJSONata && !jsonata) {
     jsonata = (await import("jsonata")).default;
   }
-  const lookup = getAttribute(key);
-  if (useJSONata && jsonata && lookup) {
-    const expression = jsonata(lookup);
+  if (useJSONata && jsonata && key) {
+    const expression = jsonata(key);
     return (await expression.evaluate(obj)) || defaultValue;
   }
-  return get(obj, lookup, defaultValue);
-}
-
-/**
- * Whether or not a feature is enabled in the `static.json`.
- * @private
- */
-export function isFeatureEnabled(key: string, defaultValue?: boolean) {
-  return Boolean(get(STATIC, `data.attributes.features.${key}`, defaultValue));
-}
-
-export function withFeature<T>(
-  key: string,
-  a: () => T,
-  b: () => T | null = () => null,
-) {
-  return isFeatureEnabled(key) ? a() : b();
+  return _get(obj, key, defaultValue);
 }

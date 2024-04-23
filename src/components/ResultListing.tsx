@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import NextLink from "next/link";
 import {
-  LinkBox,
   Card,
   CardHeader,
   CardBody,
@@ -15,7 +14,7 @@ import {
   HStack,
   Link,
 } from "@chakra-ui/react";
-import { getAttributeFrom, getAttribute } from "../../static";
+import { getValueFromAttribute, getAttribute } from "../../static";
 
 import type { GMetaResult } from "@/globus/search";
 import {
@@ -129,15 +128,15 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
 
   useEffect(() => {
     async function resolveAttributes() {
-      const heading = await getAttributeFrom<string>(
+      const heading = await getValueFromAttribute<string>(
         gmeta,
         "components.ResultListing.heading",
       );
-      const summary = await getAttributeFrom<string>(
+      const summary = await getValueFromAttribute<string>(
         gmeta,
         "components.ResultListing.summary",
       );
-      let image = await getAttributeFrom<
+      let image = await getValueFromAttribute<
         | string
         | {
             src: string;

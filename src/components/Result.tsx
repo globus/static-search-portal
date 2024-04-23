@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Heading,
   Text,
@@ -16,13 +16,29 @@ import {
   useDisclosure,
   Divider,
   Spacer,
+  ButtonGroup,
+  Link,
 } from "@chakra-ui/react";
 
-import { getAttribute, getAttributeFrom } from "../../static";
+import {
+  getAttribute,
+  getValueFrom,
+  getValueFromAttribute,
+} from "../../static";
 import { Error } from "./Error";
 import { isGError, type GError, type GMetaResult } from "@/globus/search";
 import { Field, type FieldDefinition } from "./Field";
 import { JSONTree } from "./JSONTree";
+
+type LinkDefinition = {
+  label: string | { property: string; fallback?: string };
+  href:
+    | string
+    | {
+        property: string;
+        fallback?: string;
+      };
+};
 
 export type ResultComponentOptions = {
   /**
@@ -51,31 +67,86 @@ export type ResultComponentOptions = {
    * ]
    */
   fields?: FieldDefinition[];
+  links?: LinkDefinition[];
 };
 
-export default function Result({ result }: { result?: GMetaResult | GError }) {
-  const [heading, setHeading] = React.useState<string>();
-  const [summary, setSummary] = React.useState<string>();
+type ProcessedLink = {
+  label: string | undefined;
+  href: string | undefined;
+};
+
+/**
+ * A basic wrapper for the `<Result />` component that will render a result or an error.
+ */
+export default function ResultWrapper({
+  result,
+}: {
+  result?: GMetaResult | GError;
+}) {
   if (!result) {
     return null;
   }
   if (isGError(result)) {
     return <Error error={result} />;
   }
+  return <Result result={result} />;
+}
 
-  getAttributeFrom<string>(result, "components.ResultListing.heading").then(
-    (result) => {
-      setHeading(result);
-    },
-  );
+function Result({ result }: { result: GMetaResult }) {
+  const [heading, setHeading] = React.useState<string>();
+  const [summary, setSummary] = React.useState<string>();
+  const [fields, setFields] = React.useState<FieldDefinition[]>([]);
+  const [links, setLinks] = React.useState<ProcessedLink[]>([]);
 
-  getAttributeFrom<string>(result, "components.ResultListing.summary").then(
-    (result) => {
-      setSummary(result);
-    },
-  );
+  useEffect(() => {
+    async function bootstrap() {
+      const heading = await getValueFromAttribute<string>(
+        result,
+        "components.ResultListing.heading",
+      );
+      const summary = await getValueFromAttribute<string>(
+        result,
+        "components.ResultListing.summary",
+      );
+      const fields = getAttribute("components.Result.fields", []);
+      const links = await Promise.all(
+        getAttribute("components.Result.links", []).map(
+          async (link: LinkDefinition) => {
+            const processedLink: ProcessedLink = {
+              label: undefined,
+              href: undefined,
+            };
+            if (typeof link.label === "string") {
+              processedLink.label = link.label;
+            } else {
+              processedLink.label = await getValueFrom<string>(
+                result,
+                link.label.property,
+                link.label.fallback,
+              );
+            }
+            if (typeof link.href === "string") {
+              processedLink.href = link.href;
+            } else {
+              processedLink.href = await getValueFrom<string>(
+                result,
+                link.href.property,
+                link.href.fallback,
+              );
+            }
+            console.log(processedLink);
+            return processedLink;
+          },
+        ),
+      );
 
-  const fields = getAttribute("components.Result.fields", []);
+      setHeading(heading);
+      setSummary(summary);
+      setFields(fields);
+      setLinks(links);
+    }
+    bootstrap();
+  }, [result]);
 
   return (
     <>
@@ -84,6 +155,18 @@ export default function Result({ result }: { result?: GMetaResult | GError }) {
       </Heading>
 
       <Divider my={2} />
+
+      {links.length > 0 && (
+        <ButtonGroup>
+          {links.map((link: ProcessedLink, i: number) => {
+            return (
+              <Button key={link.href || i} as={Link} href={link.href} size="sm">
+                {link.label}
+              </Button>
+            );
+          })}
+        </ButtonGroup>
+      )}
 
       <Flex>
         <Box p="2">
