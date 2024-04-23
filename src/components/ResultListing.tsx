@@ -165,24 +165,30 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
             as={NextLink}
             href={`/results?subject=${encodeURIComponent(gmeta.subject)}`}
           >
-            {heading}
+            {heading || (
+              <Text as="em" color="gray.500">
+                &mdash;
+              </Text>
+            )}
           </Link>
         </Heading>
       </CardHeader>
-      <CardBody>
-        <HStack>
-          {image && (
-            <ImageField
-              value={{
-                src: image.src,
-                alt: image?.alt,
-              }}
-            />
-          )}
-          {summary && <Text noOfLines={[3, 5, 10]}>{summary}</Text>}
-        </HStack>
-        <ResultListingFields fields={fields} gmeta={gmeta} />
-      </CardBody>
+      {image || summary || fields ? (
+        <CardBody>
+          <HStack>
+            {image && (
+              <ImageField
+                value={{
+                  src: image.src,
+                  alt: image?.alt,
+                }}
+              />
+            )}
+            {summary && <Text noOfLines={[3, 5, 10]}>{summary}</Text>}
+          </HStack>
+          <ResultListingFields fields={fields} gmeta={gmeta} />
+        </CardBody>
+      ) : null}
     </Card>
   );
 }

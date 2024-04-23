@@ -134,7 +134,6 @@ function Result({ result }: { result: GMetaResult }) {
                 link.href.fallback,
               );
             }
-            console.log(processedLink);
             return processedLink;
           },
         ),
@@ -151,7 +150,11 @@ function Result({ result }: { result: GMetaResult }) {
   return (
     <>
       <Heading as="h1" size="md" color="brand">
-        {heading}
+        {heading || (
+          <Text as="em" color="gray.500">
+            &mdash;
+          </Text>
+        )}{" "}
       </Heading>
 
       <Divider my={2} />
