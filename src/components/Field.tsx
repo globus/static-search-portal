@@ -5,6 +5,7 @@ import jsonata from "jsonata";
 
 import RgbaField from "./Fields/RgbaField";
 import ImageField from "./Fields/ImageField";
+import TableField from "./Fields/TableField";
 import FallbackField from "./Fields/FallbackField";
 
 import type { GMetaResult } from "../globus/search";
@@ -69,7 +70,13 @@ export const FieldValue = ({
   if (type === "image") {
     return <ImageField value={value} />;
   }
-  return <FallbackField value={value} />; // fallback
+  if (type === "table") {
+    return <TableField value={value} />;
+  }
+  /**
+   * If no `type` is provided, or the `type` is not recognized, use the fallback field.
+   */
+  return <FallbackField value={value} />;
 };
 
 export const Field = ({

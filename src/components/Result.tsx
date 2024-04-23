@@ -5,7 +5,6 @@ import {
   Heading,
   Text,
   Box,
-  Code,
   Flex,
   Button,
   Drawer,
@@ -22,8 +21,8 @@ import {
 import { getAttribute, getAttributeFrom } from "../../static";
 import { Error } from "./Error";
 import { isGError, type GError, type GMetaResult } from "@/globus/search";
-
 import { Field, type FieldDefinition } from "./Field";
+import { JSONTree } from "./JSONTree";
 
 export type ResultComponentOptions = {
   /**
@@ -104,7 +103,7 @@ export default function Result({ result }: { result?: GMetaResult | GError }) {
         <Spacer />
         <Box p="2">
           <ResponseDrawer>
-            <Code as="pre">{JSON.stringify(result, null, 2)}</Code>
+            <JSONTree data={result} />
           </ResponseDrawer>
         </Box>
       </Flex>

@@ -13,6 +13,7 @@ import {
   Tr,
   Td,
   HStack,
+  Link,
 } from "@chakra-ui/react";
 import { getAttributeFrom, getAttribute } from "../../static";
 
@@ -125,60 +126,64 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     src: string;
     alt?: string;
   }>();
-  getAttributeFrom<string>(gmeta, "components.ResultListing.heading").then(
-    (result) => {
-      setHeading(result);
-    },
-  );
 
-  getAttributeFrom<string>(gmeta, "components.ResultListing.summary").then(
-    (result) => {
-      setSummary(result);
-    },
-  );
+  useEffect(() => {
+    async function resolveAttributes() {
+      const heading = await getAttributeFrom<string>(
+        gmeta,
+        "components.ResultListing.heading",
+      );
+      const summary = await getAttributeFrom<string>(
+        gmeta,
+        "components.ResultListing.summary",
+      );
+      let image = await getAttributeFrom<
+        | string
+        | {
+            src: string;
+            alt?: string;
+          }
+      >(gmeta, "components.ResultListing.image");
 
-  getAttributeFrom<
-    | string
-    | {
-        src: string;
-        alt?: string;
+      setHeading(heading);
+      setSummary(summary);
+
+      if (typeof image === "string") {
+        image = { src: image };
       }
-  >(gmeta, "components.ResultListing.image").then((result) => {
-    let image = result;
-    if (typeof image === "string") {
-      image = { src: image };
+      setImage(image);
     }
-    setImage(image);
-  });
+    resolveAttributes();
+  }, [gmeta]);
 
   const fields = getAttribute("components.ResultListing.fields");
 
   return (
-    <LinkBox
-      as={NextLink}
-      href={`/results?subject=${encodeURIComponent(gmeta.subject)}`}
-    >
-      <Card size="sm" w="full">
-        <CardHeader>
-          <Heading size="md" color="brand">
+    <Card size="sm" w="full">
+      <CardHeader>
+        <Heading size="md" color="brand">
+          <Link
+            as={NextLink}
+            href={`/results?subject=${encodeURIComponent(gmeta.subject)}`}
+          >
             {heading}
-          </Heading>
-        </CardHeader>
-        <CardBody>
-          <HStack>
-            {image && (
-              <ImageField
-                value={{
-                  src: image.src,
-                  alt: image?.alt,
-                }}
-              />
-            )}
-            {summary && <Text noOfLines={[3, 5, 10]}>{summary}</Text>}
-          </HStack>
-          <ResultListingFields fields={fields} gmeta={gmeta} />
-        </CardBody>
-      </Card>
-    </LinkBox>
+          </Link>
+        </Heading>
+      </CardHeader>
+      <CardBody>
+        <HStack>
+          {image && (
+            <ImageField
+              value={{
+                src: image.src,
+                alt: image?.alt,
+              }}
+            />
+          )}
+          {summary && <Text noOfLines={[3, 5, 10]}>{summary}</Text>}
+        </HStack>
+        <ResultListingFields fields={fields} gmeta={gmeta} />
+      </CardBody>
+    </Card>
   );
 }

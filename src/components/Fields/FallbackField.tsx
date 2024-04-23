@@ -1,22 +1,22 @@
 import React from "react";
-import { Box, Code, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
+import { JSONTree } from "../JSONTree";
 
 type Value = unknown;
-
-// function isValidValue(value: unknown): value is Value {
-//   return true;
-// }
 
 /**
  * A fallback field that will introspect the value and render it as best as it can.
  */
 export default function FallbackField({ value }: { value: Value }) {
+  if (value === null || value === undefined) {
+    return <Text>&mdash;</Text>;
+  }
   if (
     typeof value === "string" ||
     typeof value === "number" ||
     typeof value === "boolean"
   ) {
-    return <Text as="p">{value}</Text>;
+    return <Text>{value}</Text>;
   }
   if (Array.isArray(value)) {
     return value.map((v, i) => (
@@ -25,9 +25,5 @@ export default function FallbackField({ value }: { value: Value }) {
       </Box>
     ));
   }
-  return (
-    <Code as="pre" display="block" borderRadius={2} my={1}>
-      {JSON.stringify(value, null, 2)}
-    </Code>
-  );
+  return <JSONTree data={value} />;
 }
