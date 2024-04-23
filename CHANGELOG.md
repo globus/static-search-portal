@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 (2024-04-23)
+
+## What's Changed
+* ops: run 'tsc' on CI by @jbottigliero in https://github.com/globus/static-search-portal/pull/51
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.7.0...0.8.0
+
 ## 0.7.0 (2024-04-23)
 
 **Full Changelog**: https://github.com/globus/static-search-portal/compare/0.6.1...0.7.0
