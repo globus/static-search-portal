@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.1 (2024-04-24)
+
+## What's Changed
+* fix: improved image rendering by providing source and more obvious 'View Image' button by @jbottigliero in https://github.com/globus/static-search-portal/pull/53
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.8.0...0.8.1
+
 ## 0.8.0 (2024-04-23)
 
 ## What's Changed
