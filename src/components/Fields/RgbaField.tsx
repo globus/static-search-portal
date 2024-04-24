@@ -22,8 +22,8 @@ export default function RgbaField({
   }
 
   const props = {
-    h: size === "sm" ? "50px" : "100px",
-    w: size === "sm" ? "50px" : "100px",
+    h: size === "sm" ? "2.5rem" : "5rem",
+    w: size === "sm" ? "2.5rem" : "5rem",
   };
 
   return (

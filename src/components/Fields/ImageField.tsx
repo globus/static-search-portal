@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {
+  AbsoluteCenter,
   Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  Center,
   Image as ChakraImage,
-  Code,
   HStack,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalHeader,
   ModalOverlay,
   Spinner,
   Text,
+  VStack,
   useDisclosure,
 } from "@chakra-ui/react";
+
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 type Value =
   | string
@@ -44,44 +54,92 @@ export default function ImageField({ value }: { value: unknown }) {
 
   return (
     <>
-      <Box>
-        {loading && (
+      <Card variant="outline">
+        <CardBody>
           <HStack>
-            <Spinner emptyColor="gray.200" color="blue.500" />
-            <Text>Loading image...</Text>
+            <HStack>
+              <Box height="5rem" width="5rem" pos="relative">
+                {loading && (
+                  <AbsoluteCenter>
+                    <Spinner emptyColor="gray.200" color="brand.500" />
+                  </AbsoluteCenter>
+                )}
+                {error && (
+                  <AbsoluteCenter>
+                    <Text
+                      fontSize="xs"
+                      backgroundColor="red.100"
+                      textColor="red.900"
+                      p={2}
+                    >
+                      Unable to load image.
+                    </Text>
+                  </AbsoluteCenter>
+                )}
+                {!error && (
+                  <Image
+                    fill
+                    src={config.src}
+                    alt={config.alt ?? ""}
+                    onLoad={() => setLoading(false)}
+                    onError={() => {
+                      setLoading(false);
+                      setError(true);
+                    }}
+                    style={{ objectFit: "contain" }}
+                  />
+                )}
+              </Box>
+              <Box m={2}>
+                <Text
+                  fontSize="sm"
+                  userSelect="all"
+                  sx={{
+                    overflowWrap: "break-word",
+                    wordWrap: "break-word",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {config.src}
+                </Text>
+                <ButtonGroup>
+                  {!error && (
+                    <Button onClick={onOpen} size="xs">
+                      View Image
+                    </Button>
+                  )}
+                  <Button
+                    as={Link}
+                    variant="link"
+                    size="xs"
+                    href={config.src}
+                    isExternal
+                  >
+                    Open in New Tab <ExternalLinkIcon mx="2px" />
+                  </Button>
+                </ButtonGroup>
+              </Box>
+            </HStack>
           </HStack>
-        )}
-        {error && (
-          <Code fontSize="xs" variant="outline" colorScheme="orange">
-            Unable to load image.
-          </Code>
-        )}
-        {!error && (
-          <Image
-            height={200}
-            width={200}
-            src={config.src}
-            alt={config.alt ?? ""}
-            onLoad={() => setLoading(false)}
-            onError={() => {
-              setLoading(false);
-              setError(true);
-            }}
-            onClick={onOpen}
-            style={{ cursor: "pointer" }}
-          />
-        )}
-      </Box>
-      <Modal onClose={onClose} isOpen={isOpen} size="full">
+        </CardBody>
+      </Card>
+      <Modal onClose={onClose} isOpen={isOpen}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent maxW="90vw">
           <ModalCloseButton />
+          <ModalHeader />
           <ModalBody>
-            <ChakraImage
-              src={config.src}
-              alt={config.alt ?? ""}
-              objectFit="contain"
-            />
+            <VStack>
+              <Box rounded={8} backgroundColor="gray.50" w="100%" p={4}>
+                <Center>
+                  <ChakraImage
+                    src={config.src}
+                    alt={config.alt ?? ""}
+                    objectFit="contain"
+                  />
+                </Center>
+              </Box>
+            </VStack>
           </ModalBody>
         </ModalContent>
       </Modal>
