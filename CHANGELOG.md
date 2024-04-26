@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.8.2 (2024-04-26)
+
+## What's Changed
+* deps: bump the react group with 4 updates by @dependabot in https://github.com/globus/static-search-portal/pull/56
+* deps: bump the next group with 2 updates by @dependabot in https://github.com/globus/static-search-portal/pull/55
+* deps: bump eslint-plugin-react-hooks from 4.6.0 to 4.6.1 by @dependabot in https://github.com/globus/static-search-portal/pull/57
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.8.1...0.8.2
+
 ## 0.8.1 (2024-04-24)
 
 ## What's Changed
