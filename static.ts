@@ -3,6 +3,7 @@ import { defaultsDeep, get as _get } from "lodash";
 import type { ResultComponentOptions } from "@/components/Result";
 import { ResultListingComponentOptions } from "@/components/ResultListing";
 import { ThemeSettings } from "@/theme";
+import { FooterComponentOptions } from "@/components/Footer";
 
 /**
  * The base type for a `static.json` file.
@@ -32,6 +33,16 @@ export type Base = {
     version: string;
     attributes: Record<string, unknown>;
   };
+};
+
+export type LinkDefinition = {
+  label: string | { property: string; fallback?: string };
+  href:
+    | string
+    | {
+        property: string;
+        fallback?: string;
+      };
 };
 
 /**
@@ -72,6 +83,7 @@ export type Data = {
     components?: {
       Result?: ResultComponentOptions;
       ResultListing?: ResultListingComponentOptions;
+      Footer?: FooterComponentOptions;
     };
 
     globus: {

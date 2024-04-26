@@ -1,11 +1,9 @@
 "use client";
-
 import React, { useEffect } from "react";
 import {
   Heading,
   Text,
   Box,
-  Flex,
   Button,
   Drawer,
   DrawerBody,
@@ -15,12 +13,12 @@ import {
   DrawerCloseButton,
   useDisclosure,
   Divider,
-  Spacer,
   ButtonGroup,
   Link,
 } from "@chakra-ui/react";
 
 import {
+  LinkDefinition,
   getAttribute,
   getValueFrom,
   getValueFromAttribute,
@@ -29,16 +27,6 @@ import { Error } from "./Error";
 import { isGError, type GError, type GMetaResult } from "@/globus/search";
 import { Field, type FieldDefinition } from "./Field";
 import { JSONTree } from "./JSONTree";
-
-type LinkDefinition = {
-  label: string | { property: string; fallback?: string };
-  href:
-    | string
-    | {
-        property: string;
-        fallback?: string;
-      };
-};
 
 export type ResultComponentOptions = {
   /**
@@ -171,28 +159,22 @@ function Result({ result }: { result: GMetaResult }) {
         </ButtonGroup>
       )}
 
-      <Flex>
-        <Box p="2">
-          {summary && (
-            <Box my="2">
-              <Heading as="h2" size="sm" my={2}>
-                Summary
-              </Heading>
-              <Text as="p">{summary}</Text>
-            </Box>
-          )}
+      {summary && (
+        <Box my="2">
+          <Heading as="h2" size="sm" my={2}>
+            Summary
+          </Heading>
+          <Text as="p">{summary}</Text>
+        </Box>
+      )}
 
-          {fields.map((field: FieldDefinition, i: number) => (
-            <Field key={i} field={field} gmeta={result} />
-          ))}
-        </Box>
-        <Spacer />
-        <Box p="2">
-          <ResponseDrawer>
-            <JSONTree data={result} />
-          </ResponseDrawer>
-        </Box>
-      </Flex>
+      {fields.map((field: FieldDefinition, i: number) => (
+        <Field key={i} field={field} gmeta={result} />
+      ))}
+
+      <ResponseDrawer>
+        <JSONTree data={result} />
+      </ResponseDrawer>
     </>
   );
 }
@@ -209,7 +191,7 @@ function ResponseDrawer({ children }: { children: any }) {
         onClick={onOpen}
         size="xs"
       >
-        View Raw Search result
+        View Raw Search Result
       </Button>
       <Drawer
         isOpen={isOpen}

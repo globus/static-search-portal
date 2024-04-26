@@ -30,7 +30,7 @@ export function Authentication() {
   const auth = useGlobusAuth();
   const user = auth.authorization?.user;
   return (
-    <>
+    <header>
       {auth.isAuthenticated && user ? (
         <Menu placement="bottom-end">
           <MenuButton size="sm" as={Button} rightIcon={<ChevronDownIcon />}>
@@ -48,28 +48,23 @@ export function Authentication() {
           </MenuList>
         </Menu>
       ) : (
-        <Button
-          size="sm"
-          onClick={() => auth.authorization?.login()}
-          colorScheme="blue"
-        >
+        <Button size="sm" onClick={() => auth.authorization?.login()}>
           Sign In
         </Button>
       )}
-    </>
+    </header>
   );
 }
 
 export default function Header() {
   return (
     <header>
-      <Box bg="brand.800">
+      <Box bg="brand.700">
         <Container maxW="container.xl">
           <Flex
             minWidth="max-content"
             alignItems="center"
             justify="space-between"
-            h="10vh"
           >
             <HStack p={4} spacing="24px">
               {LOGO && (

@@ -11,6 +11,8 @@ import {
 
 import { GlobusAuthorizationManagerProvider } from "@/globus/globus-auth-context/Provider";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Box } from "@chakra-ui/react";
 
 const env = getEnvironment();
 if (env) {
@@ -33,7 +35,8 @@ export default function RootLayout({
         <body>
           <ThemeProvider>
             <Header />
-            {children}
+            <Box minH="calc(100vh - 2rem)">{children}</Box>
+            <Footer />
           </ThemeProvider>
         </body>
       </html>
@@ -50,7 +53,8 @@ export default function RootLayout({
             scopes={scopes}
           >
             <Header />
-            {children}
+            <Box minH="calc(100vh - 2rem)">{children}</Box>
+            <Footer />
           </GlobusAuthorizationManagerProvider>
         </ThemeProvider>
       </body>

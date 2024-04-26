@@ -22,7 +22,7 @@ import type { GMetaResult } from "@/globus/search";
 
 const ClientSideResult = () => {
   const params = useSearchParams();
-  const subject = params.get("subject");
+  const subject = params?.get("subject");
   const [result, setResult] = useState<GMetaResult>();
   useEffect(() => {
     async function fetchResult() {

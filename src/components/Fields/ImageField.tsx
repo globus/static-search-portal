@@ -103,7 +103,7 @@ export default function ImageField({ value }: { value: unknown }) {
                   {config.src}
                 </Text>
                 <ButtonGroup>
-                  {!error && (
+                  {!error && !loading && (
                     <Button onClick={onOpen} size="xs">
                       View Image
                     </Button>

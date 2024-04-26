@@ -59,7 +59,7 @@ export type ThemeSettings = {
   extendTheme?: Parameters<typeof extendTheme>[0];
 };
 
-const brand: ColorDefinition = {
+const defaultBrand: ColorDefinition = {
   "50": "#E5F2FF",
   "100": "#B8DBFF",
   "200": "#8AC4FF",
@@ -87,7 +87,7 @@ const theme = extendTheme(
       mono: `'IBM Plex Mono', monospace`,
     },
     colors: {
-      brand,
+      brand: defaultBrand,
       ...(STATIC.data.attributes.theme?.colors || {}),
     },
   },

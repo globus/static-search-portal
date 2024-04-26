@@ -104,14 +104,13 @@ export function Search() {
       <Box>
         <Box p={4}>
           {isGError(result) && <Error error={result} />}
+          {isLoading && !result && <Box height="100vh" />}
           {result && result.total > 0 && (
-            <>
-              <VStack py={2} spacing={5} align="stretch">
-                {result.gmeta?.map((gmeta, i) => (
-                  <ResultListing key={gmeta.subject} gmeta={gmeta} />
-                ))}
-              </VStack>
-            </>
+            <VStack py={2} spacing={5} align="stretch">
+              {result.gmeta?.map((gmeta, i) => (
+                <ResultListing key={gmeta.subject} gmeta={gmeta} />
+              ))}
+            </VStack>
           )}
           {result && result.total === 0 && <Box>No datasets found.</Box>}
         </Box>
