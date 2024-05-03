@@ -18,6 +18,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { getAttribute, withFeature } from "../../static";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const LOGO = getAttribute("content.logo");
@@ -72,17 +73,19 @@ export default function Header() {
             h="10vh"
           >
             <HStack p={4} spacing="24px">
-              {LOGO && (
-                <Image
-                  src={LOGO.src}
-                  alt={LOGO.alt}
-                  boxSize="100px"
-                  objectFit="contain"
-                />
-              )}
-              <Heading as="h1" size="md" color="white">
-                {HEADLINE}
-              </Heading>
+              <Link href="/">
+                {LOGO && (
+                  <Image
+                    src={LOGO.src}
+                    alt={LOGO.alt}
+                    boxSize="100px"
+                    objectFit="contain"
+                  />
+                )}
+                <Heading as="h1" size="md" color="white">
+                  {HEADLINE}
+                </Heading>
+              </Link>
             </HStack>
             {withFeature("authentication", () => (
               <Authentication />

@@ -1,8 +1,9 @@
 import _STATIC from "./static.json";
 import { defaultsDeep, get as _get } from "lodash";
-import type { ResultComponentOptions } from "@/components/Result";
-import { ResultListingComponentOptions } from "@/components/ResultListing";
 import { ThemeSettings } from "@/theme";
+
+import type { ResultListingComponentOptions } from "@/components/ResultListing";
+import type { ResultComponentOptions } from "@/components/Result";
 
 /**
  * The base type for a `static.json` file.
@@ -52,6 +53,7 @@ export type Data = {
        */
       jsonata?: boolean;
       authentication?: boolean;
+      transfer?: boolean;
     };
 
     theme?: ThemeSettings;
@@ -259,3 +261,13 @@ export async function getValueFrom<T>(
   }
   return _get(obj, key, defaultValue);
 }
+
+/**
+ * Whether or not the Globus Transfer is enabled based on the state of the `static.json`.
+ */
+export const isTransferEnabled = Boolean(
+  getAttribute(
+    "features.transfer",
+    getAttribute("components.Result.globus.transfer"),
+  ),
+);
