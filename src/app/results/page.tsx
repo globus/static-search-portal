@@ -13,29 +13,40 @@ import {
 } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
-import { STATIC } from "../../../static";
+import { STATIC, withFeature } from "../../../static";
 
 import Result from "../../components/Result";
 import { search } from "@globus/sdk";
 
 import type { GMetaResult } from "@/globus/search";
+import { useGlobusAuth } from "@/globus/globus-auth-context/useGlobusAuth";
 
 const ClientSideResult = () => {
   const params = useSearchParams();
+  const auth = useGlobusAuth();
   const subject = params.get("subject");
   const [result, setResult] = useState<GMetaResult>();
   useEffect(() => {
     async function fetchResult() {
+      const headers = withFeature("authentication", () => {
+        if (!auth.isAuthenticated || !auth.authorization?.tokens.search) {
+          return;
+        }
+        return {
+          Authorization: `Bearer ${auth.authorization.tokens.search.access_token}`,
+        };
+      });
+
       const response = await (
         await search.subject.get(STATIC.data.attributes.globus.search.index, {
           query: {
             subject: Array.isArray(subject) ? subject[0] : subject,
           },
+          headers: headers ?? undefined,
         })
       ).json();
       setResult(response);
     }
-
     fetchResult();
   }, [subject]);
   return <Result result={result} />;
