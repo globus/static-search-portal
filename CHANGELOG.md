@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.8.3 (2024-05-22)
+
+## What's Changed
+* chore: adds Apache-2.0 LICENSE by @jbottigliero in https://github.com/globus/static-search-portal/pull/59
+* deps: bump the react group with 3 updates by @dependabot in https://github.com/globus/static-search-portal/pull/61
+* deps: bump eslint-plugin-react-hooks from 4.6.1 to 4.6.2 by @dependabot in https://github.com/globus/static-search-portal/pull/62
+* deps: bump @globus/sdk from 3.0.0-alpha.17 to 3.0.0 by @dependabot in https://github.com/globus/static-search-portal/pull/63
+* deps: bump @types/node from 20.12.7 to 20.12.8 by @dependabot in https://github.com/globus/static-search-portal/pull/65
+* deps: bump @globus/sdk from 3.0.0 to 3.1.0 by @dependabot in https://github.com/globus/static-search-portal/pull/64
+* deps: bump jsonata from 2.0.4 to 2.0.5 by @dependabot in https://github.com/globus/static-search-portal/pull/75
+* deps: bump @types/node from 20.12.8 to 20.12.11 by @dependabot in https://github.com/globus/static-search-portal/pull/73
+* deps: bump framer-motion from 11.1.7 to 11.1.9 by @dependabot in https://github.com/globus/static-search-portal/pull/72
+* deps: bump @globus/sdk from 3.1.0 to 3.2.0 by @dependabot in https://github.com/globus/static-search-portal/pull/74
+* deps: bump framer-motion from 11.1.9 to 11.2.4 by @dependabot in https://github.com/globus/static-search-portal/pull/82
+* deps: bump @types/node from 20.12.11 to 20.12.12 by @dependabot in https://github.com/globus/static-search-portal/pull/78
+* deps: bump @globus/sdk from 3.2.0 to 3.3.0 by @dependabot in https://github.com/globus/static-search-portal/pull/79
+* deps: bump @types/react from 18.3.1 to 18.3.2 in the react group by @dependabot in https://github.com/globus/static-search-portal/pull/76
+* deps: bump typedoc-plugin-markdown from 3.17.1 to 4.0.2 by @dependabot in https://github.com/globus/static-search-portal/pull/80
+* deps: bump framer-motion from 11.2.4 to 11.2.5 by @dependabot in https://github.com/globus/static-search-portal/pull/84
+* deps: bump @globus/sdk from 3.3.0 to 3.3.1 by @dependabot in https://github.com/globus/static-search-portal/pull/83
+* fix: ensure "Authorization" header is included when fetching a single result. by @jbottigliero in https://github.com/globus/static-search-portal/pull/85
+
+
+**Full Changelog**: https://github.com/globus/static-search-portal/compare/0.8.2...0.8.3
+
 ## 0.8.2 (2024-04-26)
 
 ## What's Changed
