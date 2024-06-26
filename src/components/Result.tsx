@@ -102,11 +102,12 @@ function Result({ result }: { result: GMetaResult }) {
     async function bootstrap() {
       const heading = await getValueFromAttribute<string>(
         result,
-        "components.ResultListing.heading",
+        "components.Result.heading",
       );
+
       const summary = await getValueFromAttribute<string>(
         result,
-        "components.ResultListing.summary",
+        "components.Result.summary",
       );
       const fields = getAttribute("components.Result.fields", []);
       const links = await Promise.all(

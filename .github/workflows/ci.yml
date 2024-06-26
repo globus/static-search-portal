@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: "lint"
+    name: "lint + test"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,3 +18,4 @@ jobs:
       - run: npm install
       - run: npm run lint
       - run: npx tsc --noEmit
+      - run: npm test
