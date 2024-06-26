@@ -1,0 +1,622 @@
+{
+  "@datatype": "GMetaResult",
+  "subject": "5f5fbd9d82ce3550e3bff3ad",
+  "@version": "2019-08-27",
+  "entries": [
+    {
+      "content": {
+        "summary": "This data release includes water-quality data collected at 38 sites in central and eastern Massachusetts from April 2018 through May 2019 by the U.S. Geological Survey to support the implementation of site-dependent aluminum criteria for Massachusetts waters. Samples of effluent and receiving surface waters were collected monthly at four wastewater-treatment facilities (WWTFs) and seven water-treatment facilities (WTFs) (see SWQ_data_and_instantaneous_CMC_CCC_values.txt). The measured properties and constituents include pH, hardness, and filtered (dissolved) organic carbon, which are required inputs to the U.S. Environmental Protection Agency's Aluminum Criteria Calculator version 2.0 (U.S. Environmental Protection Agency, 2018). Outputs [...]",
+        "maintenanceUpdateFrequency": "None planned",
+        "citation": "Armstrong, D.S., DeSimone, L.A., and Savoie, J.G., 2022, Surface-water-quality data and time-series plots to support implementation of site-dependent aluminum criteria in Massachusetts, 2018–19 (ver. 1.1, February 2023): U.S. Geological Survey data release, https://doi.org/10.5066/P95WCT5T.",
+        "purpose": "These data were collected to support implementation of site-dependent aluminum criteria for Massachusetts waters by documenting concentrations of pH, hardness, and filtered (dissolved) organic carbon, and their variability with time, at selected ambient sites associated with 11 water-treatment and wastewater-treatment facilities in Massachusetts. Site-dependent criteria values are concentrations of total recoverable aluminum that, if not exceeded, would be expected to protect fish, invertebrates, and other aquatic life from adverse effects associated with acute and chronic aluminum exposures. The site-dependent instantaneous values in this data release demonstrate potential applications of the U.S. Environmental Protection Agency's Aluminum Criteria Calculator and are not regulatory limits.",
+        "identifiers": [
+          {
+            "scheme": "https://www.sciencebase.gov/vocab/category/item/identifier",
+            "type": "DOI",
+            "key": "doi:10.5066/P95WCT5T"
+          }
+        ],
+        "hasChildren": false,
+        "link": {
+          "rel": "self",
+          "url": "https://www.sciencebase.gov/catalog/item/5f5fbd9d82ce3550e3bff3ad"
+        },
+        "relatedItems": {
+          "link": {
+            "rel": "related",
+            "url": "https://www.sciencebase.gov/catalog/itemLinks?itemId=5f5fbd9d82ce3550e3bff3ad"
+          }
+        },
+        "dates": [
+          {
+            "dateString": "2022-04-12",
+            "label": "Publication Date",
+            "type": "Publication"
+          },
+          {
+            "dateString": "2018-01-01",
+            "label": "",
+            "type": "Start"
+          },
+          {
+            "dateString": "2019-01-01",
+            "label": "",
+            "type": "End"
+          },
+          {
+            "dateString": "2023-02-27",
+            "label": "Revision",
+            "type": "Revision"
+          }
+        ],
+        "title": "Surface-Water-Quality Data and Time-Series Plots to Support Implementation of Site-Dependent Aluminum Criteria in Massachusetts, 2018–19 (ver. 1.1, February 2023)",
+        "body": "<p>This data release includes water-quality data collected at 38 sites in central and eastern Massachusetts from April 2018 through May 2019 by the U.S. Geological Survey to support the implementation of site-dependent aluminum criteria for Massachusetts waters. Samples of effluent and receiving surface waters were collected monthly at four wastewater-treatment facilities (WWTFs) and seven water-treatment facilities (WTFs) (see SWQ_data_and_instantaneous_CMC_CCC_values.txt). The measured properties and constituents include pH, hardness, and filtered (dissolved) organic carbon, which are required inputs to the U.S. Environmental Protection Agency's Aluminum Criteria Calculator version 2.0 (U.S. Environmental Protection Agency, 2018). Outputs from the Aluminum Criteria Calculator are also provided in that file; these outputs consist of acute (Criterion Maximum Concentration, CMC) and chronic (Criterion Continuous Concentration, CCC) instantaneous water-quality values for total recoverable aluminum, calculated for monthly samples at selected ambient sites near each of the 11 facilities. Quality-control data from blank, replicate, and spike samples are provided (see SWQ_QC_data.txt). In addition to data tables, the data release includes time series graphs of the discrete water-quality data (see SWQ_plot_discrete_all.zip). For pH, time series graphs also are provided showing pH from the discrete monthly water-quality samples as well as near-continuous pH measured at one surface-water site at each facility (see SWQ_plot_contin_discrete_pH.zip). The near-continuous pH data, along with all of the discrete water-quality data except the quality-control data, are also available online from the U.S. Geological Survey's National Water Information System (NWIS) database (https://nwis.waterdata.usgs.gov/nwis).</p>\n\n<p>Reference:<br>\nU.S. Environmental Protection Agency, 2018, Final aquatic life ambient water quality criteria for aluminum—2018: U.S. Environmental Protection Agency, document EPA–822–R–18–001, 161 p., apps., accessed March 12, 2020, at <a href=\"https://www.epa.gov/sites/production/files/2018-12/documents/aluminum-final-national-recommended-awqc.pdf\">https://www.epa.gov/sites/production/files/2018-12/documents/aluminum-final-national-recommended-awqc.pdf</a>.<br>\n&nbsp;</p>\n",
+        "systemTypes": ["Data Release"],
+        "distributionLinks": [
+          {
+            "rel": "alternate",
+            "name": "Surface_Water_Q.zip",
+            "files": [
+              {
+                "size": 45946,
+                "name": "Metadata_for_Water_Quality_Data_and_Time_Series.xml",
+                "checksum": {
+                  "type": "MD5",
+                  "value": "3af01dbe4fd56896cdc58f41a86a64a2"
+                },
+                "title": "",
+                "contentType": "application/fgdc+xml"
+              },
+              {
+                "size": 59327,
+                "name": "SWQ_data_and_instantaneous_CMC_CCC_values.txt",
+                "checksum": {
+                  "type": "MD5",
+                  "value": "2ae85fdaab1f0fbe8a9eb697f3f2b10a"
+                },
+                "title": "",
+                "contentType": "text/plain"
+              },
+              {
+                "size": 17961,
+                "name": "SWQ_QC_data.txt",
+                "checksum": {
+                  "type": "MD5",
+                  "value": "8d6a81520fae1edf591c524a3fcb18cc"
+                },
+                "title": "",
+                "contentType": "text/plain"
+              },
+              {
+                "size": 17090067,
+                "name": "SWQ_plot_discrete_all.zip",
+                "checksum": {
+                  "type": "MD5",
+                  "value": "232b90c56cf2fd5691dee6419d2ef3b9"
+                },
+                "title": "",
+                "contentType": "application/zip"
+              },
+              {
+                "size": 1986307,
+                "name": "SWQ_plot_contin_discrete_pH.zip",
+                "checksum": {
+                  "type": "MD5",
+                  "value": "42d81a7e0904117eedb8c90cf42d7d41"
+                },
+                "title": "",
+                "contentType": "application/zip"
+              },
+              {
+                "size": 4999,
+                "name": "version_history_1.1.txt",
+                "checksum": {
+                  "type": "MD5",
+                  "value": "14a03f05e14bc5ff38a9d5c3c09a71f1"
+                },
+                "title": "",
+                "contentType": "text/plain"
+              }
+            ],
+            "typeLabel": "Download Link",
+            "title": "Download Attached Files",
+            "type": "downloadLink",
+            "uri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad"
+          }
+        ],
+        "parentId": "5474ec49e4b04d7459a7eab2",
+        "tags": [
+          {
+            "name": "USGS Science Data Catalog (SDC)",
+            "type": "Harvest Set"
+          },
+          {
+            "scheme": "USGS Thesaurus",
+            "name": "surface water quality",
+            "type": "Theme"
+          },
+          {
+            "scheme": "USGS Thesaurus",
+            "name": "wastewater discharge",
+            "type": "Theme"
+          },
+          {
+            "scheme": "USGS Thesaurus",
+            "name": "water hardness",
+            "type": "Theme"
+          },
+          {
+            "scheme": "USGS Thesaurus",
+            "name": "water pH",
+            "type": "Theme"
+          },
+          {
+            "scheme": "USGS Thesaurus",
+            "name": "water quality",
+            "type": "Theme"
+          },
+          {
+            "scheme": "Getty Thesaurus of Geographic Names",
+            "name": "Massachusetts",
+            "type": "Place"
+          }
+        ],
+        "provenance": {
+          "annotation": "Revision 1.1 by Jonas Casey-Williams on February 27, 2023. To review the changes that were made, see “version_history_1.1.txt” in the attached files section.",
+          "lastUpdated": "2023-02-27T23:20:08Z",
+          "dateCreated": "2020-09-14T18:59:41Z"
+        },
+        "webLinks": [
+          {
+            "hidden": false,
+            "typeLabel": "Related Primary Publication",
+            "type": "Related_Primary_Publication",
+            "title": "Armstrong, D.S., Savoie, J.G., DeSimone, L.A. Laabs, K.L., and Carey, R.O., 2022, Surface-water-quality data to support implementation of revised freshwater aluminum water-quality criteria in Massachusetts, 2018–19 (ver. 1.1, February 2023): U.S. Geological Survey Scientific Investigations Report 2021–5144, 85 p., https://doi.org/10.3133/sir20215144.",
+            "uri": "https://doi.org/10.3133/sir20215144"
+          },
+          {
+            "hidden": false,
+            "typeLabel": "Related Data Set",
+            "title": "DeSimone, L.A., and Armstrong, D.S., 2022, Total and dissolved organic carbon for an assessment of aluminum in Massachusetts surface waters: U.S. Geological Survey data release",
+            "uri": "https://doi.org/10.5066/P9420WXU"
+          }
+        ],
+        "files": [
+          {
+            "originalMetadata": true,
+            "metadataHtmlViewUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__b9%2Fcd%2Ffb%2Fb9cdfb8ebbb2bf759b38065007c6b54152ec3f6c&transform=1",
+            "dateUploaded": "2023-02-27T23:15:12Z",
+            "downloadUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__b9%2Fcd%2Ffb%2Fb9cdfb8ebbb2bf759b38065007c6b54152ec3f6c",
+            "title": "",
+            "url": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__b9%2Fcd%2Ffb%2Fb9cdfb8ebbb2bf759b38065007c6b54152ec3f6c",
+            "processed": false,
+            "size": 45946,
+            "useForPreview": false,
+            "name": "Metadata_for_Water_Quality_Data_and_Time_Series.xml",
+            "checksum": {
+              "type": "MD5",
+              "value": "3af01dbe4fd56896cdc58f41a86a64a2"
+            },
+            "pathOnDisk": "__disk__b9/cd/fb/b9cdfb8ebbb2bf759b38065007c6b54152ec3f6c",
+            "contentType": "application/fgdc+xml"
+          },
+          {
+            "originalMetadata": false,
+            "dateUploaded": "2023-02-01T22:24:00Z",
+            "downloadUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__98%2F53%2F33%2F9853335fa2f7489eb1d6bc38db1fb604b838f801",
+            "title": "",
+            "url": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__98%2F53%2F33%2F9853335fa2f7489eb1d6bc38db1fb604b838f801",
+            "processed": false,
+            "size": 59327,
+            "useForPreview": false,
+            "viewUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__98%2F53%2F33%2F9853335fa2f7489eb1d6bc38db1fb604b838f801&allowOpen=true",
+            "name": "SWQ_data_and_instantaneous_CMC_CCC_values.txt",
+            "checksum": {
+              "type": "MD5",
+              "value": "2ae85fdaab1f0fbe8a9eb697f3f2b10a"
+            },
+            "pathOnDisk": "__disk__98/53/33/9853335fa2f7489eb1d6bc38db1fb604b838f801",
+            "contentType": "text/plain"
+          },
+          {
+            "originalMetadata": false,
+            "dateUploaded": "2023-02-01T22:23:52Z",
+            "downloadUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__b9%2F4b%2Fc4%2Fb94bc43fda80f6980e4338009eceaa274b993665",
+            "title": "",
+            "url": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__b9%2F4b%2Fc4%2Fb94bc43fda80f6980e4338009eceaa274b993665",
+            "processed": false,
+            "size": 17961,
+            "useForPreview": false,
+            "viewUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__b9%2F4b%2Fc4%2Fb94bc43fda80f6980e4338009eceaa274b993665&allowOpen=true",
+            "name": "SWQ_QC_data.txt",
+            "checksum": {
+              "type": "MD5",
+              "value": "8d6a81520fae1edf591c524a3fcb18cc"
+            },
+            "pathOnDisk": "__disk__b9/4b/c4/b94bc43fda80f6980e4338009eceaa274b993665",
+            "contentType": "text/plain"
+          },
+          {
+            "originalMetadata": false,
+            "processed": false,
+            "size": 17090067,
+            "useForPreview": false,
+            "name": "SWQ_plot_discrete_all.zip",
+            "dateUploaded": "2023-02-01T22:24:26Z",
+            "checksum": {
+              "type": "MD5",
+              "value": "232b90c56cf2fd5691dee6419d2ef3b9"
+            },
+            "downloadUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__2e%2Fde%2F88%2F2ede88db65610e05c3846da0fe6be6139a674bf6",
+            "title": "",
+            "pathOnDisk": "__disk__2e/de/88/2ede88db65610e05c3846da0fe6be6139a674bf6",
+            "contentType": "application/zip",
+            "url": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__2e%2Fde%2F88%2F2ede88db65610e05c3846da0fe6be6139a674bf6"
+          },
+          {
+            "originalMetadata": false,
+            "processed": false,
+            "size": 1986307,
+            "useForPreview": false,
+            "name": "SWQ_plot_contin_discrete_pH.zip",
+            "dateUploaded": "2023-02-01T22:24:19Z",
+            "checksum": {
+              "type": "MD5",
+              "value": "42d81a7e0904117eedb8c90cf42d7d41"
+            },
+            "downloadUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__af%2F0f%2F90%2Faf0f9014d31912ecc9a93b59252c9254aeaa3d92",
+            "title": "",
+            "pathOnDisk": "__disk__af/0f/90/af0f9014d31912ecc9a93b59252c9254aeaa3d92",
+            "contentType": "application/zip",
+            "url": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__af%2F0f%2F90%2Faf0f9014d31912ecc9a93b59252c9254aeaa3d92"
+          },
+          {
+            "originalMetadata": false,
+            "dateUploaded": "2023-02-16T14:16:52Z",
+            "downloadUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__67%2Ffb%2F16%2F67fb165c9537f1930436821cacb92a634f2cddeb",
+            "title": "",
+            "url": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__67%2Ffb%2F16%2F67fb165c9537f1930436821cacb92a634f2cddeb",
+            "processed": false,
+            "size": 4999,
+            "useForPreview": false,
+            "viewUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__67%2Ffb%2F16%2F67fb165c9537f1930436821cacb92a634f2cddeb&allowOpen=true",
+            "name": "version_history_1.1.txt",
+            "checksum": {
+              "type": "MD5",
+              "value": "14a03f05e14bc5ff38a9d5c3c09a71f1"
+            },
+            "pathOnDisk": "__disk__67/fb/16/67fb165c9537f1930436821cacb92a634f2cddeb",
+            "contentType": "text/plain"
+          }
+        ],
+        "id": "5f5fbd9d82ce3550e3bff3ad",
+        "spatial": {
+          "boundingBox": {
+            "minY": 42.1,
+            "minX": -71.9,
+            "maxY": 42.6,
+            "maxX": -70.8
+          }
+        },
+        "contacts": [
+          {
+            "lastName": "Armstrong",
+            "jobTitle": "Hydrologist",
+            "active": true,
+            "contactType": "person",
+            "orcId": "0000-0003-1695-1233",
+            "onlineResource": "https://usgs.gov/staff-profiles/david-s-armstrong",
+            "type": "Point of Contact",
+            "firstName": "David",
+            "primaryLocation": {
+              "faxPhone": "5084905068",
+              "officePhone": "5084905060",
+              "streetAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northboro",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "name": "David S Armstrong/WRD/USGS/DOI - Primary Location",
+              "buildingCode": "AGA",
+              "mailAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northborough",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "building": "10 Bearfoot Road"
+            },
+            "organization": {
+              "displayText": "New England Water Science Center"
+            },
+            "name": "David S Armstrong",
+            "oldPartyId": 304,
+            "middleName": "S",
+            "email": "darmstro@usgs.gov",
+            "cellPhone": "7742453900"
+          },
+          {
+            "lastName": "Armstrong",
+            "jobTitle": "Hydrologist",
+            "active": true,
+            "contactType": "person",
+            "orcId": "0000-0003-1695-1233",
+            "onlineResource": "https://usgs.gov/staff-profiles/david-s-armstrong",
+            "type": "Originator",
+            "firstName": "David",
+            "primaryLocation": {
+              "faxPhone": "5084905068",
+              "officePhone": "5084905060",
+              "streetAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northboro",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "name": "David S Armstrong/WRD/USGS/DOI - Primary Location",
+              "buildingCode": "AGA",
+              "mailAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northborough",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "building": "10 Bearfoot Road"
+            },
+            "organization": {
+              "displayText": "New England Water Science Center"
+            },
+            "name": "David S Armstrong",
+            "oldPartyId": 304,
+            "middleName": "S",
+            "email": "darmstro@usgs.gov",
+            "cellPhone": "7742453900"
+          },
+          {
+            "lastName": "DeSimone",
+            "jobTitle": "Hydrologist (QW Specialist)",
+            "active": true,
+            "contactType": "person",
+            "orcId": "0000-0003-0774-9607",
+            "onlineResource": "https://usgs.gov/staff-profiles/leslie-a-desimone",
+            "type": "Originator",
+            "firstName": "Leslie",
+            "primaryLocation": {
+              "faxPhone": "5084905068",
+              "officePhone": "5084905023",
+              "streetAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northboro",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "name": "Leslie A Desimone/WRD/USGS/DOI - Primary Location",
+              "buildingCode": "AGA",
+              "mailAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northborough",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              }
+            },
+            "organization": {
+              "displayText": "New England Water Science Center"
+            },
+            "name": "Leslie A Desimone",
+            "oldPartyId": 2487,
+            "middleName": "A",
+            "email": "ldesimon@usgs.gov"
+          },
+          {
+            "lastName": "Savoie",
+            "jobTitle": "Hydrologist",
+            "active": true,
+            "contactType": "person",
+            "orcId": "0000-0002-3906-6782",
+            "onlineResource": "https://usgs.gov/staff-profiles/jennifer-given-savoie",
+            "type": "Originator",
+            "firstName": "Jennifer",
+            "primaryLocation": {
+              "faxPhone": "5084905068",
+              "officePhone": "5084905033",
+              "streetAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northboro",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "name": "Jennifer Savoie/WRD/USGS/DOI - Primary Location",
+              "buildingCode": "AGA",
+              "mailAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northborough",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "building": "10 Bearfoot Road"
+            },
+            "organization": {
+              "displayText": "New England Water Science Center"
+            },
+            "name": "Jennifer G Savoie",
+            "oldPartyId": 9053,
+            "middleName": "G",
+            "email": "jsavoie@usgs.gov",
+            "cellPhone": "5083413081"
+          },
+          {
+            "lastName": "Armstrong",
+            "jobTitle": "Hydrologist",
+            "active": true,
+            "contactType": "person",
+            "orcId": "0000-0003-1695-1233",
+            "onlineResource": "https://usgs.gov/staff-profiles/david-s-armstrong",
+            "type": "Metadata Contact",
+            "firstName": "David",
+            "primaryLocation": {
+              "faxPhone": "5084905068",
+              "officePhone": "5084905060",
+              "streetAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northboro",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "name": "David S Armstrong/WRD/USGS/DOI - Primary Location",
+              "buildingCode": "AGA",
+              "mailAddress": {
+                "zip": "01532",
+                "country": "US",
+                "city": "Northborough",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "building": "10 Bearfoot Road"
+            },
+            "organization": {
+              "displayText": "New England Water Science Center"
+            },
+            "name": "David S Armstrong",
+            "oldPartyId": 304,
+            "middleName": "S",
+            "email": "darmstro@usgs.gov",
+            "cellPhone": "7742453900"
+          },
+          {
+            "aliases": [
+              "{\"name\":\"Geological Survey (U.S.)\"}",
+              "{\"name\":\"USGS\"}",
+              "{\"name\":\"U.S. GEOLOGICAL SURVEY\"}"
+            ],
+            "fbmsCodes": ["GG00000000"],
+            "primaryLocation": {
+              "streetAddress": {},
+              "name": "U.S. Geological Survey - Location",
+              "mailAddress": {}
+            },
+            "organization": {},
+            "name": "U.S. Geological Survey",
+            "oldPartyId": 18139,
+            "active": true,
+            "contactType": "organization",
+            "onlineResource": "http://www.usgs.gov/",
+            "type": "Publisher",
+            "smallLogoUrl": "http://my.usgs.gov/static-cache/images/dataOwner/v1/logosSmall/USGSLogo.gif",
+            "logoUrl": "http://my.usgs.gov/static-cache/images/dataOwner/v1/logosMed/USGSLogo.gif"
+          },
+          {
+            "primaryLocation": {
+              "officePhone": "1-888-275-8747",
+              "streetAddress": {},
+              "mailAddress": {
+                "zip": "80225",
+                "country": "United States",
+                "city": "Denver",
+                "state": "CO",
+                "line1": "Denver Federal Center, Building 810, Mail Stop 302"
+              }
+            },
+            "organization": {},
+            "name": "Massachusetts Department of Environmental Protection",
+            "type": "Cooperator/Partner"
+          },
+          {
+            "primaryLocation": {
+              "streetAddress": {},
+              "mailAddress": {}
+            },
+            "organization": {
+              "displayText": "Water Resources",
+              "directoryId": "64247"
+            },
+            "name": "Water Resources",
+            "contactType": "organization",
+            "type": "USGS Mission Area"
+          },
+          {
+            "aliases": ["MASS./RI WATER SCI CTR"],
+            "primaryLocation": {
+              "streetAddress": {
+                "zip": "01532-1553",
+                "country": "USA",
+                "city": "Northboro",
+                "state": "MA",
+                "line1": "Northboro"
+              },
+              "latitude": 42.3413,
+              "name": "10 Bearfoot Road [AGA]",
+              "buildingCode": "AGA",
+              "mailAddress": {
+                "zip": "01532",
+                "country": "USA",
+                "city": "Northborough",
+                "state": "MA",
+                "line1": "10 Bearfoot Road"
+              },
+              "longitude": -71.6334
+            },
+            "organization": {},
+            "name": "New England Water Science Center",
+            "oldPartyId": 17206,
+            "description": "Formerly Massachusetts/Rhode Island Water Science Center",
+            "active": true,
+            "contactType": "organization",
+            "onlineResource": "https://www.usgs.gov/centers/new-england-water",
+            "type": "SDC Data Owner"
+          },
+          {
+            "primaryLocation": {
+              "officePhone": "18882758747",
+              "streetAddress": {},
+              "name": "U.S. Geological Survey - ScienceBase - Location",
+              "mailAddress": {
+                "zip": "80225",
+                "country": "United States",
+                "mailStopCode": "302",
+                "city": "Denver",
+                "state": "CO",
+                "line2": "Building 810",
+                "line1": "Denver Federal Center"
+              }
+            },
+            "organization": {},
+            "name": "U.S. Geological Survey - ScienceBase",
+            "oldPartyId": 70157,
+            "contactType": "organization",
+            "onlineResource": "https://www.sciencebase.gov",
+            "type": "Distributor",
+            "email": "sciencebase@usgs.gov"
+          }
+        ],
+        "previewImage": {
+          "thumbnail": {
+            "width": 150,
+            "uri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__33%2F3b%2F72%2F333b72ea2006263a757ea4effd265fe7469ebc9a&width=150&height=100",
+            "height": 100
+          },
+          "original": {
+            "size": 249768,
+            "viewUri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__33%2F3b%2F72%2F333b72ea2006263a757ea4effd265fe7469ebc9a&width=360&height=240",
+            "viewUrl": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?deprecated=__use__viewUri__instead__&f=__disk__33%2F3b%2F72%2F333b72ea2006263a757ea4effd265fe7469ebc9a&width=360&height=240",
+            "width": 360,
+            "uri": "https://www.sciencebase.gov/catalog/file/get/5f5fbd9d82ce3550e3bff3ad?f=__disk__33%2F3b%2F72%2F333b72ea2006263a757ea4effd265fe7469ebc9a",
+            "height": 240
+          },
+          "from": "mapPreview"
+        }
+      },
+      "entry_id": null,
+      "matched_principal_sets": []
+    }
+  ]
+}
