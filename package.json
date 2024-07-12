@@ -21,7 +21,7 @@
     "@fontsource/ibm-plex-mono": "^5.0.13",
     "@fontsource/ibm-plex-sans": "^5.0.20",
     "@globus/sdk": "^3.4.2",
-    "framer-motion": "^11.2.13",
+    "framer-motion": "^11.3.2",
     "lodash": "^4.17.21",
     "next": "14.2.4",
     "react": "^18",
