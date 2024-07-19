@@ -53,8 +53,8 @@
     "jsonata": "^2.0.5",
     "prettier": "3.3.3",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.25.13",
-    "typedoc-plugin-markdown": "^4.0.3",
+    "typedoc": "^0.26.4",
+    "typedoc-plugin-markdown": "^4.2.1",
     "typedoc-plugin-missing-exports": "^2.3.0",
     "typescript": "^5"
   }
