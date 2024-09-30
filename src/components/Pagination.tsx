@@ -16,7 +16,7 @@ import {
   ChevronDoubleLeftIcon,
 } from "@heroicons/react/24/outline";
 
-import type { GSearchResult } from "@/globus/search";
+import type { GSearchResult } from "@globus/sdk/services/search/service/query";
 import { useSearch, useSearchDispatch } from "@/app/search-provider";
 
 export const Pagination = ({ result }: { result?: GSearchResult }) => {

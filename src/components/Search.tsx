@@ -15,8 +15,9 @@ import { throttle, debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
 import { useGlobusAuth } from "@globus/react-auth-context";
+import type { GSearchResult } from "@globus/sdk/services/search/service/query";
 
-import { GSearchResult, isGError } from "@/globus/search";
+import { isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
 import { SearchState, useSearch } from "../app/search-provider";
 import { getAttribute, isFeatureEnabled } from "../../static";

@@ -26,9 +26,11 @@ import {
   getValueFromAttribute,
 } from "../../static";
 import { Error } from "./Error";
-import { isGError, type GError, type GMetaResult } from "@/globus/search";
+import { isGError, type GError } from "@/globus/search";
 import { Field, type FieldDefinition } from "./Field";
 import { JSONTree } from "./JSONTree";
+
+import { GMetaResult } from "@globus/sdk/services/search/service/query";
 
 type LinkDefinition = {
   label: string | { property: string; fallback?: string };

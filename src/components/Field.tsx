@@ -8,7 +8,7 @@ import ImageField from "./Fields/ImageField";
 import TableField from "./Fields/TableField";
 import FallbackField from "./Fields/FallbackField";
 
-import type { GMetaResult } from "../globus/search";
+import { GMetaResult } from "@globus/sdk/services/search/service/query";
 import { isFeatureEnabled } from "../../static";
 
 export type FieldDefinition =

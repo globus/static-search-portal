@@ -18,7 +18,7 @@ import { STATIC, withFeature } from "../../../static";
 import Result from "../../components/Result";
 import { search } from "@globus/sdk";
 
-import type { GMetaResult } from "@/globus/search";
+import { GMetaResult } from "@globus/sdk/services/search/service/query";
 import { useGlobusAuth } from "@globus/react-auth-context";
 
 const ClientSideResult = () => {
