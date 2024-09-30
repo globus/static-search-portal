@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { Static, getAttribute } from "../../static";
 
-import type { GFacetResult } from "@/globus/search";
+import type { GFacetResult } from "@globus/sdk/services/search/service/query";
 
 const FACETS = getAttribute("globus.search.facets", []);
 type Facet = NonNullable<

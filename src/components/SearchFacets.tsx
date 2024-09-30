@@ -38,7 +38,10 @@ import {
   useSearch,
 } from "@/app/search-provider";
 
-import type { GSearchResult, GFacetResult } from "@/globus/search";
+import type {
+  GSearchResult,
+  GFacetResult,
+} from "@globus/sdk/services/search/service/query";
 
 const FACETS = getAttribute("globus.search.facets", []);
 const navigationKeys = ["ArrowUp", "ArrowDown", "Escape"];
@@ -84,7 +87,7 @@ function FacetMenu({ facet }: { facet: GFacetResult }) {
   };
 
   const buckets = filter
-    ? facet.buckets.filter((b) => {
+    ? facet.buckets?.filter((b) => {
         return (
           JSON.stringify(b.value)
             .toLowerCase()
@@ -117,20 +120,20 @@ function FacetMenu({ facet }: { facet: GFacetResult }) {
       </MenuButton>
       <MenuList p={0}>
         <BucketSearch
-          isDisabled={buckets.length === 0 && !filter}
+          isDisabled={buckets?.length === 0 && !filter}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setFilter(e.target.value)
           }
         />
 
-        {buckets.length === 0 && (
+        {buckets?.length === 0 && (
           <MenuItem justifyContent="center" isDisabled>
             No results found.
           </MenuItem>
         )}
 
         <MenuOptionGroup onChange={handleChange} value={value} type="checkbox">
-          {buckets.map((bucket) => {
+          {buckets?.map((bucket) => {
             const valueAsString =
               typeof bucket.value === "string"
                 ? bucket.value

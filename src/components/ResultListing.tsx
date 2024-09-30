@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { getValueFromAttribute, getAttribute } from "../../static";
 
-import type { GMetaResult } from "@/globus/search";
+import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import {
   FieldDefinition,
   FieldValue,
