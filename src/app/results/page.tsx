@@ -19,7 +19,7 @@ import Result from "../../components/Result";
 import { search } from "@globus/sdk";
 
 import type { GMetaResult } from "@/globus/search";
-import { useGlobusAuth } from "@/globus/globus-auth-context/useGlobusAuth";
+import { useGlobusAuth } from "@globus/react-auth-context";
 
 const ClientSideResult = () => {
   const params = useSearchParams();

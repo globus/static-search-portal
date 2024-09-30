@@ -14,6 +14,7 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { throttle, debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
+import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { GSearchResult, isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
@@ -22,7 +23,6 @@ import { getAttribute, isFeatureEnabled } from "../../static";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";
-import { useGlobusAuth } from "@/globus/globus-auth-context/useGlobusAuth";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);

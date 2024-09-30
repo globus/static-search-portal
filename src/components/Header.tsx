@@ -14,8 +14,8 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
+import { useGlobusAuth } from "@globus/react-auth-context";
 
-import { useGlobusAuth } from "./../globus/globus-auth-context/useGlobusAuth";
 import { getAttribute, withFeature } from "../../static";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 

@@ -9,7 +9,7 @@ import {
   isFeatureEnabled,
 } from "../../static";
 
-import { GlobusAuthorizationManagerProvider } from "@/globus/globus-auth-context/Provider";
+import { Provider as GlobusAuthorizationManagerProvider } from "@globus/react-auth-context";
 import Header from "@/components/Header";
 
 const env = getEnvironment();

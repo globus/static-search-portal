@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useGlobusAuth } from "@/globus/globus-auth-context/useGlobusAuth";
-import { Spinner } from "@chakra-ui/react";
+import { useGlobusAuth } from "@globus/react-auth-context";
+import { Center, Spinner, Text } from "@chakra-ui/react";
 import { isFeatureEnabled } from "../../../static";
 
 function Authenticate() {
@@ -22,7 +22,14 @@ function Authenticate() {
     }
     attempt();
   }, [router, instance, instance?.handleCodeRedirect, auth.isAuthenticated]);
-  return <Spinner />;
+  return (
+    <>
+      <Center mt={4}>
+        <Spinner mr="2" />
+        <Text>Attempting to validate credentials...</Text>
+      </Center>
+    </>
+  );
 }
 
 export default isFeatureEnabled("authentication") ? Authenticate : () => null;
