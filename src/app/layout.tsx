@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ThemeProvider } from "./theme-provider";
-import { info } from "@globus/sdk/cjs";
+import { info } from "@globus/sdk";
 
 import {
   getEnvironment,

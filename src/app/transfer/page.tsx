@@ -35,7 +35,7 @@ import {
 } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
-import { transfer, webapp } from "@globus/sdk/cjs";
+import { transfer, webapp } from "@globus/sdk";
 import { useGlobusAuth } from "@/globus/globus-auth-context/useGlobusAuth";
 import { isTransferEnabled } from "../../../static";
 
