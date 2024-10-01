@@ -100,17 +100,15 @@ export function CollectionSearch({
               <Text fontSize="xs">{result.entity_type}</Text>
             </CardHeader>
             <CardBody>
-              <List>
-                <Text fontSize="xs">
-                  <ListItem>ID: {result.id}</ListItem>
-                  <ListItem>Owner: {result.owner_id}</ListItem>
-                  <ListItem>Domain: {result.domain || "\u2014"}</ListItem>
-                  <ListItem>
-                    <Text noOfLines={1}>
-                      Description: {result.description || "\u2014"}
-                    </Text>
-                  </ListItem>
-                </Text>
+              <List fontSize="xs">
+                <ListItem>ID: {result.id}</ListItem>
+                <ListItem>Owner: {result.owner_id}</ListItem>
+                <ListItem>Domain: {result.domain || "\u2014"}</ListItem>
+                <ListItem>
+                  <Text noOfLines={1}>
+                    Description: {result.description || "\u2014"}
+                  </Text>
+                </ListItem>
               </List>
             </CardBody>
           </Card>

@@ -15,10 +15,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
-
-import { getAttribute, withFeature } from "../../static";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+
+import TransferDrawer from "@/components/Transfer/Drawer";
+
+import { getAttribute, withFeature } from "../../static";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const LOGO = getAttribute("content.logo");
@@ -33,21 +35,33 @@ export function Authentication() {
   return (
     <>
       {auth.isAuthenticated && user ? (
-        <Menu placement="bottom-end">
-          <MenuButton size="sm" as={Button} rightIcon={<ChevronDownIcon />}>
-            {user?.preferred_username}
-          </MenuButton>
-          <MenuList zIndex={2}>
-            <Box px={2} textAlign="right">
-              <Text>{user?.name}</Text>
-              <Text fontSize="sm">{user?.organization}</Text>
-            </Box>
-            <MenuDivider />
-            <MenuItem onClick={async () => await auth.authorization?.revoke()}>
-              Log Out
-            </MenuItem>
-          </MenuList>
-        </Menu>
+        <>
+          <HStack as="nav" spacing={4}>
+            <TransferDrawer />
+            <Menu placement="bottom-end">
+              <MenuButton
+                colorScheme="gray"
+                size="sm"
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+              >
+                {user?.preferred_username}
+              </MenuButton>
+              <MenuList zIndex={2}>
+                <Box px={2} textAlign="right">
+                  <Text>{user?.name}</Text>
+                  <Text fontSize="sm">{user?.organization}</Text>
+                </Box>
+                <MenuDivider />
+                <MenuItem
+                  onClick={async () => await auth.authorization?.revoke()}
+                >
+                  Log Out
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
+        </>
       ) : (
         <Button
           size="sm"
@@ -88,7 +102,9 @@ export default function Header() {
               </Link>
             </HStack>
             {withFeature("authentication", () => (
-              <Authentication />
+              <Box>
+                <Authentication />
+              </Box>
             ))}
           </Flex>
         </Container>

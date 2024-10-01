@@ -14,7 +14,6 @@ import {
 
 import { Provider as GlobusAuthorizationManagerProvider } from "@globus/react-auth-context";
 import Header from "@/components/Header";
-import TransferDrawer from "@/components/Transfer/Drawer";
 import { CLIENT_INFO } from "@/globus/utils";
 
 const env = getEnvironment();
@@ -65,7 +64,6 @@ export default function RootLayout({
           >
             <Header />
             {children}
-            {isTransferEnabled && <TransferDrawer />}
           </GlobusAuthorizationManagerProvider>
         </ThemeProvider>
       </body>

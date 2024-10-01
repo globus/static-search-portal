@@ -27,17 +27,20 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
+  FormHelperText,
 } from "@chakra-ui/react";
-import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import {
   XCircleIcon,
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
-import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
 import { transfer, webapp } from "@globus/sdk";
-import { useGlobusAuth } from "@/globus/globus-auth-context/useGlobusAuth";
+import { useGlobusAuth } from "@globus/react-auth-context";
+
+import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
+import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
 import { isTransferEnabled } from "../../../static";
+import PathVerifier from "@/globus/PathVerifier";
 
 export default function ResultPage() {
   const auth = useGlobusAuth();
@@ -82,7 +85,7 @@ export default function ResultPage() {
     e.preventDefault();
 
     const { destination, path, label } = transferSettings;
-    if (!label || !path || !destination) {
+    if (!path || !destination) {
       return;
     }
 
@@ -158,7 +161,7 @@ export default function ResultPage() {
       {auth.isAuthenticated === false && (
         <Alert status="error" my={2}>
           <AlertIcon />
-          <AlertTitle>You must authetnicate to initiate a transfer.</AlertTitle>
+          <AlertTitle>You must authenticate to initiate a transfer.</AlertTitle>
         </Alert>
       )}
 
@@ -241,6 +244,14 @@ export default function ResultPage() {
                         });
                       }}
                     />
+                    <FormHelperText>
+                      {transferSettings?.path && (
+                        <PathVerifier
+                          path={transferSettings.path}
+                          collectionId={transferSettings.destination}
+                        />
+                      )}
+                    </FormHelperText>
                   </FormControl>
                   <FormControl>
                     <FormLabel>Label</FormLabel>

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Drawer,
@@ -23,12 +25,14 @@ import {
   HStack,
   Tooltip,
 } from "@chakra-ui/react";
+import { usePathname } from "next/navigation";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import NextLink from "next/link";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 
 export default function TransferDrawer() {
+  const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const items = useGlobusTransferStore((state) => state.items);
@@ -49,12 +53,15 @@ export default function TransferDrawer() {
 
   return (
     <>
-      <Box pos="fixed" bottom={0} left={0} right={0}>
-        <Box p={2}>
-          <Button colorScheme="blue" onClick={onOpen}>
-            Transfer List ({items.length})
-          </Button>
-        </Box>
+      <Box>
+        <Button
+          isDisabled={pathname === "/transfer"}
+          size="sm"
+          colorScheme="blue"
+          onClick={onOpen}
+        >
+          Transfer List ({items.length})
+        </Button>
       </Box>
       <Drawer size="xl" placement="right" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
@@ -98,6 +105,7 @@ export default function TransferDrawer() {
                                   noOfLines={1}
                                   as={NextLink}
                                   href={`/results?subject=${item.subject}`}
+                                  onClick={onClose}
                                 >
                                   {item.label}
                                 </Link>
