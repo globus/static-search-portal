@@ -81,8 +81,8 @@ export default function Header() {
       as="header"
       bg="brand.800"
       minH={{ base: "50px", md: "10vh" }}
-      align={"center"}
-      justify={"center"}
+      align="center"
+      justify="center"
     >
       <Container maxW="container.xl">
         <Flex
