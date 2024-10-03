@@ -15,9 +15,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import Link from "next/link";
+
+import TransferDrawer from "@/components/Transfer/Drawer";
 
 import { getAttribute, withFeature } from "../../static";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const LOGO = getAttribute("content.logo");
@@ -32,21 +35,33 @@ export function Authentication() {
   return (
     <>
       {auth.isAuthenticated && user ? (
-        <Menu placement="bottom-end">
-          <MenuButton size="sm" as={Button} rightIcon={<ChevronDownIcon />}>
-            {user?.preferred_username}
-          </MenuButton>
-          <MenuList zIndex={2}>
-            <Box px={2} textAlign="right">
-              <Text>{user?.name}</Text>
-              <Text fontSize="sm">{user?.organization}</Text>
-            </Box>
-            <MenuDivider />
-            <MenuItem onClick={async () => await auth.authorization?.revoke()}>
-              Log Out
-            </MenuItem>
-          </MenuList>
-        </Menu>
+        <>
+          <HStack as="nav" spacing={4}>
+            <TransferDrawer />
+            <Menu placement="bottom-end">
+              <MenuButton
+                colorScheme="gray"
+                size="sm"
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+              >
+                {user?.preferred_username}
+              </MenuButton>
+              <MenuList zIndex={2}>
+                <Box px={2} textAlign="right">
+                  <Text>{user?.name}</Text>
+                  <Text fontSize="sm">{user?.organization}</Text>
+                </Box>
+                <MenuDivider />
+                <MenuItem
+                  onClick={async () => await auth.authorization?.revoke()}
+                >
+                  Log Out
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
+        </>
       ) : (
         <Button
           size="sm"
@@ -62,34 +77,45 @@ export function Authentication() {
 
 export default function Header() {
   return (
-    <header>
-      <Box bg="brand.800">
-        <Container maxW="container.xl">
-          <Flex
-            minWidth="max-content"
-            alignItems="center"
-            justify="space-between"
-            h="10vh"
-          >
-            <HStack p={4} spacing="24px">
-              {LOGO && (
-                <Image
-                  src={LOGO.src}
-                  alt={LOGO.alt}
-                  boxSize="100px"
-                  objectFit="contain"
-                />
-              )}
-              <Heading as="h1" size="md" color="white">
-                {HEADLINE}
-              </Heading>
-            </HStack>
-            {withFeature("authentication", () => (
+    <Flex
+      as="header"
+      bg="brand.800"
+      minH={{ base: "50px", md: "10vh" }}
+      align="center"
+      justify="center"
+    >
+      <Container maxW="container.xl">
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          minWidth="max-content"
+          alignItems={{ base: "flex-start", md: "center" }}
+          justify={{ base: "space-around", md: "space-between" }}
+          my={2}
+        >
+          <Box>
+            <Link href="/">
+              <HStack py={4} spacing="24px">
+                {LOGO && (
+                  <Image
+                    src={LOGO.src}
+                    alt={LOGO.alt}
+                    boxSize="100px"
+                    objectFit="contain"
+                  />
+                )}
+                <Heading as="h1" size="md" color="white">
+                  {HEADLINE}
+                </Heading>
+              </HStack>
+            </Link>
+          </Box>
+          {withFeature("authentication", () => (
+            <Box>
               <Authentication />
-            ))}
-          </Flex>
-        </Container>
-      </Box>
-    </header>
+            </Box>
+          ))}
+        </Flex>
+      </Container>
+    </Flex>
   );
 }

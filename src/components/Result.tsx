@@ -7,13 +7,6 @@ import {
   Box,
   Flex,
   Button,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
   Divider,
   Spacer,
   ButtonGroup,
@@ -29,16 +22,60 @@ import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
 import { Field, type FieldDefinition } from "./Field";
 import { JSONTree } from "./JSONTree";
+import ResponseDrawer from "./ResponseDrawer";
+import AddToTransferList from "./AddToTransferList";
 
-import { GMetaResult } from "@globus/sdk/services/search/service/query";
+import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 
 type LinkDefinition = {
+  /**
+   * The label that will be rendered as the link text.
+   */
   label: string | { property: string; fallback?: string };
+  /**
+   * The location that will be used as the `href` for the link.
+   */
   href:
     | string
     | {
         property: string;
+        /**
+         * A fallback value that will be used if the property is not found.
+         */
         fallback?: string;
+      };
+};
+
+export type GlobusTransferOptions = {
+  type?:
+    | string
+    | {
+        /**
+         * `property` can be used to reference a value from the result (subject) using JSONata.
+         */
+        property: string;
+      };
+  /**
+   * The collection that will be used as the `source_endpoint` for the transfer.
+   */
+  collection:
+    | string
+    | {
+        /**
+         * `property` can be used to reference a value from the result (subject) using JSONata.
+         */
+        property: string;
+      };
+  /**
+   * The path that will be used as the `source_path` for the transfer.
+   */
+  path:
+    | string
+    | {
+        /**
+         * `property` can be used to reference a value from the result (subject) using JSONata.
+         */
+        property: string;
       };
 };
 
@@ -70,6 +107,12 @@ export type ResultComponentOptions = {
    */
   fields?: FieldDefinition[];
   links?: LinkDefinition[];
+  globus?: {
+    /**
+     * Enables Globus Transfer UI for the result.
+     */
+    transfer?: GlobusTransferOptions;
+  };
 };
 
 type ProcessedLink = {
@@ -92,6 +135,61 @@ export default function ResultWrapper({
     return <Error error={result} />;
   }
   return <Result result={result} />;
+}
+
+export async function getTransferDetailsFromResult(
+  result: GMetaResult,
+): Promise<{
+  collection: string;
+  path: string;
+  type: "file" | "directory";
+}> {
+  /**
+   * The configuration for Globus Transfer found in the `static.json` file.
+   */
+  const config = getAttribute("components.Result.globus.transfer");
+  /**
+   * Properties that can be set on the result itself that will take precedence over the configuration.
+   */
+
+  /**
+   * For `collection`, `path`, and `type`, we first check to see if there is a property configured
+   * on the result itself in the `globus` object. If not, we fall back to the configuration in the `static.json` file,
+   * either using a string value or property reference.
+   */
+
+  async function getTransferValue(property: "collection" | "path" | "type") {
+    /**
+     * Attempt to get the value from the result itself.
+     */
+    const { globus } = result.entries[0].content;
+    const value = (globus as { transfer?: GlobusTransferOptions })?.transfer?.[
+      property
+    ];
+    if (value) {
+      return value;
+    }
+    if (typeof config[property] === "string") {
+      /**
+       * If the `static.json` configuration for the property is a string, return that value.
+       */
+      return config[property];
+    }
+    /**
+     * Otherwise, attempt to get the value from the result using the property reference.
+     */
+    return getValueFrom<string>(result, config[property]?.property);
+  }
+
+  const collection = await getTransferValue("collection");
+  const path = await getTransferValue("path");
+  const type = await getTransferValue("type");
+
+  return {
+    collection,
+    path,
+    type: type || "file",
+  };
 }
 
 function Result({ result }: { result: GMetaResult }) {
@@ -141,7 +239,6 @@ function Result({ result }: { result: GMetaResult }) {
           },
         ),
       );
-
       setHeading(heading);
       setSummary(summary);
       setFields(fields);
@@ -152,13 +249,17 @@ function Result({ result }: { result: GMetaResult }) {
 
   return (
     <>
-      <Heading as="h1" size="md" color="brand">
-        {heading || (
-          <Text as="em" color="gray.500">
-            &mdash;
-          </Text>
-        )}{" "}
-      </Heading>
+      <Flex>
+        <Heading as="h1" size="md" color="brand">
+          {heading || (
+            <Text as="em" color="gray.500">
+              &mdash;
+            </Text>
+          )}{" "}
+        </Heading>
+        <Spacer />
+        <AddToTransferList result={result} />
+      </Flex>
 
       <Divider my={2} />
 
@@ -196,38 +297,6 @@ function Result({ result }: { result: GMetaResult }) {
           </ResponseDrawer>
         </Box>
       </Flex>
-    </>
-  );
-}
-
-function ResponseDrawer({ children }: { children: any }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
-
-  return (
-    <>
-      <Button
-        ref={btnRef.current}
-        colorScheme="gray"
-        onClick={onOpen}
-        size="xs"
-      >
-        View Raw Search result
-      </Button>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef.current}
-        size="xl"
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader />
-          <DrawerBody>{children}</DrawerBody>
-        </DrawerContent>
-      </Drawer>
     </>
   );
 }

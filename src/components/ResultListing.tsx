@@ -13,6 +13,7 @@ import {
   Td,
   HStack,
   Link,
+  Spacer,
 } from "@chakra-ui/react";
 import { getValueFromAttribute, getAttribute } from "../../static";
 
@@ -24,6 +25,7 @@ import {
   getProcessedField,
 } from "./Field";
 import ImageField from "./Fields/ImageField";
+import AddToTransferList from "./AddToTransferList";
 
 export type ResultListingComponentOptions = {
   /**
@@ -161,16 +163,20 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     <Card size="sm" w="full">
       <CardHeader>
         <Heading size="md" color="brand">
-          <Link
-            as={NextLink}
-            href={`/results?subject=${encodeURIComponent(gmeta.subject)}`}
-          >
-            {heading || (
-              <Text as="em" color="gray.500">
-                &mdash;
-              </Text>
-            )}
-          </Link>
+          <HStack>
+            <Link
+              as={NextLink}
+              href={`/results?subject=${encodeURIComponent(gmeta.subject)}`}
+            >
+              {heading || (
+                <Text as="em" color="gray.500">
+                  &mdash;
+                </Text>
+              )}
+            </Link>
+            <Spacer />
+            <AddToTransferList result={gmeta} />
+          </HStack>
         </Heading>
       </CardHeader>
       {image || summary || fields ? (

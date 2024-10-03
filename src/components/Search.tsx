@@ -1,4 +1,5 @@
 "use client";
+
 import {
   InputGroup,
   Input,
@@ -20,14 +21,13 @@ import type { GSearchResult } from "@globus/sdk/services/search/service/query";
 import { isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
 import { SearchState, useSearch } from "../app/search-provider";
-import { getAttribute, isFeatureEnabled } from "../../static";
+import { getAttribute, isAuthenticationEnabled } from "../../static";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
-const AUTENTICATION_ENABLED = isFeatureEnabled("authentication");
 
 function getSearchPayload(query: string, state: SearchState) {
   return {
@@ -51,7 +51,7 @@ export function Search() {
       setIsLoading(true);
 
       const headers =
-        AUTENTICATION_ENABLED &&
+        isAuthenticationEnabled &&
         auth.isAuthenticated &&
         auth.authorization?.tokens?.search?.access_token
           ? {
@@ -71,7 +71,7 @@ export function Search() {
   }, [
     query,
     search,
-    AUTENTICATION_ENABLED
+    isAuthenticationEnabled
       ? auth.authorization?.tokens?.search?.access_token
       : undefined,
   ]);
