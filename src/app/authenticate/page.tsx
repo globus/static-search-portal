@@ -5,6 +5,12 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 import { Center, Spinner, Text } from "@chakra-ui/react";
 import { isFeatureEnabled } from "../../../static";
 
+const REDIRECT_KEY = "postLoginRedirectUrl";
+
+export function setPostLoginRedirectUrl(url: string) {
+  sessionStorage.setItem(REDIRECT_KEY, url);
+}
+
 function Authenticate() {
   const auth = useGlobusAuth();
   const router = useRouter();
@@ -13,7 +19,9 @@ function Authenticate() {
   useEffect(() => {
     async function attempt() {
       if (auth.isAuthenticated) {
-        return router.replace("/");
+        const replaceWith = sessionStorage.getItem(REDIRECT_KEY) ?? "/";
+        sessionStorage.removeItem(REDIRECT_KEY);
+        return router.replace(replaceWith);
       } else {
         await instance?.handleCodeRedirect({
           shouldReplace: false,

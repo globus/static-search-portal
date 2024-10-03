@@ -25,6 +25,10 @@ import {
   HStack,
   Tooltip,
   Badge,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 
@@ -79,30 +83,34 @@ export default function TransferDrawer() {
             <Flex h="100%" direction="column">
               {items.length ? (
                 <Box my={2}>
-                  <Text mb={2}>
-                    These are the entries that you have selected for data
-                    transfer. Data or data sets associated to entries may be
-                    sourced from multiple sources, which will be visible here.
-                  </Text>
-                  <Text mb={2}>
-                    Once you have finished selecting entries, the next step is
-                    to:&nbsp;
-                    <Link as={NextLink} href="/transfer" onClick={onClose}>
-                      Configure your Transfer
-                    </Link>
-                  </Text>
+                  <Alert
+                    status="info"
+                    variant="subtle"
+                    flexDirection="column"
+                    alignItems="start"
+                  >
+                    <AlertTitle>
+                      These are the entries that you have selected for data
+                      transfer.
+                    </AlertTitle>
+                    <AlertDescription>
+                      Data or datasets associated to entries may be sourced from
+                      multiple sources, which will be visible here.
+                    </AlertDescription>
+                  </Alert>
                 </Box>
               ) : null}
               <Stack spacing={2}>
                 {items.length === 0 && (
                   <>
-                    <Text fontSize="large" as="em" mt={4}>
-                      No items added.
-                    </Text>
-                    <Text>
-                      As you browse data and add entries to your Transfer List,
-                      they will appear here.
-                    </Text>
+                    <Alert status="warning">
+                      <AlertIcon />
+                      <AlertTitle>No items added.</AlertTitle>
+                      <AlertDescription>
+                        As you browse data and add entries to your Transfer
+                        List, they will appear here.
+                      </AlertDescription>
+                    </Alert>
                   </>
                 )}
                 {Object.keys(itemsByCollection).map((collection, i) => (
@@ -158,14 +166,16 @@ export default function TransferDrawer() {
                 ))}
               </Stack>
               <Spacer />
-              <Button
-                as={NextLink}
-                href="/transfer"
-                onClick={onClose}
-                isDisabled={items.length === 0}
-              >
-                Next Step: Configure your Transfer
-              </Button>
+              {items.length > 0 && (
+                <Button
+                  as={NextLink}
+                  href="/transfer"
+                  onClick={onClose}
+                  isDisabled={items.length === 0}
+                >
+                  Next Step: Configure your Transfer
+                </Button>
+              )}
             </Flex>
           </DrawerBody>
         </DrawerContent>

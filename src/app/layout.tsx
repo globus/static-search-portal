@@ -36,8 +36,12 @@ const scopes = [
   /**
    * If Globus Transfer functionality is enabled, we'll need to ask for the Transfer scope.
    */
-  isTransferEnabled && "urn:globus:auth:scope:transfer.api.globus.org:all",
-].join(" ");
+  isTransferEnabled
+    ? "urn:globus:auth:scope:transfer.api.globus.org:all"
+    : null,
+]
+  .filter(Boolean)
+  .join(" ");
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -47,20 +47,10 @@ import { CollectionName } from "@/globus/Collection";
 export default function ResultPage() {
   const auth = useGlobusAuth();
   const toast = useToast();
-  const items = useGlobusTransferStore((state) => state.items);
+  const transferStore = useGlobusTransferStore();
   const removeItemBySubject = useGlobusTransferStore(
     (state) => state.removeItemBySubject,
   );
-
-  const [transferSettings, setTransferSettings] = useState<{
-    destination: string | undefined;
-    path: string | undefined;
-    label: string | undefined;
-  }>({
-    destination: undefined,
-    path: undefined,
-    label: undefined,
-  });
 
   if (isTransferEnabled === false) {
     return (
@@ -72,7 +62,7 @@ export default function ResultPage() {
     );
   }
 
-  const itemsByCollection = items.reduce(
+  const itemsByCollection = transferStore.items.reduce(
     (acc: { [key: Item["collection"]]: Item[] }, item) => {
       if (!acc[item.collection]) {
         acc[item.collection] = [];
@@ -89,7 +79,7 @@ export default function ResultPage() {
   async function handleStartTransfer(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const { destination, path, label } = transferSettings;
+    const { destination, path, label } = transferStore.transfer ?? {};
     if (!path || !destination) {
       return;
     }
@@ -108,7 +98,7 @@ export default function ResultPage() {
             submission_id: id.value,
             label,
             source_endpoint: collection,
-            destination_endpoint: destination,
+            destination_endpoint: destination.id,
             DATA: itemsByCollection[collection].map((item) => {
               return {
                 DATA_TYPE: "transfer_item",
@@ -170,7 +160,7 @@ export default function ResultPage() {
         </Alert>
       )}
 
-      {items.length === 0 ? (
+      {transferStore.items.length === 0 ? (
         <Center>
           <Text fontSize="xl">No items in the Transfer List.</Text>
         </Center>
@@ -254,31 +244,31 @@ export default function ResultPage() {
                     <FormControl>
                       <FormLabel>Destination</FormLabel>
                       <CollectionSearch
+                        defaultValue={
+                          transferStore.transfer?.destination ?? null
+                        }
                         onSelect={(destination) => {
-                          setTransferSettings({
-                            ...transferSettings,
-                            destination: destination.id,
-                          });
+                          transferStore.setDestination(destination);
                         }}
                       />
                     </FormControl>
                     <FormControl>
                       <FormLabel>Path</FormLabel>
                       <Input
+                        defaultValue={transferStore.transfer?.path}
                         required
                         disabled={!auth.isAuthenticated}
                         onChange={(e) => {
-                          setTransferSettings({
-                            ...transferSettings,
-                            path: e.currentTarget.value,
-                          });
+                          transferStore.setPath(e.currentTarget.value);
                         }}
                       />
                       <FormHelperText>
-                        {transferSettings?.path && (
+                        {transferStore.transfer?.path && (
                           <PathVerifier
-                            path={transferSettings.path}
-                            collectionId={transferSettings.destination}
+                            path={transferStore.transfer?.path}
+                            collectionId={
+                              transferStore.transfer?.destination?.id
+                            }
                           />
                         )}
                       </FormHelperText>
@@ -286,20 +276,18 @@ export default function ResultPage() {
                     <FormControl>
                       <FormLabel>Label</FormLabel>
                       <Input
+                        defaultValue={transferStore.transfer?.label}
                         disabled={!auth.isAuthenticated}
                         onChange={(e) => {
-                          setTransferSettings({
-                            ...transferSettings,
-                            label: e.currentTarget.value,
-                          });
+                          transferStore.setLabel(e.currentTarget.value);
                         }}
                       />
                     </FormControl>
                     <Button
                       w="100%"
                       isDisabled={
-                        !transferSettings?.destination ||
-                        !transferSettings?.path
+                        !transferStore.transfer?.destination ||
+                        !transferStore.transfer?.path
                       }
                       type="submit"
                     >

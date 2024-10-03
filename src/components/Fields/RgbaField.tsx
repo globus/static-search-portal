@@ -27,7 +27,7 @@ export default function RgbaField({
   };
 
   return (
-    <VStack>
+    <VStack display="inline-flex">
       <Box bg={`rgba(${value.join(",")})`} {...props} />
       <Code>[{value.join(",")}]</Code>
     </VStack>

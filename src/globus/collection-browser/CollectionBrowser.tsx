@@ -20,16 +20,18 @@ import { transfer } from "@globus/sdk";
 
 import { useGlobusAuth } from "@globus/react-auth-context";
 
-type Endpoint = Record<string, any>;
+export type Endpoint = Record<string, any>;
 
 export function CollectionSearch({
+  defaultValue = null,
   onSelect = () => {},
 }: {
+  defaultValue?: Endpoint | null;
   onSelect: (endpoint: Endpoint) => void;
 }) {
   const auth = useGlobusAuth();
   const [results, setResults] = useState<Endpoint[]>([]);
-  const [selection, setSelection] = useState<Endpoint | null>(null);
+  const [selection, setSelection] = useState(defaultValue);
 
   async function handleSearch(e: React.FormEvent<HTMLInputElement>) {
     const query = e.currentTarget.value;

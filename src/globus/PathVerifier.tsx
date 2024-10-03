@@ -24,6 +24,7 @@ import {
 } from "@globus/sdk/core/errors";
 
 import type { FileDocument } from "@globus/sdk/services/transfer/service/file-operations";
+import { setPostLoginRedirectUrl } from "@/app/authenticate/page";
 
 export default function PathVerifier({
   path,
@@ -90,7 +91,8 @@ export default function PathVerifier({
           size="xs"
           onClick={async () => {
             if (!response) return;
-            await auth.authorization?.handleErrorResponse(response, false);
+            setPostLoginRedirectUrl("/transfer");
+            await auth.authorization?.handleErrorResponse(response);
           }}
         >
           Address
