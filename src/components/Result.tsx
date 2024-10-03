@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import {
   Heading,
   Text,
@@ -11,24 +11,21 @@ import {
   Spacer,
   ButtonGroup,
   Link,
-  Icon,
 } from "@chakra-ui/react";
-import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 
 import {
   getAttribute,
   getValueFrom,
   getValueFromAttribute,
-  isTransferEnabled,
 } from "../../static";
 import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
 import { Field, type FieldDefinition } from "./Field";
 import { JSONTree } from "./JSONTree";
-import { useGlobusTransferStore } from "@/store/globus-transfer";
 import ResponseDrawer from "./ResponseDrawer";
+import AddToTransferList from "./AddToTransferList";
 
-import { GMetaResult } from "@globus/sdk/services/search/service/query";
+import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 
 type LinkDefinition = {
   /**
@@ -140,7 +137,9 @@ export default function ResultWrapper({
   return <Result result={result} />;
 }
 
-async function getTransferDetailsFromResult(result: GMetaResult): Promise<{
+export async function getTransferDetailsFromResult(
+  result: GMetaResult,
+): Promise<{
   collection: string;
   path: string;
   type: "file" | "directory";
@@ -183,7 +182,7 @@ async function getTransferDetailsFromResult(result: GMetaResult): Promise<{
   }
 
   const collection = await getTransferValue("collection");
-  const path = await getTransferValue("collection");
+  const path = await getTransferValue("path");
   const type = await getTransferValue("type");
 
   return {
@@ -198,17 +197,6 @@ function Result({ result }: { result: GMetaResult }) {
   const [summary, setSummary] = React.useState<string>();
   const [fields, setFields] = React.useState<FieldDefinition[]>([]);
   const [links, setLinks] = React.useState<ProcessedLink[]>([]);
-  const [transferEnabled, setTransferEnabled] = React.useState<boolean>();
-
-  const items = useGlobusTransferStore((state) => state.items);
-  const addTransferItem = useGlobusTransferStore((state) => state.addItem);
-  const removeItemBySubject = useGlobusTransferStore(
-    (state) => state.removeItemBySubject,
-  );
-
-  const isSelected = useMemo(() => {
-    return items.some((item) => item.subject === result.subject);
-  }, [result.subject, items]);
 
   useEffect(() => {
     async function bootstrap() {
@@ -251,7 +239,6 @@ function Result({ result }: { result: GMetaResult }) {
           },
         ),
       );
-      setTransferEnabled(isTransferEnabled);
       setHeading(heading);
       setSummary(summary);
       setFields(fields);
@@ -271,31 +258,7 @@ function Result({ result }: { result: GMetaResult }) {
           )}{" "}
         </Heading>
         <Spacer />
-        {transferEnabled && (
-          <Button
-            as={Link}
-            size="sm"
-            onClick={
-              !isSelected
-                ? async () => {
-                    const { collection, path, type } =
-                      await getTransferDetailsFromResult(result);
-
-                    addTransferItem({
-                      label: heading || result.subject,
-                      subject: result.subject,
-                      collection,
-                      path,
-                      type,
-                    });
-                  }
-                : () => removeItemBySubject(result.subject)
-            }
-          >
-            <Icon as={isSelected ? MinusCircleIcon : PlusCircleIcon} mr="1" />
-            {isSelected ? "Remove from Transfer List" : "Add to Transfer List"}
-          </Button>
-        )}
+        <AddToTransferList result={result} />
       </Flex>
 
       <Divider my={2} />

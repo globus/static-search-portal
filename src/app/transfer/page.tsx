@@ -28,6 +28,7 @@ import {
   AlertIcon,
   AlertTitle,
   FormHelperText,
+  AlertDescription,
 } from "@chakra-ui/react";
 import {
   XCircleIcon,
@@ -41,6 +42,7 @@ import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
 import { isTransferEnabled } from "../../../static";
 import PathVerifier from "@/globus/PathVerifier";
+import { CollectionName } from "@/globus/Collection";
 
 export default function ResultPage() {
   const auth = useGlobusAuth();
@@ -81,6 +83,9 @@ export default function ResultPage() {
     {},
   );
 
+  const collections = Object.keys(itemsByCollection);
+  const isMultipleCollections = collections.length > 1;
+
   async function handleStartTransfer(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -89,7 +94,7 @@ export default function ResultPage() {
       return;
     }
 
-    Object.keys(itemsByCollection).forEach(async (collection) => {
+    collections.forEach(async (collection) => {
       const id = await (
         await transfer.taskSubmission.submissionId(
           {},
@@ -167,118 +172,145 @@ export default function ResultPage() {
 
       {items.length === 0 ? (
         <Center>
-          <Text fontSize="xl">No items in the transfer list.</Text>
+          <Text fontSize="xl">No items in the Transfer List.</Text>
         </Center>
       ) : (
-        <SimpleGrid columns={2} spacing={10}>
-          <Box>
-            {Object.keys(itemsByCollection).map((collection, i) => (
-              <Card key={collection}>
-                <CardHeader>
-                  <Flex>
-                    <Heading size="sm">
-                      Collection {i + 1} ({collection})
-                    </Heading>
-                    <Spacer />
-                    {/* <Button size="xs">Remove Collection + Items</Button> */}
-                  </Flex>
-                </CardHeader>
-                <CardBody>
-                  <Stack>
-                    {itemsByCollection[collection].map((item) => (
-                      <Box key={item.subject}>
-                        <HStack align="flex-start">
-                          <IconButton
-                            size="xs"
-                            variant="ghost"
-                            aria-label="Remove item from transfer list"
-                            icon={<Icon as={XCircleIcon} boxSize={4} />}
-                            onClick={() => removeItemBySubject(item.subject)}
+        <>
+          <Box mb={8}>
+            <Heading size="lg" my={4}>
+              Transfer Data
+            </Heading>
+            <Text fontSize="lg">
+              Now that you have selected the data for transfer, you'll need to
+              specify a destination collection, path, and optional label for the
+              transfer.
+            </Text>
+          </Box>
+          <SimpleGrid columns={2} spacing={10}>
+            <Box>
+              {collections.map((collection, i) => (
+                <Card key={collection} size="sm">
+                  <CardHeader>
+                    <Flex>
+                      <Heading size="sm">
+                        <CollectionName id={collection} />
+                      </Heading>
+                      <Spacer />
+                    </Flex>
+                  </CardHeader>
+                  <CardBody>
+                    <Stack>
+                      {itemsByCollection[collection].map((item) => (
+                        <Box key={item.subject}>
+                          <HStack align="flex-start">
+                            <IconButton
+                              size="xs"
+                              variant="ghost"
+                              aria-label="Remove item from transfer list"
+                              icon={<Icon as={XCircleIcon} boxSize={4} />}
+                              onClick={() => removeItemBySubject(item.subject)}
+                            />
+                            <Stack spacing={1}>
+                              <Link
+                                noOfLines={1}
+                                as={NextLink}
+                                href={`/results?subject=${item.subject}`}
+                              >
+                                {item.label}
+                              </Link>
+                              <Tooltip label={item.path}>
+                                <Text
+                                  noOfLines={1}
+                                  fontSize="xs"
+                                  maxWidth="50%"
+                                >
+                                  {item.path}
+                                </Text>
+                              </Tooltip>
+                            </Stack>
+                            <Spacer />
+                          </HStack>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </CardBody>
+                </Card>
+              ))}
+            </Box>
+            <Box>
+              {isMultipleCollections && (
+                <Alert status="info" my={2}>
+                  <AlertIcon />
+                  <AlertDescription>
+                    Since the data you've selected is hosted across multiple
+                    sources ({collections.length}), a transfer task will be
+                    created for each source.
+                  </AlertDescription>
+                </Alert>
+              )}
+              <form onSubmit={(e) => handleStartTransfer(e)}>
+                <fieldset disabled={!auth.isAuthenticated}>
+                  <VStack>
+                    <FormControl>
+                      <FormLabel>Destination</FormLabel>
+                      <CollectionSearch
+                        onSelect={(destination) => {
+                          setTransferSettings({
+                            ...transferSettings,
+                            destination: destination.id,
+                          });
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel>Path</FormLabel>
+                      <Input
+                        required
+                        disabled={!auth.isAuthenticated}
+                        onChange={(e) => {
+                          setTransferSettings({
+                            ...transferSettings,
+                            path: e.currentTarget.value,
+                          });
+                        }}
+                      />
+                      <FormHelperText>
+                        {transferSettings?.path && (
+                          <PathVerifier
+                            path={transferSettings.path}
+                            collectionId={transferSettings.destination}
                           />
-                          <Stack spacing={1}>
-                            <Link
-                              noOfLines={1}
-                              as={NextLink}
-                              href={`/results?subject=${item.subject}`}
-                            >
-                              {item.label}
-                            </Link>
-                            <Tooltip label={item.path}>
-                              <Text noOfLines={1} fontSize="xs" maxWidth="50%">
-                                {item.path}
-                              </Text>
-                            </Tooltip>
-                          </Stack>
-                          <Spacer />
-                        </HStack>
-                      </Box>
-                    ))}
-                  </Stack>
-                </CardBody>
-              </Card>
-            ))}
-          </Box>
-          <Box>
-            <form onSubmit={(e) => handleStartTransfer(e)}>
-              <fieldset disabled={!auth.isAuthenticated}>
-                <VStack>
-                  <FormControl>
-                    <FormLabel>Destination</FormLabel>
-                    <CollectionSearch
-                      onSelect={(destination) => {
-                        setTransferSettings({
-                          ...transferSettings,
-                          destination: destination.id,
-                        });
-                      }}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Path</FormLabel>
-                    <Input
-                      disabled={!auth.isAuthenticated}
-                      onChange={(e) => {
-                        setTransferSettings({
-                          ...transferSettings,
-                          path: e.currentTarget.value,
-                        });
-                      }}
-                    />
-                    <FormHelperText>
-                      {transferSettings?.path && (
-                        <PathVerifier
-                          path={transferSettings.path}
-                          collectionId={transferSettings.destination}
-                        />
-                      )}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Label</FormLabel>
-                    <Input
-                      disabled={!auth.isAuthenticated}
-                      onChange={(e) => {
-                        setTransferSettings({
-                          ...transferSettings,
-                          label: e.currentTarget.value,
-                        });
-                      }}
-                    />
-                  </FormControl>
-                  <Button
-                    w="100%"
-                    isDisabled={
-                      !transferSettings?.destination || !transferSettings?.path
-                    }
-                    type="submit"
-                  >
-                    Start Transfer
-                  </Button>
-                </VStack>
-              </fieldset>
-            </form>
-          </Box>
-        </SimpleGrid>
+                        )}
+                      </FormHelperText>
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel>Label</FormLabel>
+                      <Input
+                        disabled={!auth.isAuthenticated}
+                        onChange={(e) => {
+                          setTransferSettings({
+                            ...transferSettings,
+                            label: e.currentTarget.value,
+                          });
+                        }}
+                      />
+                    </FormControl>
+                    <Button
+                      w="100%"
+                      isDisabled={
+                        !transferSettings?.destination ||
+                        !transferSettings?.path
+                      }
+                      type="submit"
+                    >
+                      Start Transfer
+                    </Button>
+                  </VStack>
+                </fieldset>
+              </form>
+            </Box>
+          </SimpleGrid>
+        </>
       )}
     </Container>
   );

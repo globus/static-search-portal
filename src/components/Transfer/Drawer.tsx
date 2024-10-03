@@ -24,12 +24,15 @@ import {
   Icon,
   HStack,
   Tooltip,
+  Badge,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import NextLink from "next/link";
-import { XCircleIcon } from "@heroicons/react/24/outline";
+import { MinusCircleIcon } from "@heroicons/react/24/outline";
+import { CollectionName } from "@/globus/Collection";
+import { isTransferEnabled } from "../../../static";
 
 export default function TransferDrawer() {
   const pathname = usePathname();
@@ -51,16 +54,19 @@ export default function TransferDrawer() {
     {},
   );
 
-  return (
+  return isTransferEnabled ? (
     <>
       <Box>
         <Button
           isDisabled={pathname === "/transfer"}
           size="sm"
-          colorScheme="blue"
+          colorScheme="brand"
           onClick={onOpen}
         >
-          Transfer List ({items.length})
+          Transfer List
+          <Badge ml={2} colorScheme="brand">
+            {items.length}
+          </Badge>
         </Button>
       </Box>
       <Drawer size="xl" placement="right" onClose={onClose} isOpen={isOpen}>
@@ -69,18 +75,42 @@ export default function TransferDrawer() {
           <DrawerHeader borderBottomWidth="1px">
             Transfer List <DrawerCloseButton />
           </DrawerHeader>
-          <DrawerBody mt={2}>
+          <DrawerBody>
             <Flex h="100%" direction="column">
+              {items.length ? (
+                <Box my={2}>
+                  <Text mb={2}>
+                    These are the entries that you have selected for data
+                    transfer. Data or data sets associated to entries may be
+                    sourced from multiple sources, which will be visible here.
+                  </Text>
+                  <Text mb={2}>
+                    Once you have finished selecting entries, the next step is
+                    to:&nbsp;
+                    <Link as={NextLink} href="/transfer" onClick={onClose}>
+                      Configure your Transfer
+                    </Link>
+                  </Text>
+                </Box>
+              ) : null}
               <Stack spacing={2}>
                 {items.length === 0 && (
-                  <Text as="em">No items added to transfer list.</Text>
+                  <>
+                    <Text fontSize="large" as="em" mt={4}>
+                      No items added.
+                    </Text>
+                    <Text>
+                      As you browse data and add entries to your Transfer List,
+                      they will appear here.
+                    </Text>
+                  </>
                 )}
                 {Object.keys(itemsByCollection).map((collection, i) => (
-                  <Card key={collection}>
+                  <Card key={collection} size="sm">
                     <CardHeader>
                       <Flex>
                         <Heading size="sm">
-                          Collection {i + 1} ({collection})
+                          <CollectionName id={collection} />
                         </Heading>
                         <Spacer />
                         {/* <Button size="xs">Remove Collection + Items</Button> */}
@@ -91,15 +121,6 @@ export default function TransferDrawer() {
                         {itemsByCollection[collection].map((item) => (
                           <Box key={item.subject}>
                             <HStack align="flex-start">
-                              <IconButton
-                                size="xs"
-                                variant="ghost"
-                                aria-label="Remove item from transfer list"
-                                icon={<Icon as={XCircleIcon} boxSize={4} />}
-                                onClick={() =>
-                                  removeItemBySubject(item.subject)
-                                }
-                              />
                               <Stack spacing={1}>
                                 <Link
                                   noOfLines={1}
@@ -110,12 +131,24 @@ export default function TransferDrawer() {
                                   {item.label}
                                 </Link>
                                 <Tooltip label={item.path}>
-                                  <Text noOfLines={1} fontSize="xs">
+                                  <Text
+                                    noOfLines={1}
+                                    fontSize="xs"
+                                    maxWidth="90%"
+                                  >
                                     {item.path}
                                   </Text>
                                 </Tooltip>
                               </Stack>
                               <Spacer />
+                              <IconButton
+                                variant="ghost"
+                                aria-label="Remove item from transfer list"
+                                icon={<Icon as={MinusCircleIcon} boxSize={6} />}
+                                onClick={() =>
+                                  removeItemBySubject(item.subject)
+                                }
+                              />
                             </HStack>
                           </Box>
                         ))}
@@ -125,13 +158,18 @@ export default function TransferDrawer() {
                 ))}
               </Stack>
               <Spacer />
-              <Button as={NextLink} href="/transfer" onClick={onClose}>
-                Configure Transfer
+              <Button
+                as={NextLink}
+                href="/transfer"
+                onClick={onClose}
+                isDisabled={items.length === 0}
+              >
+                Next Step: Configure your Transfer
               </Button>
             </Flex>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
     </>
-  );
+  ) : null;
 }
