@@ -24,7 +24,7 @@ import {
 } from "@globus/sdk/core/errors";
 
 import type { FileDocument } from "@globus/sdk/services/transfer/service/file-operations";
-import { setPostLoginRedirectUrl } from "@/app/authenticate/page";
+import { useOAuthStore } from "@/store/oauth";
 
 export default function PathVerifier({
   path,
@@ -34,6 +34,7 @@ export default function PathVerifier({
   collectionId?: string;
 }) {
   const auth = useGlobusAuth();
+  const oauthStore = useOAuthStore();
   const [isValidating, setIsValidating] = React.useState(false);
   const [isValid, setIsValid] = React.useState<null | boolean>(null);
   const [response, setResponse] = React.useState<FileDocument>();
@@ -91,7 +92,7 @@ export default function PathVerifier({
           size="xs"
           onClick={async () => {
             if (!response) return;
-            setPostLoginRedirectUrl("/transfer");
+            oauthStore.setReplaceWith("/transfer");
             await auth.authorization?.handleErrorResponse(response);
           }}
         >
