@@ -10,7 +10,17 @@
       "prerelease": false,
       "include-v-in-tag": false,
       "include-component-in-tag": false,
-      "extra-files": ["src/globus/utils.ts"]
+      "extra-files": ["src/utils/globus.ts"],
+      "changelog-sections": [
+        {
+          "type": "feat",
+          "section": "Features"
+        },
+        {
+          "type": "fix",
+          "section": "Fixes"
+        }
+      ]
     }
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
