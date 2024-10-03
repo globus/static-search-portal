@@ -77,17 +77,24 @@ export function Authentication() {
 
 export default function Header() {
   return (
-    <header>
-      <Box bg="brand.800">
-        <Container maxW="container.xl">
-          <Flex
-            minWidth="max-content"
-            alignItems="center"
-            justify="space-between"
-            h="10vh"
-          >
-            <HStack p={4} spacing="24px">
-              <Link href="/">
+    <Flex
+      as="header"
+      bg="brand.800"
+      minH={{ base: "50px", md: "10vh" }}
+      align={"center"}
+      justify={"center"}
+    >
+      <Container maxW="container.xl">
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          minWidth="max-content"
+          alignItems={{ base: "flex-start", md: "center" }}
+          justify={{ base: "space-around", md: "space-between" }}
+          my={2}
+        >
+          <Box>
+            <Link href="/">
+              <HStack py={4} spacing="24px">
                 {LOGO && (
                   <Image
                     src={LOGO.src}
@@ -99,16 +106,16 @@ export default function Header() {
                 <Heading as="h1" size="md" color="white">
                   {HEADLINE}
                 </Heading>
-              </Link>
-            </HStack>
-            {withFeature("authentication", () => (
-              <Box>
-                <Authentication />
-              </Box>
-            ))}
-          </Flex>
-        </Container>
-      </Box>
-    </header>
+              </HStack>
+            </Link>
+          </Box>
+          {withFeature("authentication", () => (
+            <Box>
+              <Authentication />
+            </Box>
+          ))}
+        </Flex>
+      </Container>
+    </Flex>
   );
 }
