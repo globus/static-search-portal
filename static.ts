@@ -1,4 +1,4 @@
-import _STATIC from "./static.json";
+import _STATIC from "./static-lsst-desc.json";
 import { defaultsDeep, get as _get } from "lodash";
 import { ThemeSettings } from "@/theme";
 
@@ -271,3 +271,10 @@ export const isTransferEnabled = Boolean(
     getAttribute("components.Result.globus.transfer"),
   ),
 );
+
+/**
+ * Whether or not a user can "Sign In" to the portal.
+ * If Transfer functionality is enabled (`isTransferEnabled`), then authentication is enabled.
+ */
+export const isAuthenticationEnabled =
+  isTransferEnabled || isFeatureEnabled("authentication");
