@@ -17,7 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import type { GSearchResult } from "@globus/sdk/services/search/service/query";
-import { useSearch, useSearchDispatch } from "@/app/search-provider";
+import { useSearch, useSearchDispatch } from "@/providers/search-provider";
 
 export const Pagination = ({ result }: { result?: GSearchResult }) => {
   const search = useSearch();

@@ -166,7 +166,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
           <HStack>
             <Link
               as={NextLink}
-              href={`/results?subject=${encodeURIComponent(gmeta.subject)}`}
+              href={`/results/${encodeURIComponent(gmeta.subject)}`}
             >
               {heading || (
                 <Text as="em" color="gray.500">

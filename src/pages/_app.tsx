@@ -1,7 +1,5 @@
-"use client";
-
 import React, { PropsWithChildren, useEffect } from "react";
-import { ThemeProvider } from "./theme-provider";
+import { ThemeProvider } from "../providers/theme-provider";
 import { info } from "@globus/sdk";
 
 import {
@@ -19,6 +17,7 @@ import {
 import Header from "@/components/Header";
 import { CLIENT_INFO } from "@/globus/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppProps } from "next/app";
 
 const env = getEnvironment();
 if (env) {
@@ -63,13 +62,14 @@ function reset() {
 const QueryProvider = ({ children }: PropsWithChildren) => {
   const auth = useGlobusAuth();
   useEffect(() => {
-    auth.authorization?.events.revoke.addListener(reset);
-    auth.authorization?.events.authenticated.addListener(reset);
+    auth?.authorization?.events.revoke.addListener(reset);
+    auth?.authorization?.events.authenticated.addListener(reset);
     return () => {
-      auth.authorization?.events.revoke.removeListener(reset);
-      auth.authorization?.events.authenticated.removeListener(reset);
+      auth?.authorization?.events.revoke.removeListener(reset);
+      auth?.authorization?.events.authenticated.removeListener(reset);
     };
-  }, [auth.authorization]);
+  }, [auth?.authorization]);
+
   return (
     <>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -77,40 +77,34 @@ const QueryProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function App({ Component, pageProps }: AppProps) {
   if (!isAuthenticationEnabled) {
     return (
-      <html lang="en">
-        <body>
-          <ThemeProvider>
+      <>
+        <ThemeProvider>
+          <QueryProvider>
             <Header />
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
+            <Component {...pageProps} />
+          </QueryProvider>
+        </ThemeProvider>
+      </>
     );
   }
 
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider>
-          <GlobusAuthorizationManagerProvider
-            redirect={redirect}
-            client={client}
-            scopes={scopes}
-          >
-            <QueryProvider>
-              <Header />
-              {children}
-            </QueryProvider>
-          </GlobusAuthorizationManagerProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <>
+      <ThemeProvider>
+        <GlobusAuthorizationManagerProvider
+          redirect={redirect}
+          client={client}
+          scopes={scopes}
+        >
+          <QueryProvider>
+            <Header />
+            <Component {...pageProps} />
+          </QueryProvider>
+        </GlobusAuthorizationManagerProvider>
+      </ThemeProvider>
+    </>
   );
 }

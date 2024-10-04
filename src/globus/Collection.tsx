@@ -1,7 +1,7 @@
 import React from "react";
 import { Code, Text, Tooltip } from "@chakra-ui/react";
 
-import { useCollection } from "@/hooks/useTransfer";
+import { useCollection } from "@/hooks/useGlobusAPI";
 
 export function CollectionName({ id }: { id: string }) {
   const { data } = useCollection(id);

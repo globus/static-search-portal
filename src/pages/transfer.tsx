@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {
   Container,
@@ -40,7 +39,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
-import { isTransferEnabled } from "../../../static";
+import { isTransferEnabled } from "../../static";
 import PathVerifier from "@/globus/PathVerifier";
 import { CollectionName } from "@/globus/Collection";
 
