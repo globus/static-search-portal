@@ -162,7 +162,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
   return (
     <Card size="sm" w="full">
       <CardHeader>
-        <Heading size="md" color="brand">
+        <Heading size="md" color="primary">
           <HStack>
             <Link
               as={NextLink}

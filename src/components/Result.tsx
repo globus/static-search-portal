@@ -250,7 +250,7 @@ function Result({ result }: { result: GMetaResult }) {
   return (
     <>
       <Flex>
-        <Heading as="h1" size="md" color="brand">
+        <Heading as="h1" size="md" color="primary">
           {heading || (
             <Text as="em" color="gray.500">
               &mdash;

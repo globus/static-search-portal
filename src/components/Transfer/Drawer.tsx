@@ -64,11 +64,11 @@ export default function TransferDrawer() {
         <Button
           isDisabled={pathname === "/transfer"}
           size="sm"
-          colorScheme="brand"
+          colorScheme="primary"
           onClick={onOpen}
         >
           Transfer List
-          <Badge ml={2} colorScheme="brand">
+          <Badge ml={2} colorScheme="primary">
             {items.length}
           </Badge>
         </Button>
