@@ -20,11 +20,12 @@ import type { GSearchResult } from "@globus/sdk/services/search/service/query";
 
 import { isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
-import { SearchState, useSearch } from "../app/search-provider";
+import { SearchState, useSearch } from "../providers/search-provider";
 import { getAttribute, isAuthenticationEnabled } from "../../static";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";
+import { useSearchParams } from "next/navigation";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
@@ -42,7 +43,8 @@ function getSearchPayload(query: string, state: SearchState) {
 export function Search() {
   const auth = useGlobusAuth();
   const search = useSearch();
-  const [query, setQuery] = useState<string>("");
+  const params = useSearchParams();
+  const [query, setQuery] = useState<string>(params.get("q") || "");
   const [result, setResult] = useState<undefined | GSearchResult>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -85,6 +87,7 @@ export function Search() {
               <SearchIcon color="gray.300" />
             </InputLeftElement>
             <Input
+              defaultValue={query}
               type="search"
               placeholder="Start your search here..."
               onChange={debounce((e) => setQuery(e.target.value), 300)}

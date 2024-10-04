@@ -1,9 +1,15 @@
 import STATIC from "./static.json" assert { type: "json" };
+import mdx from "@next/mdx";
+
+const withMDX = mdx({
+  extension: /\.(md|mdx)$/,
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
   reactStrictMode: true,
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   /**
    * If the `static.json` file contains a `host` object, use the `base_path` value
    * as the `basePath` for the Next.js application.
@@ -17,4 +23,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);

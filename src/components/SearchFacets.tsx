@@ -36,7 +36,7 @@ import {
   getFacetFieldNameByName,
   useSearchDispatch,
   useSearch,
-} from "@/app/search-provider";
+} from "@/providers/search-provider";
 
 import type {
   GSearchResult,
