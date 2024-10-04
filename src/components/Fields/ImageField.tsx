@@ -61,7 +61,7 @@ export default function ImageField({ value }: { value: unknown }) {
               <Box height="5rem" width="5rem" pos="relative">
                 {loading && (
                   <AbsoluteCenter>
-                    <Spinner emptyColor="gray.200" color="brand.500" />
+                    <Spinner emptyColor="gray.200" color="primary.500" />
                   </AbsoluteCenter>
                 )}
                 {error && (

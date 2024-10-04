@@ -79,7 +79,7 @@ export default function Header() {
   return (
     <Flex
       as="header"
-      bg="brand.800"
+      bg="primary.800"
       minH={{ base: "50px", md: "10vh" }}
       align="center"
       justify="center"

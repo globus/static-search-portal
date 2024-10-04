@@ -1,6 +1,10 @@
 import { STATIC } from "../static";
 
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import {
+  theme as baseTheme,
+  extendTheme,
+  withDefaultColorScheme,
+} from "@chakra-ui/react";
 
 import "@fontsource/ibm-plex-mono";
 import "@fontsource/ibm-plex-sans";
@@ -29,12 +33,12 @@ export type ThemeSettings = {
   colorScheme?: string;
   /**
    * Specific color definitions to use in the theme.
-   * The most common use case is to define a `brand` color.
+   * The most common use case is to define a `primary` color.
    * @example
    * ```json
    * {
    *   "colors": {
-   *     "brand": {
+   *     "primary": {
    *      "50": "#E5F2FF",
    *      "100": "#B8DBFF",
    *      "200": "#8AC4FF",
@@ -59,7 +63,7 @@ export type ThemeSettings = {
   extendTheme?: Parameters<typeof extendTheme>[0];
 };
 
-const brand: ColorDefinition = {
+const primary: ColorDefinition = {
   "50": "#E5F2FF",
   "100": "#B8DBFF",
   "200": "#8AC4FF",
@@ -71,6 +75,8 @@ const brand: ColorDefinition = {
   "800": "#00264c",
   "900": "#001933",
 };
+
+const secondary = baseTheme.colors.gray;
 
 let colorScheme = {};
 if (STATIC.data.attributes.theme?.colorScheme) {
@@ -87,7 +93,11 @@ const theme = extendTheme(
       mono: `'IBM Plex Mono', monospace`,
     },
     colors: {
-      brand,
+      /**
+       * Allow the legacy "brand" to be used as the primary color.
+       */
+      primary: STATIC.data.attributes.theme?.colors?.brand || primary,
+      secondary,
       ...(STATIC.data.attributes.theme?.colors || {}),
     },
   },
