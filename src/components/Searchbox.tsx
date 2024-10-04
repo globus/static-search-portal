@@ -7,12 +7,20 @@ export function Searchbox() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: React.FormEvent<
+      HTMLFormElement & {
+        readonly elements: {
+          q: HTMLInputElement;
+        };
+      }
+    >,
+  ) => {
+    const target = event.currentTarget.elements;
     event.preventDefault();
-
     router.push({
       pathname: "/search",
-      query: { q: event.target.q.value },
+      query: { q: target.q.value },
     });
   };
 
