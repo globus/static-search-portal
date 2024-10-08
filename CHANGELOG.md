@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0](https://github.com/globus/static-search-portal/compare/0.8.3...0.9.0) (2024-10-08)
+
+
+### Features
+
+* adds support for "content" directory and landing page customization ([#189](https://github.com/globus/static-search-portal/issues/189)) ([63b3319](https://github.com/globus/static-search-portal/commit/63b3319c808cb06e52cbcbea624b6407796f7b45))
+* use 'primary' and 'secondary' colors for styling ([#192](https://github.com/globus/static-search-portal/issues/192)) ([0877f8e](https://github.com/globus/static-search-portal/commit/0877f8e169cbdc03e7fd8f9b62438ffcc19f2b01))
+
 ## 0.8.3 (2024-05-22)
 
 ## What's Changed
