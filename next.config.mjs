@@ -1,4 +1,5 @@
 import STATIC from "./static.json" assert { type: "json" };
+
 import mdx from "@next/mdx";
 
 const withMDX = mdx({
@@ -16,10 +17,10 @@ const nextConfig = {
    */
   basePath: STATIC._static?.host?.base_path || undefined,
   images: {
-    /**
-     * @see https://nextjs.org/docs/pages/api-reference/components/image#unoptimized
-     */
     unoptimized: true,
+  },
+  publicRuntimeConfig: {
+    basePath: `${STATIC._static?.host?.base_path || ""}`,
   },
 };
 
