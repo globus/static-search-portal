@@ -14,10 +14,10 @@ import {
   Provider as GlobusAuthorizationManagerProvider,
   useGlobusAuth,
 } from "@globus/react-auth-context";
-import Header from "@/components/Header";
 import { CLIENT_INFO } from "@/globus/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProps } from "next/app";
+import Layout from "@/components/Layout";
 
 const env = getEnvironment();
 if (env) {
@@ -83,8 +83,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <>
         <ThemeProvider>
           <QueryProvider>
-            <Header />
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </QueryProvider>
         </ThemeProvider>
       </>
@@ -100,8 +101,9 @@ export default function App({ Component, pageProps }: AppProps) {
           scopes={scopes}
         >
           <QueryProvider>
-            <Header />
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </QueryProvider>
         </GlobusAuthorizationManagerProvider>
       </ThemeProvider>
