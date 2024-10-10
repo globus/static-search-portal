@@ -5,6 +5,5 @@
   "excludePrivate": true,
   "excludeExternals": true,
   "hideBreadcrumbs": true,
-  "hideInPageTOC": true,
   "placeInternalsInOwningModule": false
 }
