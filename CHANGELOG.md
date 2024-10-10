@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.10.0](https://github.com/globus/static-search-portal/compare/0.9.0...0.10.0) (2024-10-10)
+
+
+### Features
+
+* Allows configuration of custom navigation using "attributes.content.navigation" ([#205](https://github.com/globus/static-search-portal/issues/205)) ([e9356b8](https://github.com/globus/static-search-portal/commit/e9356b8733ccef5ab18f75136aceb2da32453bb6))
+
+
+### Fixes
+
+* Improves default styling of Markdown components. ([e9356b8](https://github.com/globus/static-search-portal/commit/e9356b8733ccef5ab18f75136aceb2da32453bb6))
+* Improves general layout styling. ([e9356b8](https://github.com/globus/static-search-portal/commit/e9356b8733ccef5ab18f75136aceb2da32453bb6))
+
 ## [0.9.0](https://github.com/globus/static-search-portal/compare/0.8.3...0.9.0) (2024-10-08)
 
 
