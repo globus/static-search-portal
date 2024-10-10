@@ -1,26 +1,8 @@
 import React from "react";
-import {
-  HStack,
-  Heading,
-  Box,
-  Image,
-  Button,
-  Container,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Text,
-} from "@chakra-ui/react";
-import { useGlobusAuth } from "@globus/react-auth-context";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { HStack, Heading, Box, Image, Container, Flex } from "@chakra-ui/react";
 import Link from "next/link";
 
-import TransferDrawer from "@/components/Transfer/Drawer";
-
-import { getAttribute, withFeature } from "../../static";
+import { getAttribute } from "../../static";
 import Navigation from "./Navigation";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
