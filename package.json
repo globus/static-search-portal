@@ -19,7 +19,7 @@
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.10.1",
     "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/styled": "^11.13.0",
     "@fontsource/ibm-plex-mono": "^5.1.0",
     "@fontsource/ibm-plex-sans": "^5.0.20",
     "@globus/react-auth-context": "^0.0.6",
