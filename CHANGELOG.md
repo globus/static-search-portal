@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/globus/static-search-portal/compare/0.10.0...0.10.1) (2024-10-10)
+
+
+### Fixes
+
+* include basePath in publicRuntimeConfig ([0e4585f](https://github.com/globus/static-search-portal/commit/0e4585f82123b150f857b853f553309b6ea12aaa))
+
 ## [0.10.0](https://github.com/globus/static-search-portal/compare/0.9.0...0.10.0) (2024-10-10)
 
 
