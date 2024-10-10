@@ -4,6 +4,7 @@ import { ThemeSettings } from "@/theme";
 
 import type { ResultListingComponentOptions } from "@/components/ResultListing";
 import type { ResultComponentOptions } from "@/components/Result";
+import { NavigationOptions } from "@/components/Navigation";
 
 /**
  * The base type for a `static.json` file.
@@ -69,6 +70,7 @@ export type Data = {
         src: string;
         alt?: string;
       };
+      navigation?: NavigationOptions;
     };
 
     components?: {

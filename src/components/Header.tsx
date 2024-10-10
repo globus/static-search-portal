@@ -21,6 +21,7 @@ import Link from "next/link";
 import TransferDrawer from "@/components/Transfer/Drawer";
 
 import { getAttribute, withFeature } from "../../static";
+import Navigation from "./Navigation";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const LOGO = getAttribute("content.logo");
@@ -28,52 +29,6 @@ const HEADLINE = getAttribute(
   "content.headline",
   `Search Index ${SEARCH_INDEX}`,
 );
-
-export function Authentication() {
-  const auth = useGlobusAuth();
-  const user = auth.authorization?.user;
-  return (
-    <>
-      {auth.isAuthenticated && user ? (
-        <>
-          <HStack as="nav" spacing={4}>
-            <TransferDrawer />
-            <Menu placement="bottom-end">
-              <MenuButton
-                colorScheme="gray"
-                size="sm"
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
-              >
-                {user?.preferred_username}
-              </MenuButton>
-              <MenuList zIndex={2}>
-                <Box px={2} textAlign="right">
-                  <Text>{user?.name}</Text>
-                  <Text fontSize="sm">{user?.organization}</Text>
-                </Box>
-                <MenuDivider />
-                <MenuItem
-                  onClick={async () => await auth.authorization?.revoke()}
-                >
-                  Log Out
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </HStack>
-        </>
-      ) : (
-        <Button
-          size="sm"
-          onClick={() => auth.authorization?.login()}
-          colorScheme="blue"
-        >
-          Sign In
-        </Button>
-      )}
-    </>
-  );
-}
 
 export default function Header() {
   return (
@@ -109,11 +64,7 @@ export default function Header() {
               </HStack>
             </Link>
           </Box>
-          {withFeature("authentication", () => (
-            <Box>
-              <Authentication />
-            </Box>
-          ))}
+          <Navigation />
         </Flex>
       </Container>
     </Flex>
