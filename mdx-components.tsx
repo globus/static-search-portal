@@ -70,7 +70,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
        * If the link is external, mark it as such.
        */
       return (
-        <Link {...rest} href={href} position="relative" pr={4} isExternal>
+        <Link
+          {...rest}
+          target="_blank"
+          rel="noopener noreferrer"
+          href={href}
+          position="relative"
+          pr={4}
+          isExternal
+        >
           {rest.children}
           <ExternalLinkIcon
             as="sup"
