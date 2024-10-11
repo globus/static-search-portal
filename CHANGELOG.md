@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/globus/static-search-portal/compare/0.10.1...0.11.0) (2024-10-11)
+
+
+### Features
+
+* Adds support for rendering fields a links. ([#212](https://github.com/globus/static-search-portal/issues/212)) ([889d966](https://github.com/globus/static-search-portal/commit/889d966bcbef78fa38a86c28eabf3bdf2ef843f9))
+
 ## [0.10.1](https://github.com/globus/static-search-portal/compare/0.10.0...0.10.1) (2024-10-10)
 
 
