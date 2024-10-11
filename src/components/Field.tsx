@@ -6,6 +6,7 @@ import jsonata from "jsonata";
 import RgbaField from "./Fields/RgbaField";
 import ImageField from "./Fields/ImageField";
 import TableField from "./Fields/TableField";
+import LinkField from "./Fields/LinkField";
 import FallbackField from "./Fields/FallbackField";
 
 import { GMetaResult } from "@globus/sdk/services/search/service/query";
@@ -73,6 +74,10 @@ export const FieldValue = ({
   if (type === "table") {
     return <TableField value={value} />;
   }
+  if (type === "link") {
+    return <LinkField value={value} />;
+  }
+
   /**
    * If no `type` is provided, or the `type` is not recognized, use the fallback field.
    */
