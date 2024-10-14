@@ -1,4 +1,4 @@
-[**@globus/static-search-portal**](README.md) • **Docs**
+[**@globus/static-search-portal**](README.md)
 
 ***
 
@@ -16,10 +16,10 @@
 
 ## Variables
 
-- [METADATA](variables/METADATA.md)
 - [areSEOResultsEnabled](variables/areSEOResultsEnabled.md)
 - [isAuthenticationEnabled](variables/isAuthenticationEnabled.md)
 - [isTransferEnabled](variables/isTransferEnabled.md)
+- [METADATA](variables/METADATA.md)
 
 ## Functions
 

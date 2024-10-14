@@ -1,4 +1,4 @@
-[**@globus/static-search-portal**](../README.md) • **Docs**
+[**@globus/static-search-portal**](../README.md)
 
 ***
 
@@ -6,9 +6,7 @@
 
 > `const` **isAuthenticationEnabled**: `boolean`
 
+Defined in: [static.ts:313](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/static.ts#L313)
+
 Whether or not a user can "Sign In" to the portal.
 If Transfer functionality is enabled (`isTransferEnabled`), then authentication is enabled.
-
-## Source
-
-[static.ts:313](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/static.ts#L313)

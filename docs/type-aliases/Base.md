@@ -1,10 +1,12 @@
-[**@globus/static-search-portal**](../README.md) • **Docs**
+[**@globus/static-search-portal**](../README.md)
 
 ***
 
-# Type alias: Base
+# Type Alias: Base
 
 > **Base**: `object`
+
+Defined in: [static.ts:12](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/static.ts#L12)
 
 The base type for a `static.json` file.
 
@@ -14,46 +16,46 @@ The base type for a `static.json` file.
 
 > **\_static**: `object`
 
-### \_static.generator
+#### \_static.generator
 
 > **generator**: `object`
 
-### \_static.generator.name
+#### \_static.generator.name
 
 > **name**: `string`
 
 The name of the generator used to build the `static.json` file.
 This should be a reference to the package name of the generator.
 
-#### Example
+##### Example
 
 ```ts
 "@globus/static-data-portal"
 ```
 
-### \_static.host?
+#### \_static.host?
 
 > `optional` **host**: `object`
 
 GitHub Action-injected environment variables.
 
-#### See
+##### See
 
 https://github.com/from-static/actions
 
-### \_static.host.base\_path
+#### \_static.host.base\_path
 
 > **base\_path**: `string`
 
-### \_static.host.base\_url
+#### \_static.host.base\_url
 
 > **base\_url**: `string`
 
-### \_static.host.host
+#### \_static.host.host
 
 > **host**: `string`
 
-### \_static.host.origin
+#### \_static.host.origin
 
 > **origin**: `string`
 
@@ -61,14 +63,10 @@ https://github.com/from-static/actions
 
 > **data**: `object`
 
-### data.attributes
+#### data.attributes
 
 > **attributes**: `Record`\<`string`, `unknown`\>
 
-### data.version
+#### data.version
 
 > **version**: `string`
-
-## Source
-
-[static.ts:12](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/static.ts#L12)
