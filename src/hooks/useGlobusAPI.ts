@@ -6,7 +6,7 @@ import { type AuthorizationManager } from "@globus/sdk/core/authorization/Author
 
 import { STATIC } from "../../static";
 
-export async function fetchCollection(
+async function fetchCollection(
   authorization: AuthorizationManager | undefined,
   id: string,
 ) {
@@ -18,12 +18,12 @@ export async function fetchCollection(
   return response.json();
 }
 
-export function useCollection(id: string) {
+export function useCollection(collectionId: string) {
   const auth = useGlobusAuth();
   return useQuery({
     enabled: auth?.isAuthenticated,
-    queryKey: ["transfer", "collections", id],
-    queryFn: () => fetchCollection(auth.authorization, id),
+    queryKey: ["transfer", "collections", collectionId],
+    queryFn: () => fetchCollection(auth.authorization, collectionId),
   });
 }
 
@@ -56,5 +56,26 @@ export function useSubject(id: string) {
   return useQuery({
     queryKey: key,
     queryFn: () => fetchSubject(auth?.authorization, id),
+  });
+}
+
+export function useStat(collectionId: string, path: string) {
+  const auth = useGlobusAuth();
+  const key = ["transfer", "collections", collectionId, "stat", path];
+  return useQuery({
+    enabled: auth?.isAuthenticated,
+    queryKey: key,
+    queryFn: async () => {
+      const response = await transfer.fileOperations.stat(
+        collectionId,
+        {
+          query: {
+            path,
+          },
+        },
+        { manager: auth.authorization },
+      );
+      return response.json();
+    },
   });
 }

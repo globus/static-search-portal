@@ -42,6 +42,7 @@ import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser"
 import { isTransferEnabled } from "../../static";
 import PathVerifier from "@/globus/PathVerifier";
 import { CollectionName } from "@/globus/Collection";
+import { TransferListItem } from "@/components/Transfer/Drawer";
 
 export default function ResultPage() {
   const auth = useGlobusAuth();
@@ -117,6 +118,7 @@ export default function ResultPage() {
       const data = await response.json();
 
       if (response.ok) {
+        transferStore.resetTransferSettings();
         toast({
           title: `Transfer: ${data.code}`,
           description: (
@@ -190,36 +192,7 @@ export default function ResultPage() {
                   <CardBody>
                     <Stack>
                       {itemsByCollection[collection].map((item) => (
-                        <Box key={item.subject}>
-                          <HStack align="flex-start">
-                            <IconButton
-                              size="xs"
-                              variant="ghost"
-                              aria-label="Remove item from transfer list"
-                              icon={<Icon as={XCircleIcon} boxSize={4} />}
-                              onClick={() => removeItemBySubject(item.subject)}
-                            />
-                            <Stack spacing={1}>
-                              <Link
-                                noOfLines={1}
-                                as={NextLink}
-                                href={`/results?subject=${item.subject}`}
-                              >
-                                {item.label}
-                              </Link>
-                              <Tooltip label={item.path}>
-                                <Text
-                                  noOfLines={1}
-                                  fontSize="xs"
-                                  maxWidth="50%"
-                                >
-                                  {item.path}
-                                </Text>
-                              </Tooltip>
-                            </Stack>
-                            <Spacer />
-                          </HStack>
-                        </Box>
+                        <TransferListItem key={item.subject} item={item} />
                       ))}
                     </Stack>
                   </CardBody>
