@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Drawer,
@@ -29,6 +27,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Code,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 
@@ -37,15 +36,59 @@ import NextLink from "next/link";
 import { MinusCircleIcon } from "@heroicons/react/24/outline";
 import { CollectionName } from "@/globus/Collection";
 import { isTransferEnabled } from "../../../static";
+import { useStat } from "@/hooks/useGlobusAPI";
+
+export const TransferListItem = ({
+  item,
+  onClick = () => {},
+}: {
+  item: Item;
+  onClick?: () => void;
+}) => {
+  const stat = useStat(item.collection, item.path);
+  const removeItemBySubject = useGlobusTransferStore(
+    (state) => state.removeItemBySubject,
+  );
+  return (
+    <Box key={item.subject}>
+      <HStack align="flex-start">
+        <Stack spacing={1}>
+          <Link
+            noOfLines={1}
+            as={NextLink}
+            href={`/results/${item.subject}`}
+            onClick={onClick}
+          >
+            {item.label}
+          </Link>
+          {stat.data?.size && (
+            <Text>
+              <Code>{stat.data?.size} Bytes</Code>
+            </Text>
+          )}
+          <Tooltip label={item.path}>
+            <Text noOfLines={1} fontSize="xs" maxWidth="90%">
+              {item.path}
+            </Text>
+          </Tooltip>
+        </Stack>
+        <Spacer />
+        <IconButton
+          variant="ghost"
+          aria-label="Remove item from transfer list"
+          icon={<Icon as={MinusCircleIcon} boxSize={6} />}
+          onClick={() => removeItemBySubject(item.subject)}
+        />
+      </HStack>
+    </Box>
+  );
+};
 
 export default function TransferDrawer() {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const items = useGlobusTransferStore((state) => state.items);
-  const removeItemBySubject = useGlobusTransferStore(
-    (state) => state.removeItemBySubject,
-  );
 
   const itemsByCollection = items.reduce(
     (acc: { [key: Item["collection"]]: Item[] }, item) => {
@@ -127,38 +170,11 @@ export default function TransferDrawer() {
                     <CardBody>
                       <Stack overflow="hidden">
                         {itemsByCollection[collection].map((item) => (
-                          <Box key={item.subject}>
-                            <HStack align="flex-start">
-                              <Stack spacing={1}>
-                                <Link
-                                  noOfLines={1}
-                                  as={NextLink}
-                                  href={`/results?subject=${item.subject}`}
-                                  onClick={onClose}
-                                >
-                                  {item.label}
-                                </Link>
-                                <Tooltip label={item.path}>
-                                  <Text
-                                    noOfLines={1}
-                                    fontSize="xs"
-                                    maxWidth="90%"
-                                  >
-                                    {item.path}
-                                  </Text>
-                                </Tooltip>
-                              </Stack>
-                              <Spacer />
-                              <IconButton
-                                variant="ghost"
-                                aria-label="Remove item from transfer list"
-                                icon={<Icon as={MinusCircleIcon} boxSize={6} />}
-                                onClick={() =>
-                                  removeItemBySubject(item.subject)
-                                }
-                              />
-                            </HStack>
-                          </Box>
+                          <TransferListItem
+                            key={item.subject}
+                            item={item}
+                            onClick={onClose}
+                          />
                         ))}
                       </Stack>
                     </CardBody>
