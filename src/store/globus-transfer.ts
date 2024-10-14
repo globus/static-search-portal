@@ -34,6 +34,7 @@ type Actions = {
   removeItemBySubject: (subject: Item["subject"]) => void;
   addItem: (item: Item) => void;
   reset: () => void;
+  resetTransferSettings: () => void;
 };
 
 const initialState = {
@@ -82,6 +83,15 @@ export const useGlobusTransferStore = create<State & Actions>()(
         return set((state) => ({
           ...state,
           items: state.items.filter((i) => i.subject !== item),
+        }));
+      },
+      /**
+       * Preserves the items selected for transfer but resets the settings.
+       */
+      resetTransferSettings: () => {
+        return set((state) => ({
+          ...state,
+          transfer: undefined,
         }));
       },
       reset: () => {
