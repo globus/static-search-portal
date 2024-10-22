@@ -27,7 +27,6 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Code,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 
@@ -35,8 +34,10 @@ import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import NextLink from "next/link";
 import { MinusCircleIcon } from "@heroicons/react/24/outline";
 import { CollectionName } from "@/globus/Collection";
-import { isTransferEnabled } from "../../../static";
 import { useStat } from "@/hooks/useGlobusAPI";
+import { readableBytes } from "@globus/sdk/services/transfer/utils";
+
+import { isTransferEnabled } from "../../../static";
 
 export const TransferListItem = ({
   item,
@@ -61,16 +62,16 @@ export const TransferListItem = ({
           >
             {item.label}
           </Link>
-          {stat.data?.size && (
-            <Text>
-              <Code>{stat.data?.size} Bytes</Code>
-            </Text>
-          )}
-          <Tooltip label={item.path}>
-            <Text noOfLines={1} fontSize="xs" maxWidth="90%">
-              {item.path}
-            </Text>
-          </Tooltip>
+          <HStack>
+            {stat.data?.type === "file" && stat.data?.size && (
+              <Text fontSize="xs">{readableBytes(stat.data?.size)}</Text>
+            )}
+            <Tooltip label={item.path}>
+              <Text noOfLines={1} fontSize="xs">
+                {item.path}
+              </Text>
+            </Tooltip>
+          </HStack>
         </Stack>
         <Spacer />
         <IconButton

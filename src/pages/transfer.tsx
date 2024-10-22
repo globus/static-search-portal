@@ -10,9 +10,7 @@ import {
   CardHeader,
   CardBody,
   Box,
-  HStack,
   Icon,
-  IconButton,
   Spacer,
   Stack,
   Button,
@@ -22,18 +20,13 @@ import {
   Input,
   useToast,
   SimpleGrid,
-  Tooltip,
   Alert,
   AlertIcon,
   AlertTitle,
   FormHelperText,
   AlertDescription,
 } from "@chakra-ui/react";
-import {
-  XCircleIcon,
-  ArrowTopRightOnSquareIcon,
-} from "@heroicons/react/24/outline";
-import NextLink from "next/link";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { transfer, webapp } from "@globus/sdk";
 import { useGlobusAuth } from "@globus/react-auth-context";
 
@@ -48,9 +41,6 @@ export default function ResultPage() {
   const auth = useGlobusAuth();
   const toast = useToast();
   const transferStore = useGlobusTransferStore();
-  const removeItemBySubject = useGlobusTransferStore(
-    (state) => state.removeItemBySubject,
-  );
 
   if (isTransferEnabled === false) {
     return (
@@ -92,6 +82,7 @@ export default function ResultPage() {
         )
       ).json();
 
+      const basePath = path.endsWith("/") ? path : `${path}/`;
       const response = await transfer.taskSubmission.submitTransfer(
         {
           payload: {
@@ -106,7 +97,7 @@ export default function ResultPage() {
                 /**
                  * @todo Should we allow (or require) configuration of `item.name` and `item.type`?
                  */
-                destination_path: `${path}${item.path}`,
+                destination_path: `${basePath}${item.path}`,
                 recursive: item.type === "directory",
               };
             }),
@@ -216,9 +207,7 @@ export default function ResultPage() {
                     <FormControl>
                       <FormLabel>Destination</FormLabel>
                       <CollectionSearch
-                        defaultValue={
-                          transferStore.transfer?.destination ?? null
-                        }
+                        value={transferStore.transfer?.destination ?? null}
                         onSelect={(destination) => {
                           transferStore.setDestination(destination);
                         }}
@@ -227,7 +216,7 @@ export default function ResultPage() {
                     <FormControl>
                       <FormLabel>Path</FormLabel>
                       <Input
-                        defaultValue={transferStore.transfer?.path}
+                        value={transferStore.transfer?.path || ""}
                         required
                         disabled={!auth.isAuthenticated}
                         onChange={(e) => {
@@ -237,7 +226,7 @@ export default function ResultPage() {
                       <FormHelperText>
                         {transferStore.transfer?.path && (
                           <PathVerifier
-                            path={transferStore.transfer?.path}
+                            path={transferStore.transfer.path}
                             collectionId={
                               transferStore.transfer?.destination?.id
                             }
@@ -248,7 +237,7 @@ export default function ResultPage() {
                     <FormControl>
                       <FormLabel>Label</FormLabel>
                       <Input
-                        defaultValue={transferStore.transfer?.label}
+                        value={transferStore.transfer?.label || ""}
                         disabled={!auth.isAuthenticated}
                         onChange={(e) => {
                           transferStore.setLabel(e.currentTarget.value);
