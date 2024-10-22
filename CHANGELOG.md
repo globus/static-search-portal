@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/globus/static-search-portal/compare/0.11.0...0.12.0) (2024-10-22)
+
+
+### Features
+
+* **Transfer:** Adds `stat` integration for files added to the Transfer list. ([#219](https://github.com/globus/static-search-portal/issues/219)) ([e3d27f5](https://github.com/globus/static-search-portal/commit/e3d27f585e305be340986f80186f9e14ff780449))
+
 ## [0.11.0](https://github.com/globus/static-search-portal/compare/0.10.1...0.11.0) (2024-10-11)
 
 
