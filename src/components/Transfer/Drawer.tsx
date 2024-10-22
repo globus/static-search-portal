@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Drawer,
@@ -34,18 +32,81 @@ import { usePathname } from "next/navigation";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import NextLink from "next/link";
-import { MinusCircleIcon } from "@heroicons/react/24/outline";
+import {
+  ExclamationCircleIcon,
+  MinusCircleIcon,
+} from "@heroicons/react/24/outline";
 import { CollectionName } from "@/globus/Collection";
+import { useStat } from "@/hooks/useGlobusAPI";
+import { readableBytes } from "@globus/sdk/services/transfer/utils";
+
 import { isTransferEnabled } from "../../../static";
+
+export const TransferListItem = ({
+  item,
+  onClick = () => {},
+}: {
+  item: Item;
+  onClick?: () => void;
+}) => {
+  const stat = useStat(item.collection, item.path);
+  const removeItemBySubject = useGlobusTransferStore(
+    (state) => state.removeItemBySubject,
+  );
+  return (
+    <Box key={item.subject}>
+      <HStack align="flex-start">
+        <Stack spacing={1}>
+          <Link
+            noOfLines={1}
+            as={NextLink}
+            href={`/results/${item.subject}`}
+            onClick={onClick}
+          >
+            {item.label}
+          </Link>
+          <HStack>
+            {stat.data?.type === "file" && stat.data?.size && (
+              <Text fontSize="xs">{readableBytes(stat.data?.size)}</Text>
+            )}
+            <Tooltip
+              label={
+                stat.isError ? `Unable to access "${item.path}".` : item.path
+              }
+            >
+              <Text noOfLines={1} fontSize="xs">
+                <Flex align="center">
+                  {stat.isError && (
+                    <Icon
+                      as={ExclamationCircleIcon}
+                      boxSize={4}
+                      color="red.500"
+                      mr={1}
+                    />
+                  )}
+                  {item.path}
+                </Flex>
+              </Text>
+            </Tooltip>
+          </HStack>
+        </Stack>
+        <Spacer />
+        <IconButton
+          variant="ghost"
+          aria-label="Remove item from transfer list"
+          icon={<Icon as={MinusCircleIcon} boxSize={6} />}
+          onClick={() => removeItemBySubject(item.subject)}
+        />
+      </HStack>
+    </Box>
+  );
+};
 
 export default function TransferDrawer() {
   const pathname = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const items = useGlobusTransferStore((state) => state.items);
-  const removeItemBySubject = useGlobusTransferStore(
-    (state) => state.removeItemBySubject,
-  );
 
   const itemsByCollection = items.reduce(
     (acc: { [key: Item["collection"]]: Item[] }, item) => {
@@ -127,38 +188,11 @@ export default function TransferDrawer() {
                     <CardBody>
                       <Stack overflow="hidden">
                         {itemsByCollection[collection].map((item) => (
-                          <Box key={item.subject}>
-                            <HStack align="flex-start">
-                              <Stack spacing={1}>
-                                <Link
-                                  noOfLines={1}
-                                  as={NextLink}
-                                  href={`/results?subject=${item.subject}`}
-                                  onClick={onClose}
-                                >
-                                  {item.label}
-                                </Link>
-                                <Tooltip label={item.path}>
-                                  <Text
-                                    noOfLines={1}
-                                    fontSize="xs"
-                                    maxWidth="90%"
-                                  >
-                                    {item.path}
-                                  </Text>
-                                </Tooltip>
-                              </Stack>
-                              <Spacer />
-                              <IconButton
-                                variant="ghost"
-                                aria-label="Remove item from transfer list"
-                                icon={<Icon as={MinusCircleIcon} boxSize={6} />}
-                                onClick={() =>
-                                  removeItemBySubject(item.subject)
-                                }
-                              />
-                            </HStack>
-                          </Box>
+                          <TransferListItem
+                            key={item.subject}
+                            item={item}
+                            onClick={onClose}
+                          />
                         ))}
                       </Stack>
                     </CardBody>

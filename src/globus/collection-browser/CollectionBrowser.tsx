@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Input,
@@ -23,15 +23,22 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 export type Endpoint = Record<string, any>;
 
 export function CollectionSearch({
-  defaultValue = null,
+  value = null,
   onSelect = () => {},
 }: {
-  defaultValue?: Endpoint | null;
+  value?: Endpoint | null;
   onSelect: (endpoint: Endpoint) => void;
 }) {
   const auth = useGlobusAuth();
   const [results, setResults] = useState<Endpoint[]>([]);
-  const [selection, setSelection] = useState(defaultValue);
+  const [selection, setSelection] = useState(value);
+
+  useEffect(() => {
+    setSelection(value);
+    if (value === null) {
+      setResults([]);
+    }
+  }, [value]);
 
   async function handleSearch(e: React.FormEvent<HTMLInputElement>) {
     const query = e.currentTarget.value;
