@@ -75,6 +75,11 @@ export function useStat(collectionId: string, path: string) {
         },
         { manager: auth.authorization },
       );
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
       return response.json();
     },
   });

@@ -32,7 +32,10 @@ import { usePathname } from "next/navigation";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import NextLink from "next/link";
-import { MinusCircleIcon } from "@heroicons/react/24/outline";
+import {
+  ExclamationCircleIcon,
+  MinusCircleIcon,
+} from "@heroicons/react/24/outline";
 import { CollectionName } from "@/globus/Collection";
 import { useStat } from "@/hooks/useGlobusAPI";
 import { readableBytes } from "@globus/sdk/services/transfer/utils";
@@ -66,9 +69,23 @@ export const TransferListItem = ({
             {stat.data?.type === "file" && stat.data?.size && (
               <Text fontSize="xs">{readableBytes(stat.data?.size)}</Text>
             )}
-            <Tooltip label={item.path}>
+            <Tooltip
+              label={
+                stat.isError ? `Unable to access "${item.path}".` : item.path
+              }
+            >
               <Text noOfLines={1} fontSize="xs">
-                {item.path}
+                <Flex align="center">
+                  {stat.isError && (
+                    <Icon
+                      as={ExclamationCircleIcon}
+                      boxSize={4}
+                      color="red.500"
+                      mr={1}
+                    />
+                  )}
+                  {item.path}
+                </Flex>
               </Text>
             </Tooltip>
           </HStack>
