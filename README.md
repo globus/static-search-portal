@@ -10,7 +10,7 @@ This is a working proof-of-concept of a Globus-powered research search portal `g
 
 ---
 
-- [static.json Type Documentation](docs/modules.md#static)
+- [static.json Type Documentation](/docs/type-aliases/Static.md)
 
 ---
 
