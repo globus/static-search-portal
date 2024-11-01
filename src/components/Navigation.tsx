@@ -17,6 +17,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { STATIC, withFeature } from "../../static";
 import TransferDrawer from "./Transfer/Drawer";
+import { useSignIn } from "@/hooks/useSignIn";
 
 export type NavigationItem =
   | {
@@ -114,6 +115,7 @@ export default function Navigation() {
 
 export function Authentication() {
   const auth = useGlobusAuth();
+  const signIn = useSignIn();
   const user = auth.authorization?.user;
   return (
     <>
@@ -146,11 +148,7 @@ export function Authentication() {
           </HStack>
         </>
       ) : (
-        <Button
-          size="sm"
-          onClick={() => auth.authorization?.login()}
-          colorScheme="blue"
-        >
+        <Button size="sm" onClick={signIn} colorScheme="blue">
           Sign In
         </Button>
       )}
