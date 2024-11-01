@@ -53,8 +53,19 @@ export type Data = {
        * @see https://jsonata.org/
        */
       jsonata?: boolean;
+      /**
+       * Enable the Globus Auth functionality in the portal.
+       */
       authentication?: boolean;
+      /**
+       * Enables the Globus Transfer functionality in the portal.
+       */
       transfer?: boolean;
+      /**
+       * Enable SEO results in the portal; This feature is not yet available.
+       * @private
+       */
+      seo_results?: boolean;
     };
 
     theme?: ThemeSettings;
@@ -280,3 +291,5 @@ export const isTransferEnabled = Boolean(
  */
 export const isAuthenticationEnabled =
   isTransferEnabled || isFeatureEnabled("authentication");
+
+export const areSEOResultsEnabled = isFeatureEnabled("seo_results");

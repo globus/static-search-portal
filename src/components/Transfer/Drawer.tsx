@@ -41,6 +41,7 @@ import { useStat } from "@/hooks/useGlobusAPI";
 import { readableBytes } from "@globus/sdk/services/transfer/utils";
 
 import { isTransferEnabled } from "../../../static";
+import { getResultLink } from "@/utils/results";
 
 export const TransferListItem = ({
   item,
@@ -60,7 +61,7 @@ export const TransferListItem = ({
           <Link
             noOfLines={1}
             as={NextLink}
-            href={`/results/${item.subject}`}
+            href={getResultLink(item.subject)}
             onClick={onClick}
           >
             {item.label}
