@@ -58,6 +58,11 @@ export type Data = {
        */
       authentication?: boolean;
       /**
+       * Force users to authenticate before accessing the portal, regardless of whether or not the
+       * configured Globus Index is private.
+       */
+      requireAuthentication?: boolean;
+      /**
        * Enables the Globus Transfer functionality in the portal.
        */
       transfer?: boolean;

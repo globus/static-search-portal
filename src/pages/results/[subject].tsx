@@ -6,6 +6,7 @@ import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { ClientSideResult } from "@/components/ClientSideResult";
 
 import type { GetStaticPaths, GetStaticProps } from "next";
+import { RequireAuthentication } from "@/components/RequireAuthentication";
 
 /**
  * @todo This page implementaiton and `getStaticPaths` should use the `areSEOResultsEnabled` flag to
@@ -19,13 +20,15 @@ export default function ResultPage() {
     : router.query.subject;
   return (
     <Container maxW="container.xl" p={4}>
-      <Link onClick={() => router.back()}>
-        <Flex alignItems="center" mb={4}>
-          <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-        </Flex>
-      </Link>
-      <Divider my={2} />
-      {subject && <ClientSideResult subject={subject} />}
+      <RequireAuthentication>
+        <Link onClick={() => router.back()}>
+          <Flex alignItems="center" mb={4}>
+            <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
+          </Flex>
+        </Link>
+        <Divider my={2} />
+        {subject && <ClientSideResult subject={subject} />}
+      </RequireAuthentication>
     </Container>
   );
 }

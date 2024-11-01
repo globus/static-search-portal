@@ -37,7 +37,7 @@ import PathVerifier from "@/globus/PathVerifier";
 import { CollectionName } from "@/globus/Collection";
 import { TransferListItem } from "@/components/Transfer/Drawer";
 
-export default function ResultPage() {
+export default function TransferPage() {
   const auth = useGlobusAuth();
   const toast = useToast();
   const transferStore = useGlobusTransferStore();
