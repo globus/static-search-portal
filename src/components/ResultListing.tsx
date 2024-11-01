@@ -26,6 +26,7 @@ import {
 } from "./Field";
 import ImageField from "./Fields/ImageField";
 import AddToTransferList from "./AddToTransferList";
+import { getResultLink } from "@/utils/results";
 
 export type ResultListingComponentOptions = {
   /**
@@ -164,10 +165,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
       <CardHeader>
         <Heading size="md" color="primary">
           <HStack>
-            <Link
-              as={NextLink}
-              href={`/results/${encodeURIComponent(gmeta.subject)}`}
-            >
+            <Link as={NextLink} href={getResultLink(gmeta.subject)}>
               {heading || (
                 <Text as="em" color="gray.500">
                   &mdash;

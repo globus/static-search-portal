@@ -1,39 +1,17 @@
 import React from "react";
 import { useRouter } from "next/router";
-
-import {
-  Container,
-  Text,
-  Link,
-  Flex,
-  Divider,
-  Center,
-  Spinner,
-} from "@chakra-ui/react";
+import { Container, Text, Link, Flex, Divider } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
-import Result from "../../components/Result";
+import { ClientSideResult } from "@/components/ClientSideResult";
 
-import { useSubject } from "@/hooks/useGlobusAPI";
+import type { GetStaticPaths, GetStaticProps } from "next";
 
-const ClientSideResult = ({ subject }: { subject: string }) => {
-  const { isPending, data } = useSubject(subject);
-  if (isPending) {
-    return (
-      <Center>
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Center>
-    );
-  }
-  return <Result result={data} />;
-};
-
+/**
+ * @todo This page implementaiton and `getStaticPaths` should use the `areSEOResultsEnabled` flag to
+ * determine if a list of results paths should be generated at build time. For now, this route
+ * exists as a bit of a fallback for existing portals, but will result in 404s when hard-refreshed.
+ */
 export default function ResultPage() {
   const router = useRouter();
   const subject = Array.isArray(router.query.subject)
@@ -51,3 +29,24 @@ export default function ResultPage() {
     </Container>
   );
 }
+
+/**
+ * @todo This function is not yet implemented.
+ */
+export const getStaticPaths = (async () => {
+  return {
+    paths: [],
+    /**
+     * Since we will be using a static export, `fallback: false` is the only suported value.
+     * @see https://nextjs.org/docs/pages/building-your-application/deploying/static-exports#unsupported-features
+     */
+    fallback: false,
+  };
+}) satisfies GetStaticPaths;
+
+/**
+ * @todo This function is not yet implemented.
+ */
+export const getStaticProps = (async () => {
+  return { props: {} };
+}) satisfies GetStaticProps;
