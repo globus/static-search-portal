@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/globus/static-search-portal/compare/1.0.0...1.1.0) (2024-11-01)
+
+
+### Features
+
+* Adds support for `features.requireAuthentication` – this will update built-in routes to prompt for authentication before any information is displayed. This feature is useful for mostly/completely private Globus Search indicies. ([abdd9cf](https://github.com/globus/static-search-portal/commit/abdd9cff0c03724326dd98fcc070de36126c8f57))
+
+
+### Fixes
+
+* **OAuth:** Ensures users are redirected back to the path they initiated a "Sign In" request from. ([#236](https://github.com/globus/static-search-portal/issues/236)) ([abdd9cf](https://github.com/globus/static-search-portal/commit/abdd9cff0c03724326dd98fcc070de36126c8f57))
+
 ## [1.0.0](https://github.com/globus/static-search-portal/compare/0.12.0...1.0.0) (2024-11-01)
 
 
