@@ -100,7 +100,7 @@ export const useGlobusTransferStore = create<State & Actions>()(
     }),
     {
       name: "globus-transfer",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
     },
   ),
 );

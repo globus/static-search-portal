@@ -249,19 +249,23 @@ function Result({ result }: { result: GMetaResult }) {
 
   return (
     <>
-      <Flex>
-        <Heading as="h1" size="md" color="primary">
-          {heading || (
-            <Text as="em" color="gray.500">
-              &mdash;
-            </Text>
-          )}{" "}
-        </Heading>
-        <Spacer />
-        <AddToTransferList result={result} />
-      </Flex>
+      <Heading as="h1" size="md" wordBreak="break-word">
+        {heading || (
+          <Text as="em" color="gray.500">
+            &mdash;
+          </Text>
+        )}
+      </Heading>
 
       <Divider my={2} />
+
+      <Flex>
+        <AddToTransferList result={result} />
+        <Spacer />
+        <ResponseDrawer>
+          <JSONTree data={result} />
+        </ResponseDrawer>
+      </Flex>
 
       {links.length > 0 && (
         <ButtonGroup>
@@ -275,28 +279,20 @@ function Result({ result }: { result: GMetaResult }) {
         </ButtonGroup>
       )}
 
-      <Flex>
-        <Box p="2">
-          {summary && (
-            <Box my="2">
-              <Heading as="h2" size="sm" my={2}>
-                Summary
-              </Heading>
-              <Text as="p">{summary}</Text>
-            </Box>
-          )}
+      {summary && (
+        <Box my="2">
+          <Heading as="h2" size="sm" my={2}>
+            Summary
+          </Heading>
+          <Text as="p">{summary}</Text>
+        </Box>
+      )}
 
-          {fields.map((field: FieldDefinition, i: number) => (
-            <Field key={i} field={field} gmeta={result} />
-          ))}
-        </Box>
-        <Spacer />
-        <Box p="2">
-          <ResponseDrawer>
-            <JSONTree data={result} />
-          </ResponseDrawer>
-        </Box>
-      </Flex>
+      <Box>
+        {fields.map((field: FieldDefinition, i: number) => (
+          <Field key={i} field={field} gmeta={result} />
+        ))}
+      </Box>
     </>
   );
 }

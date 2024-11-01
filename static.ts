@@ -62,6 +62,10 @@ export type Data = {
        */
       transfer?: boolean;
       /**
+       * Whether or not authorization data should be stored in LocalStorage
+       */
+      useLocalStorage?: boolean;
+      /**
        * Enable SEO results in the portal; This feature is not yet available.
        * @private
        */

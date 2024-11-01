@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Link } from "@chakra-ui/react";
+import { Button, ButtonProps, Link } from "@chakra-ui/react";
 
 import { useGlobusTransferStore } from "@/store/globus-transfer";
 import { getTransferDetailsFromResult } from "./Result";
@@ -11,11 +11,10 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 export default function AddToTransferList({
   result,
-  iconOnly = false,
+  ...rest
 }: {
   result: GMetaResult;
-  iconOnly?: boolean;
-}) {
+} & ButtonProps) {
   const auth = useGlobusAuth();
   const items = useGlobusTransferStore((state) => state.items);
   const addTransferItem = useGlobusTransferStore((state) => state.addItem);
@@ -62,6 +61,7 @@ export default function AddToTransferList({
               }
             : () => removeItemBySubject(result.subject)
         }
+        {...rest}
       >
         {isSelected ? "Remove from Transfer List" : "Add to Transfer List"}
       </Button>

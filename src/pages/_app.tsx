@@ -8,6 +8,7 @@ import {
   getAttribute,
   isTransferEnabled,
   isAuthenticationEnabled,
+  isFeatureEnabled,
 } from "../../static";
 
 import {
@@ -29,6 +30,9 @@ info.addClientInfo(CLIENT_INFO);
 
 const redirect = getRedirectUri();
 const client = getAttribute("globus.application.client_id");
+const storage = isFeatureEnabled("useLocalStorage")
+  ? globalThis.localStorage
+  : undefined;
 
 const scopes = [
   "urn:globus:auth:scope:search.api.globus.org:search",
@@ -99,6 +103,7 @@ export default function App({ Component, pageProps }: AppProps) {
           redirect={redirect}
           client={client}
           scopes={scopes}
+          storage={storage}
         >
           <QueryProvider>
             <Layout>
