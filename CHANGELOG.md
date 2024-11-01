@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0](https://github.com/globus/static-search-portal/compare/0.12.0...1.0.0) (2024-11-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* Use in-memory based storage for authorization tokens, by default. ([#235](https://github.com/globus/static-search-portal/issues/235))
+
+### Features
+
+* Use in-memory based storage for authorization tokens, by default. ([#235](https://github.com/globus/static-search-portal/issues/235)) ([427d9e7](https://github.com/globus/static-search-portal/commit/427d9e768bedde4f5dc3d367aa2f475355b36dde))
+
+
+### Fixes
+
+* Improves result rendering to account for 404s on hard refresh. ([#233](https://github.com/globus/static-search-portal/issues/233)) ([2dc2bbc](https://github.com/globus/static-search-portal/commit/2dc2bbcd1b77666c964c7d4ed97620a0d998e74e))
+
 ## [0.12.0](https://github.com/globus/static-search-portal/compare/0.11.0...0.12.0) (2024-10-22)
 
 
