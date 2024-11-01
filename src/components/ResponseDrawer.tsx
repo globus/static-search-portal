@@ -19,6 +19,7 @@ export default function ResponseDrawer({ children }: { children: any }) {
       <Button
         ref={btnRef.current}
         colorScheme="gray"
+        variant="link"
         onClick={onOpen}
         size="xs"
       >

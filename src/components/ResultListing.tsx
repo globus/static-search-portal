@@ -13,7 +13,7 @@ import {
   Td,
   HStack,
   Link,
-  Spacer,
+  Skeleton,
 } from "@chakra-ui/react";
 import { getValueFromAttribute, getAttribute } from "../../static";
 
@@ -128,6 +128,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     src: string;
     alt?: string;
   }>();
+  const [boostrapping, setBoostrapping] = React.useState(true);
 
   useEffect(() => {
     async function resolveAttributes() {
@@ -154,6 +155,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
         image = { src: image };
       }
       setImage(image);
+      setBoostrapping(false);
     }
     resolveAttributes();
   }, [gmeta]);
@@ -162,37 +164,38 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
 
   return (
     <Card size="sm" w="full">
-      <CardHeader>
-        <Heading size="md" color="primary">
-          <HStack>
-            <Link as={NextLink} href={getResultLink(gmeta.subject)}>
+      <CardHeader style={{ textWrap: "stable" }}>
+        <Heading size="md" wordBreak="break-word">
+          <Link as={NextLink} href={getResultLink(gmeta.subject)}>
+            <Skeleton isLoaded={!boostrapping}>
               {heading || (
                 <Text as="em" color="gray.500">
                   &mdash;
                 </Text>
               )}
-            </Link>
-            <Spacer />
-            <AddToTransferList result={gmeta} />
-          </HStack>
+            </Skeleton>
+          </Link>
         </Heading>
       </CardHeader>
-      {image || summary || fields ? (
-        <CardBody>
-          <HStack>
-            {image && (
-              <ImageField
-                value={{
-                  src: image.src,
-                  alt: image?.alt,
-                }}
-              />
-            )}
-            {summary && <Text noOfLines={[3, 5, 10]}>{summary}</Text>}
-          </HStack>
-          <ResultListingFields fields={fields} gmeta={gmeta} />
-        </CardBody>
-      ) : null}
+      <CardBody>
+        <AddToTransferList result={gmeta} size="xs" mb={2} />
+        {image || summary || fields ? (
+          <>
+            <HStack>
+              {image && (
+                <ImageField
+                  value={{
+                    src: image.src,
+                    alt: image?.alt,
+                  }}
+                />
+              )}
+              {summary && <Text noOfLines={[3, 5, 10]}>{summary}</Text>}
+            </HStack>
+            <ResultListingFields fields={fields} gmeta={gmeta} />
+          </>
+        ) : null}
+      </CardBody>
     </Card>
   );
 }

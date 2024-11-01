@@ -24,6 +24,8 @@ import {
   Icon,
   Text,
   Tag,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import {
   PlusCircleIcon,
@@ -105,18 +107,19 @@ function FacetMenu({ facet }: { facet: GFacetResult }) {
         variant="ghost"
         border="1px dashed"
         borderColor="gray.400"
+        p={1}
       >
-        <Flex align="center">
-          {facet.name}
+        <HStack>
+          <Text>{facet.name}</Text>
           {value.length > 0 &&
             value.length <= 2 &&
             value.map((v: string) => (
-              <Tag key={v} ml={2}>
-                {v}
-              </Tag>
+              <Box key={v}>
+                <Tag size="sm">{v}</Tag>
+              </Box>
             ))}
-          {value.length > 2 && <Tag ml={2}>{value.length} selected</Tag>}
-        </Flex>
+          {value.length > 2 && <Tag size="sm">{value.length} selected</Tag>}
+        </HStack>
       </MenuButton>
       <MenuList p={0}>
         <BucketSearch
@@ -187,21 +190,24 @@ export default function SearchFacets({
 
   return (
     <Box {...rest}>
-      <HStack>
+      <Wrap>
         {result.facet_results.map((facet, i) => (
-          <FacetMenu key={i} facet={facet} />
+          <WrapItem key={i}>
+            <FacetMenu facet={facet} />
+          </WrapItem>
         ))}
-        {hasFacetFilters && (
-          <Button
-            size="sm"
-            onClick={reset}
-            variant="ghost"
-            rightIcon={<Icon as={XMarkIcon} />}
-          >
-            Clear All Filters
-          </Button>
-        )}
-      </HStack>
+      </Wrap>
+      {hasFacetFilters && (
+        <Button
+          mt={2}
+          size="xs"
+          onClick={reset}
+          variant="ghost"
+          leftIcon={<Icon as={XMarkIcon} />}
+        >
+          Clear All Filters
+        </Button>
+      )}
     </Box>
   );
 }
