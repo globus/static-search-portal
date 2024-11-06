@@ -9,6 +9,7 @@ import {
   isTransferEnabled,
   isAuthenticationEnabled,
   isFeatureEnabled,
+  METADATA,
 } from "../../static";
 
 import {
@@ -47,9 +48,6 @@ const scopes = [
   .concat(getAttribute("globus.application.scopes", []))
   .filter(Boolean)
   .join(" ");
-
-const title = getAttribute("metadata.title", "Seearch Portal");
-const description = getAttribute("metadata.description", "");
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -91,9 +89,9 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
       <>
         <Head>
-          <title>{title}</title>
-          <meta property="og:title" content={title} key="title" />
-          <meta name="description" content={description} />
+          <title>{METADATA.title}</title>
+          <meta property="og:title" content={METADATA.title} key="title" />
+          <meta name="description" content={METADATA.description} />
         </Head>
         <ThemeProvider>
           <QueryProvider>
@@ -109,9 +107,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>{title}</title>
-        <meta property="og:title" content={title} key="title" />
-        <meta name="description" content={description} />
+        <title>{METADATA.title}</title>
+        <meta property="og:title" content={METADATA.title} key="title" />
+        <meta name="description" content={METADATA.description} />
       </Head>
       <ThemeProvider>
         <GlobusAuthorizationManagerProvider

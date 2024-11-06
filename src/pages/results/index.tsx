@@ -8,9 +8,8 @@ import { ClientSideResult } from "@/components/ClientSideResult";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
 import Head from "next/head";
 
-import { getAttribute } from "../../../static";
+import { METADATA } from "../../../static";
 
-const baseTitle = getAttribute("metadata.title", "Seearch Portal");
 /**
  * The `/results` route uses client-side rendering exclusively in order to support the static export of
  * the portal by default. For portals that require result pages to be pre-rendered at build time, we will
@@ -22,7 +21,7 @@ export default function ResultPage() {
     ? router.query.subject[0]
     : router.query.subject;
 
-  const title = `${baseTitle} | Results | ${subject}`;
+  const title = `${METADATA.title} | Results | ${subject}`;
 
   return (
     <>

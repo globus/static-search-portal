@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { get } from "lodash";
-import { Heading, Box, HStack } from "@chakra-ui/react";
+import { Heading, Box } from "@chakra-ui/react";
 import jsonata from "jsonata";
 
 import GlobusEmbedField from "./Fields/GlobusEmbedField";

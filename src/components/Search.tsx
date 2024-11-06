@@ -98,7 +98,6 @@ export function Search() {
               onChange={debounce((e) => {
                 router.push({ query: { q: e.target.value } });
                 setQuery(e.target.value);
-                // document.location.search = `q=${e.target.value}`;
               }, 300)}
             />
           </InputGroup>

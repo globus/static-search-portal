@@ -314,3 +314,8 @@ export const isAuthenticationEnabled =
   isTransferEnabled || isFeatureEnabled("authentication");
 
 export const areSEOResultsEnabled = isFeatureEnabled("seo_results");
+
+export const METADATA = {
+  title: getAttribute("metadata.title", "Search Portal"),
+  description: getAttribute("metadata.description", ""),
+};
