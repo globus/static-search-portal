@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
+import NextLink from "next/link";
 import { Container, Text, Link, Flex, Divider } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
@@ -21,7 +22,7 @@ export default function ResultPage() {
   return (
     <Container maxW="container.xl" p={4}>
       <RequireAuthentication>
-        <Link onClick={() => router.back()}>
+        <Link as={NextLink} href="/search">
           <Flex alignItems="center" mb={4}>
             <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
           </Flex>

@@ -6,7 +6,11 @@ import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 import { ClientSideResult } from "@/components/ClientSideResult";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
+import Head from "next/head";
 
+import { getAttribute } from "../../../static";
+
+const baseTitle = getAttribute("metadata.title", "Seearch Portal");
 /**
  * The `/results` route uses client-side rendering exclusively in order to support the static export of
  * the portal by default. For portals that require result pages to be pre-rendered at build time, we will
@@ -17,17 +21,26 @@ export default function ResultPage() {
   const subject = Array.isArray(router.query.subject)
     ? router.query.subject[0]
     : router.query.subject;
+
+  const title = `${baseTitle} | Results | ${subject}`;
+
   return (
-    <Container maxW="container.xl" p={4}>
-      <RequireAuthentication>
-        <Link onClick={() => router.back()}>
-          <Flex alignItems="center" mb={4}>
-            <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-          </Flex>
-        </Link>
-        <Divider my={2} />
-        {subject && <ClientSideResult subject={subject} />}
-      </RequireAuthentication>
-    </Container>
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:title" content={title} key="title" />
+      </Head>
+      <Container maxW="container.xl" p={4}>
+        <RequireAuthentication>
+          <Link onClick={() => router.back()}>
+            <Flex alignItems="center" mb={4}>
+              <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
+            </Flex>
+          </Link>
+          <Divider my={2} />
+          {subject && <ClientSideResult subject={subject} />}
+        </RequireAuthentication>
+      </Container>
+    </>
   );
 }

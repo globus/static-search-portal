@@ -3,6 +3,7 @@ import { get } from "lodash";
 import { Heading, Box, HStack } from "@chakra-ui/react";
 import jsonata from "jsonata";
 
+import GlobusEmbedField from "./Fields/GlobusEmbedField";
 import RgbaField from "./Fields/RgbaField";
 import ImageField from "./Fields/ImageField";
 import TableField from "./Fields/TableField";
@@ -58,13 +59,11 @@ export async function getProcessedField(
   };
 }
 
-export const FieldValue = ({
-  value,
-  type,
-}: {
-  value: unknown;
-  type?: string;
-}) => {
+export const FieldValue = ({ definition }: { definition: ProcessedField }) => {
+  const { value, type } = definition;
+  if (type === "globus.embed") {
+    return <GlobusEmbedField definition={definition} />;
+  }
   if (type === "rgba") {
     return <RgbaField value={value} />;
   }
@@ -77,7 +76,6 @@ export const FieldValue = ({
   if (type === "link") {
     return <LinkField value={value} />;
   }
-
   /**
    * If no `type` is provided, or the `type` is not recognized, use the fallback field.
    */
@@ -87,37 +85,19 @@ export const FieldValue = ({
 export const Field = ({
   field,
   gmeta,
-  condensed,
 }: {
   field: FieldDefinition;
   gmeta: GMetaResult;
-  condensed?: boolean;
 }) => {
   const [processedField, setProcessedField] = React.useState<ProcessedField>();
-
   useEffect(() => {
     getProcessedField(field, gmeta).then((result) => {
       setProcessedField(result);
     });
   }, [field, gmeta]);
-
   if (!processedField) {
     return null;
   }
-
-  if (condensed) {
-    return (
-      <HStack>
-        {processedField.label && (
-          <Heading as="h2" size="sm" my={2}>
-            {processedField.label}
-          </Heading>
-        )}
-        <FieldValue value={processedField.value} type={processedField.type} />
-      </HStack>
-    );
-  }
-
   return (
     <Box my="2">
       {processedField.label && (
@@ -125,7 +105,7 @@ export const Field = ({
           {processedField.label}
         </Heading>
       )}
-      <FieldValue value={processedField.value} type={processedField.type} />
+      <FieldValue definition={processedField} />
     </Box>
   );
 };

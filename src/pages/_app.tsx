@@ -19,6 +19,7 @@ import { CLIENT_INFO } from "@/globus/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
+import Head from "next/head";
 
 const env = getEnvironment();
 if (env) {
@@ -43,8 +44,12 @@ const scopes = [
     ? "urn:globus:auth:scope:transfer.api.globus.org:all"
     : null,
 ]
+  .concat(getAttribute("globus.application.scopes", []))
   .filter(Boolean)
   .join(" ");
+
+const title = getAttribute("metadata.title", "Seearch Portal");
+const description = getAttribute("metadata.description", "");
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -85,6 +90,11 @@ export default function App({ Component, pageProps }: AppProps) {
   if (!isAuthenticationEnabled) {
     return (
       <>
+        <Head>
+          <title>{title}</title>
+          <meta property="og:title" content={title} key="title" />
+          <meta name="description" content={description} />
+        </Head>
         <ThemeProvider>
           <QueryProvider>
             <Layout>
@@ -98,6 +108,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:title" content={title} key="title" />
+        <meta name="description" content={description} />
+      </Head>
       <ThemeProvider>
         <GlobusAuthorizationManagerProvider
           redirect={redirect}
