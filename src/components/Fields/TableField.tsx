@@ -38,7 +38,13 @@ export default function TableField({ value }: { value: unknown }) {
               <Tr key={key}>
                 <Td>{key}</Td>
                 <Td>
-                  <FieldValue value={value} />
+                  <FieldValue
+                    field={{
+                      label: undefined,
+                      type: undefined,
+                      derivedValue: value,
+                    }}
+                  />
                 </Td>
               </Tr>
             );

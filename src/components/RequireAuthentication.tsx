@@ -2,13 +2,13 @@ import React, { PropsWithChildren } from "react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { isFeatureEnabled } from "../../static";
 import { Alert, AlertIcon, AlertTitle, Button } from "@chakra-ui/react";
-import { useSignIn } from "@/hooks/useSignIn";
+import { useLogin } from "@/hooks/useOAuth";
 
 const requireAuthentication = isFeatureEnabled("requireAuthentication");
 
 export function RequireAuthentication({ children }: PropsWithChildren) {
   const auth = useGlobusAuth();
-  const signIn = useSignIn();
+  const login = useLogin();
   if (!requireAuthentication) {
     return children;
   }
@@ -19,7 +19,7 @@ export function RequireAuthentication({ children }: PropsWithChildren) {
       <AlertIcon />
       <AlertTitle>
         You must{" "}
-        <Button variant="link" onClick={signIn}>
+        <Button variant="link" onClick={login}>
           Sign In
         </Button>{" "}
         in order to access this section.

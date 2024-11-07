@@ -8,7 +8,7 @@
     "version": "1.0.0",
     "attributes": {
       "metadata": {
-        "title": "Search | Globus",
+        "title": "Serverless Search Portal",
         "description": "This is an example of a basis Globus Search interface generated from a static.json file."
       },
       "theme": {

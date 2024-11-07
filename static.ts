@@ -84,6 +84,14 @@ export type Data = {
       description?: string;
     };
 
+    /**
+     * The Content Security Policy (CSP) for the portal that will be included in a `<meta>` tag.
+     * If no value is provided, a default CSP will be used.
+     * If `false` is provided as the value, no CSP `<meta>` tag will be included.
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+     */
+    contentSecurityPolicy?: string | false;
+
     content?: {
       headline?: string;
       logo?: {
@@ -120,6 +128,10 @@ export type Data = {
          * @example "https://example.com/data-portal/authenticate"
          */
         redirect_uri?: string;
+        /**
+         * Additional scopes to request from the Globus Auth service when authenticating.
+         */
+        scopes?: string[];
       };
       /**
        * Configuration for Search-related functionality in the portal.
@@ -302,3 +314,8 @@ export const isAuthenticationEnabled =
   isTransferEnabled || isFeatureEnabled("authentication");
 
 export const areSEOResultsEnabled = isFeatureEnabled("seo_results");
+
+export const METADATA = {
+  title: getAttribute("metadata.title", "Search Portal"),
+  description: getAttribute("metadata.description", ""),
+};

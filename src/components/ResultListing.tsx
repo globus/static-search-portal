@@ -90,7 +90,7 @@ function ResultListingFieldTableRow({
     <Tr>
       <Td>{processedField.label}</Td>
       <Td>
-        <FieldValue value={processedField.value} type={processedField.type} />
+        <FieldValue field={processedField} />
       </Td>
     </Tr>
   );

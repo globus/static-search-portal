@@ -26,6 +26,7 @@ import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
@@ -42,9 +43,13 @@ function getSearchPayload(query: string, state: SearchState) {
 
 export function Search() {
   const auth = useGlobusAuth();
+  const router = useRouter();
   const search = useSearch();
   const params = useSearchParams();
-  const [query, setQuery] = useState<string>(params.get("q") || "");
+
+  const initialQuery = params.get("q") || "";
+
+  const [query, setQuery] = useState<string>(initialQuery);
   const [result, setResult] = useState<undefined | GSearchResult>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -87,10 +92,13 @@ export function Search() {
               <SearchIcon color="gray.300" />
             </InputLeftElement>
             <Input
-              defaultValue={query}
+              defaultValue={initialQuery}
               type="search"
               placeholder="Start your search here..."
-              onChange={debounce((e) => setQuery(e.target.value), 300)}
+              onChange={debounce((e) => {
+                router.push({ query: { q: e.target.value } });
+                setQuery(e.target.value);
+              }, 300)}
             />
           </InputGroup>
           <SearchFacets result={result} />
