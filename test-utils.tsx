@@ -17,5 +17,5 @@ export const render = (
   ui: ReactElement,
   options?: Omit<RenderOptions, "wrapper">,
 ) => {
-  _render(ui, { wrapper: Providers, ...options });
+  return _render(ui, { wrapper: Providers, ...options });
 };

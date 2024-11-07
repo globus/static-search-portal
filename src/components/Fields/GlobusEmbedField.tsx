@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import {
   Alert,
   AlertDescription,
   AlertIcon,
+  AlertTitle,
   Box,
   Button,
+  Code,
+  Flex,
   Skeleton,
-  Text,
 } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { ProcessedField } from "../Field";
 import { isAuthorizationRequirementsError } from "@globus/sdk/core/errors";
 import { useOAuthStore } from "@/store/oauth";
 import { usePathname, useSearchParams } from "next/navigation";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
-const SUPPORTED_EXTENSIONS = {
+const SUPPORTED_EXTENSIONS: {
+  [key: string]: {
+    mime: string;
+  };
+} = {
   jpg: {
     mime: "image/jpeg",
   },
@@ -44,18 +51,90 @@ const SUPPORTED_EXTENSIONS = {
   },
 };
 
-type SupportedTypes = "image" | string;
+type Renderers = "plotly" | undefined;
 
-type Config = {
+type SharedOptions = {
+  /**
+   * The Globus Collection that the asset is hosted on. This is required
+   * to ensure the proper Authorization header is sent with the request.
+   */
   collection: string;
-  path: string;
-  type?: SupportedTypes;
+  /**
+   * When using the default renderer, the MIME type of the `<object>` can be
+   * specified using this option. If not provided, the MIME type will be
+   * inferred from the file extension.
+   */
   mime?: string;
+  /**
+   * The renderer that will be used to display the asset. By default,
+   * the asset will be rendered as an `<object>` in a sandboxed `<iframe>`.
+   */
+  renderer?: Renderers;
+
+  /**
+   * Sytling options for the rendered asset, such as width and height.
+   * The configured `renderer` will determine how these options are applied.
+   */
+
   height?: string;
   width?: string;
 };
 
-export type Value = string | Config;
+type Definition =
+  | {
+      label: string;
+      property: string;
+      type: "globus.embed";
+      options: {
+        /**
+         * The full HTTPS URL to the asset.
+         */
+        asset?: string;
+        /**
+         * The path to the asset on the Globus Collection. This can be used as
+         * an alternative to the `asset` field.
+         */
+        path?: string;
+      } & SharedOptions;
+    }
+  | {
+      label: string;
+      type: "globus.embed";
+      value: string;
+      options: {
+        /**
+         * The full HTTPS URL to the asset.
+         */
+        asset?: string;
+        /**
+         * The path to the asset on the Globus Collection. This can be used as
+         * an alternative to the `asset` field.
+         */
+        path?: string;
+      } & SharedOptions;
+    }
+  | {
+      label: string;
+      type: "globus.embed";
+      options: (
+        | {
+            /**
+             * The full HTTPS URL to the asset.
+             */
+            asset: string;
+          }
+        | {
+            /**
+             * The path to the asset on the Globus Collection. This can be used as
+             * an alternative to the `asset` field.
+             */
+            path: string;
+          }
+      ) &
+        SharedOptions;
+    };
+
+export type Value = string | Definition["options"];
 
 function isValidValue(value: unknown): value is Value {
   return (
@@ -63,7 +142,7 @@ function isValidValue(value: unknown): value is Value {
     (typeof value === "object" &&
       value !== null &&
       "collection" in value &&
-      "path" in value)
+      ("asset" in value || "path" in value))
   );
 }
 
@@ -76,43 +155,73 @@ function getMimeType(path: string) {
   return extension && SUPPORTED_EXTENSIONS[extension]?.mime;
 }
 
-export default function GlobusEmbedField({
-  definition,
-}: {
-  definition: ProcessedField;
-}) {
-  const { value } = definition;
+type GlobusEmbedProps = PropsWithChildren<{
+  config: Definition["options"] & {
+    asset: string;
+  };
+}>;
 
-  return isValidValue(value) ? (
-    <GlobusEmbed
-      config={
-        typeof value === "string"
-          ? {
-              path: value,
-              ...definition.options,
-            }
-          : value
-      }
-    />
-  ) : (
-    <Text>Invalid value provided.</Text>
-  );
+export default function GlobusEmbedField({ field }: { field: ProcessedField }) {
+  const { derivedValue } = field;
+  if (!isValidValue(derivedValue)) {
+    return (
+      <Alert status="error" flexDirection="column" alignItems="flex-start">
+        <Flex>
+          <AlertIcon />
+          <AlertTitle>Unable to render Globus-embedded asset.</AlertTitle>
+        </Flex>
+        <AlertDescription w="100%">
+          <details>
+            Unable to interpret the provided configuration as a valid
+            Globus-embedded asset.
+            <Code as="pre" overflow="scroll" maxW="100%">
+              {JSON.stringify(field, null, 2)}
+            </Code>
+          </details>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+  let props: GlobusEmbedProps | undefined;
+  if (
+    typeof derivedValue === "string" &&
+    field.options?.collection &&
+    typeof field.options?.collection === "string"
+  ) {
+    props = {
+      config: {
+        asset: derivedValue,
+        collection: field.options.collection,
+        ...field.options,
+      },
+    };
+  }
+
+  if (typeof derivedValue === "object") {
+    props = {
+      /**
+       * If the derived value is an object, assume it is a valid configuration object.
+       */
+      config: derivedValue as GlobusEmbedProps["config"],
+    };
+  }
+  return props && <GlobusEmbed {...props} />;
 }
 
-function GlobusEmbed({ config }: { config: Config }) {
+function GlobusEmbed({ config }: GlobusEmbedProps) {
   const auth = useGlobusAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [src, setSrc] = useState<string | null>(null);
 
-  const { width = "100%", height = "auto" } = config;
+  const { width = "100%", height = "auto", mime } = config;
 
   useEffect(() => {
     async function attemptFetch() {
       setLoading(true);
       setError(false);
       setSrc(null);
-      const result = await fetch(config.path, {
+      const result = await fetch(config.asset, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Authorization: `Bearer ${auth.authorization?.tokens.getByResourceServer(config.collection)?.access_token}`,
@@ -146,7 +255,7 @@ function GlobusEmbed({ config }: { config: Config }) {
             Loading...
           </Skeleton>
         )}
-        {error && <EmbedError error={error} rounded="md" />}
+        {error && <EmbedError error={error} />}
         {!error && src && (
           <>
             <Box
@@ -160,7 +269,7 @@ function GlobusEmbed({ config }: { config: Config }) {
               referrerPolicy="no-referrer"
               srcDoc={`
               <object
-                type="${getMimeType(config.path)}"
+                type="${mime || getMimeType(config.asset)}"
                 data="${src}"
                 width="${width}"
                 height="${height}"
@@ -168,7 +277,7 @@ function GlobusEmbed({ config }: { config: Config }) {
               >
                 <b>Unable to load preview of asset.</b>
                 <div style="padding: .75em;">
-                  <code>${config.path}</code>
+                  <code>${config.asset}</code>
                 </div>
               </object>
             `}
@@ -181,11 +290,12 @@ function GlobusEmbed({ config }: { config: Config }) {
           as="a"
           variant="link"
           colorScheme="black"
-          href={config.path}
+          href={config.asset}
           target="_blank"
           rel="noopener noreferrer"
+          size="xs"
         >
-          Open in New Tab
+          Open in New Tab <ExternalLinkIcon mx="2px" />
         </Button>
       </Box>
     </>
@@ -213,18 +323,24 @@ function EmbedError({ error }: { error: unknown }) {
       });
     };
   }
+  /**
+   * Attempt to extract a `message` from the error.
+   */
+  const message =
+    error &&
+    typeof error === "object" &&
+    "message" in error &&
+    typeof error.message === "string"
+      ? error.message
+      : "An error occurred.";
   return (
     <Alert status="error">
       <AlertIcon />
-      {error?.message || "An error occurred."}
+      {message}
       <AlertDescription>
-        {handler ? (
+        {handler && (
           <Button onClick={handler} size="xs" colorScheme="red" ml={2}>
             Address Error
-          </Button>
-        ) : (
-          <Button onClick={() => console.error(error)} size="sm">
-            Dismiss
           </Button>
         )}
       </AlertDescription>

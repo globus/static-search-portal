@@ -13,25 +13,46 @@ import FallbackField from "./Fields/FallbackField";
 import { GMetaResult } from "@globus/sdk/services/search/service/query";
 import { isFeatureEnabled } from "../../static";
 
-export type FieldDefinition =
-  | string
-  | {
-      label: string;
-      property: string;
-      type?: string;
-    }
-  | {
-      label: string;
-      value: unknown;
-      type?: string;
-    };
-
-export type ProcessedField = {
-  label: string | undefined;
-  value: unknown;
-  type: string | undefined;
+type SharedDefinitionProperties = {
+  /**
+   * The label for the field.
+   */
+  label?: string;
+  /**
+   * An option `type` to specify how the field should be rendered.
+   */
+  type?: string;
+  options?: Record<string, unknown>;
 };
 
+export type FieldDefinition =
+  /**
+   * When a string value is provided, it is assumed to be equivalent to a `property` definition.
+   */
+  | string
+  | ({
+      /**
+       * When `property` it is assumed to be a pointer to a property on the object currently being processed/displayed.
+       */
+      property: string;
+    } & SharedDefinitionProperties)
+  | ({
+      value: unknown;
+    } & SharedDefinitionProperties);
+
+/**
+ * The processed field object is the result of processing a `FieldDefinition` object to a more standard/predictable object.
+ */
+export type ProcessedField = {
+  /**
+   * The derived `value` of either the original provided `value` or the result of the `property` lookup.
+   */
+  derivedValue: unknown;
+} & SharedDefinitionProperties;
+
+/**
+ * Get the processed field object from a `FieldDefinition` object and a `GMetaResult` object.
+ */
 export async function getProcessedField(
   field: FieldDefinition,
   data: GMetaResult,
@@ -40,46 +61,47 @@ export async function getProcessedField(
    * Ensure we're working with a FieldDefinition object.
    */
   const def = typeof field === "string" ? { property: field } : field;
-  let value;
+  let derivedValue;
   if ("value" in def) {
-    value = def.value;
+    derivedValue = def.value;
   } else {
     if (isFeatureEnabled("jsonata")) {
       const expression = jsonata(def.property);
-      value = await expression.evaluate(data);
+      derivedValue = await expression.evaluate(data);
     } else {
-      value = get(data, def.property);
+      derivedValue = get(data, def.property);
     }
   }
   return {
     label: undefined,
     type: undefined,
-    value,
+    derivedValue,
     ...def,
   };
 }
 
-export const FieldValue = ({ definition }: { definition: ProcessedField }) => {
-  const { value, type } = definition;
+export const FieldValue = ({ field }: { field: ProcessedField }) => {
+  const { derivedValue, type } = field;
+
   if (type === "globus.embed") {
-    return <GlobusEmbedField definition={definition} />;
+    return <GlobusEmbedField field={field} />;
   }
   if (type === "rgba") {
-    return <RgbaField value={value} />;
+    return <RgbaField value={derivedValue} />;
   }
   if (type === "image") {
-    return <ImageField value={value} />;
+    return <ImageField value={derivedValue} />;
   }
   if (type === "table") {
-    return <TableField value={value} />;
+    return <TableField value={derivedValue} />;
   }
   if (type === "link") {
-    return <LinkField value={value} />;
+    return <LinkField value={derivedValue} />;
   }
   /**
    * If no `type` is provided, or the `type` is not recognized, use the fallback field.
    */
-  return <FallbackField value={value} />;
+  return <FallbackField value={derivedValue} />;
 };
 
 export const Field = ({
@@ -105,7 +127,7 @@ export const Field = ({
           {processedField.label}
         </Heading>
       )}
-      <FieldValue definition={processedField} />
+      <FieldValue field={processedField} />
     </Box>
   );
 };

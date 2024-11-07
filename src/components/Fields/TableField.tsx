@@ -39,10 +39,10 @@ export default function TableField({ value }: { value: unknown }) {
                 <Td>{key}</Td>
                 <Td>
                   <FieldValue
-                    definition={{
+                    field={{
                       label: undefined,
                       type: undefined,
-                      value,
+                      derivedValue: value,
                     }}
                   />
                 </Td>
