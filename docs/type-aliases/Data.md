@@ -50,6 +50,18 @@ The type used for `data` by the [@globus/static-search-portal generator](https:/
 
 > `optional` **navigation**: [`NavigationOptions`](../-internal-/type-aliases/NavigationOptions.md)
 
+### attributes.contentSecurityPolicy?
+
+> `optional` **contentSecurityPolicy**: `string` \| `false`
+
+The Content Security Policy (CSP) for the portal that will be included in a `<meta>` tag.
+If no value is provided, a default CSP will be used.
+If `false` is provided as the value, no CSP `<meta>` tag will be included.
+
+#### See
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+
 ### attributes.features?
 
 > `optional` **features**: `object`
@@ -69,6 +81,13 @@ Enable JSONata support for processing the `static.json` file.
 #### See
 
 https://jsonata.org/
+
+### attributes.features.requireAuthentication?
+
+> `optional` **requireAuthentication**: `boolean`
+
+Force users to authenticate before accessing the portal, regardless of whether or not the
+configured Globus Index is private.
 
 ### attributes.features.transfer?
 
@@ -115,6 +134,12 @@ To use the portal's built-in authorization handling, redirects should be sent to
 ```ts
 "https://example.com/data-portal/authenticate"
 ```
+
+### attributes.globus.application.scopes?
+
+> `optional` **scopes**: `string`[]
+
+Additional scopes to request from the Globus Auth service when authenticating.
 
 ### attributes.globus.search
 
@@ -163,4 +188,4 @@ the generator will render its `attributes`.
 
 ## Source
 
-[static.ts:42](https://github.com/globus/static-search-portal/blob/427d9e768bedde4f5dc3d367aa2f475355b36dde/static.ts#L42)
+[static.ts:42](https://github.com/globus/static-search-portal/blob/baa2d7ee8b5271b1d58d6455e5096e077c19aecd/static.ts#L42)

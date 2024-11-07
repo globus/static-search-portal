@@ -16,4 +16,5 @@
 - [NavigationOptions](type-aliases/NavigationOptions.md)
 - [ResultComponentOptions](type-aliases/ResultComponentOptions.md)
 - [ResultListingComponentOptions](type-aliases/ResultListingComponentOptions.md)
+- [SharedDefinitionProperties](type-aliases/SharedDefinitionProperties.md)
 - [ThemeSettings](type-aliases/ThemeSettings.md)

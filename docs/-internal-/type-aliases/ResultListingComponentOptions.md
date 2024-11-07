@@ -81,4 +81,4 @@ https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
 
 ## Source
 
-[src/components/ResultListing.tsx:31](https://github.com/globus/static-search-portal/blob/427d9e768bedde4f5dc3d367aa2f475355b36dde/src/components/ResultListing.tsx#L31)
+[src/components/ResultListing.tsx:31](https://github.com/globus/static-search-portal/blob/baa2d7ee8b5271b1d58d6455e5096e077c19aecd/src/components/ResultListing.tsx#L31)

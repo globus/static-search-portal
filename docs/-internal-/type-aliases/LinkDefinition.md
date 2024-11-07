@@ -22,4 +22,4 @@ The label that will be rendered as the link text.
 
 ## Source
 
-[src/components/Result.tsx:30](https://github.com/globus/static-search-portal/blob/427d9e768bedde4f5dc3d367aa2f475355b36dde/src/components/Result.tsx#L30)
+[src/components/Result.tsx:30](https://github.com/globus/static-search-portal/blob/baa2d7ee8b5271b1d58d6455e5096e077c19aecd/src/components/Result.tsx#L30)

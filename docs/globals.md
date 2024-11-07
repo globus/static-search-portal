@@ -16,6 +16,7 @@
 
 ## Variables
 
+- [METADATA](variables/METADATA.md)
 - [areSEOResultsEnabled](variables/areSEOResultsEnabled.md)
 - [isAuthenticationEnabled](variables/isAuthenticationEnabled.md)
 - [isTransferEnabled](variables/isTransferEnabled.md)

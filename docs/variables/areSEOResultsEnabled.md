@@ -8,4 +8,4 @@
 
 ## Source
 
-[static.ts:299](https://github.com/globus/static-search-portal/blob/427d9e768bedde4f5dc3d367aa2f475355b36dde/static.ts#L299)
+[static.ts:316](https://github.com/globus/static-search-portal/blob/baa2d7ee8b5271b1d58d6455e5096e077c19aecd/static.ts#L316)

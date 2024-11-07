@@ -10,4 +10,4 @@ Whether or not the Globus Transfer is enabled based on the state of the `static.
 
 ## Source
 
-[static.ts:285](https://github.com/globus/static-search-portal/blob/427d9e768bedde4f5dc3d367aa2f475355b36dde/static.ts#L285)
+[static.ts:302](https://github.com/globus/static-search-portal/blob/baa2d7ee8b5271b1d58d6455e5096e077c19aecd/static.ts#L302)
