@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/globus/static-search-portal/compare/1.1.0...1.2.0) (2024-11-08)
+
+
+### Features
+
+* adds "globus.embed" field type support ([#243](https://github.com/globus/static-search-portal/issues/243)) ([baa2d7e](https://github.com/globus/static-search-portal/commit/baa2d7ee8b5271b1d58d6455e5096e077c19aecd))
+* adds support for rendering embedded Globus assets as a Plotly graph or chart ([#248](https://github.com/globus/static-search-portal/issues/248)) ([272e4a6](https://github.com/globus/static-search-portal/commit/272e4a675c3e9008e90107cd68a41c15b61dfb79))
+
+
+### Fixes
+
+* Ensure application path is accounted for in OAuth redirects ([8fac9a1](https://github.com/globus/static-search-portal/commit/8fac9a178c49b01aef5ff83e0dc384a9d6fccfac))
+
 ## [1.1.0](https://github.com/globus/static-search-portal/compare/1.0.0...1.1.0) (2024-11-01)
 
 
