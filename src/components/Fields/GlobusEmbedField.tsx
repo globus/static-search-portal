@@ -30,12 +30,15 @@ type SharedOptions = {
   /**
    * When using the default renderer, the MIME type of the `<object>` can be
    * specified using this option. If not provided, the MIME type will be
-   * inferred from the file extension.
+   * inferred from the "Content-Type" header in the asset response.
    */
   mime?: string;
   /**
    * The renderer that will be used to display the asset. By default,
    * the asset will be rendered as an `<object>` in a sandboxed `<iframe>`.
+   *
+   * - `plotly` will render the asset as a Plotly chart. When using this renderer, the asset should be a JSON file than can
+   * be passed as the configuration object for your chart; See https://plotly.com/javascript/plotlyjs-function-reference/#plotlynewplot) for more details.
    */
   renderer?: Renderers;
 
