@@ -9,7 +9,6 @@ describe("GlobusEmbedField", () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       blob: jest.fn().mockResolvedValue(new Blob()),
-      json: jest.fn().mockResolvedValue({}),
       headers: {
         get: jest.fn().mockReturnValue("image/jpeg"),
       },
@@ -39,6 +38,9 @@ describe("GlobusEmbedField", () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       blob: jest.fn().mockResolvedValue(new Blob()),
+      headers: {
+        get: jest.fn().mockReturnValue("image/jpeg"),
+      },
     });
     global.URL.createObjectURL = jest
       .fn()
