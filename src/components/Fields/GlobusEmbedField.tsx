@@ -16,40 +16,8 @@ import { isAuthorizationRequirementsError } from "@globus/sdk/core/errors";
 import { useOAuthStore } from "@/store/oauth";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-
-const SUPPORTED_EXTENSIONS: {
-  [key: string]: {
-    mime: string;
-  };
-} = {
-  jpg: {
-    mime: "image/jpeg",
-  },
-  jpeg: {
-    mime: "image/jpeg",
-  },
-  png: {
-    mime: "image/png",
-  },
-  gif: {
-    mime: "image/gif",
-  },
-  tiff: {
-    mime: "image/tiff",
-  },
-  svg: {
-    mime: "image/svg+xml",
-  },
-  webp: {
-    mime: "image/webp",
-  },
-  pdf: {
-    mime: "application/pdf",
-  },
-  mp4: {
-    mime: "video/mp4",
-  },
-};
+import { JSONTree } from "../JSONTree";
+import { Plotly } from "./Renderer/Plotly";
 
 type Renderers = "plotly" | undefined;
 
@@ -62,12 +30,15 @@ type SharedOptions = {
   /**
    * When using the default renderer, the MIME type of the `<object>` can be
    * specified using this option. If not provided, the MIME type will be
-   * inferred from the file extension.
+   * inferred from the "Content-Type" header in the asset response.
    */
   mime?: string;
   /**
    * The renderer that will be used to display the asset. By default,
    * the asset will be rendered as an `<object>` in a sandboxed `<iframe>`.
+   *
+   * - `plotly` will render the asset as a Plotly chart. When using this renderer, the asset should be a JSON file than can
+   * be passed as the configuration object for your chart; See https://plotly.com/javascript/plotlyjs-function-reference/#plotlynewplot) for more details.
    */
   renderer?: Renderers;
 
@@ -146,15 +117,6 @@ function isValidValue(value: unknown): value is Value {
   );
 }
 
-function getExtension(path: string) {
-  return path.split(".").pop()?.toLowerCase();
-}
-
-function getMimeType(path: string) {
-  const extension = getExtension(path);
-  return extension && SUPPORTED_EXTENSIONS[extension]?.mime;
-}
-
 type GlobusEmbedProps = PropsWithChildren<{
   config: Definition["options"] & {
     asset: string;
@@ -211,8 +173,12 @@ export default function GlobusEmbedField({ field }: { field: ProcessedField }) {
 function GlobusEmbed({ config }: GlobusEmbedProps) {
   const auth = useGlobusAuth();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [src, setSrc] = useState<string | null>(null);
+  const [error, setError] = useState<unknown | false>(false);
+  const [contents, setContents] = useState<{
+    url?: string;
+    json?: Record<string, unknown>;
+  } | null>(null);
+  const [contentType, setContentType] = useState<string | null>(null);
 
   const { width = "100%", height = "auto", mime } = config;
 
@@ -220,7 +186,7 @@ function GlobusEmbed({ config }: GlobusEmbedProps) {
     async function attemptFetch() {
       setLoading(true);
       setError(false);
-      setSrc(null);
+      setContents(null);
       const result = await fetch(config.asset, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -232,45 +198,57 @@ function GlobusEmbed({ config }: GlobusEmbedProps) {
         setLoading(false);
         return;
       }
-      const blob = await result.blob();
-      const url = URL.createObjectURL(blob);
-      setSrc(url);
+      const contentType = result.headers.get("Content-Type");
+      const isJSON = contentType?.includes("application/json");
+      setContentType(contentType);
+      if (isJSON) {
+        try {
+          const json = await result.json();
+          setContents({ json });
+        } catch (e) {
+          setError(e);
+        }
+      } else {
+        const blob = await result.blob();
+        const url = URL.createObjectURL(blob);
+        setContents({ url });
+      }
       setLoading(false);
     }
 
     attemptFetch();
 
     return () => {
-      if (src) {
-        URL.revokeObjectURL(src);
+      if (contents && contents.url) {
+        URL.revokeObjectURL(contents.url);
       }
     };
   }, [config]);
 
   return (
     <>
-      <Box w={width} h={height}>
+      <Box w={`calc(${width} + 2em)`} h={`calc(${height} + 2em)`}>
         {loading && (
-          <Skeleton w={width} h={height}>
+          <Skeleton w={`calc(${width} + 2em)`} h={`calc(${height} + 2em)`}>
             Loading...
           </Skeleton>
         )}
-        {error && <EmbedError error={error} />}
-        {!error && src && (
-          <>
-            <Box
-              w={width}
-              h={height}
-              border="1px solid"
-              rounded="md"
-              as="iframe"
-              allow=""
-              sandbox="allow-same-origin"
-              referrerPolicy="no-referrer"
-              srcDoc={`
+        {error !== false && <EmbedError error={error} />}
+        {!error && contents?.url && (
+          <Box
+            w={`calc(${width} + 2em)`}
+            h={`calc(${height} + 2em)`}
+            p={1}
+            border="1px solid"
+            rounded="md"
+            as="iframe"
+            allow=""
+            sandbox="allow-same-origin"
+            referrerPolicy="no-referrer"
+            srcDoc={`
               <object
-                type="${mime || getMimeType(config.asset)}"
-                data="${src}"
+                type="${mime || contentType}"
+                data="${contents.url}"
                 width="${width}"
                 height="${height}"
                 style="font-size: 12px; font-family: sans-serif;"
@@ -281,9 +259,15 @@ function GlobusEmbed({ config }: GlobusEmbedProps) {
                 </div>
               </object>
             `}
-            />
-          </>
+          />
         )}
+        {!error &&
+          contents?.json &&
+          (config.renderer === "plotly" ? (
+            <Plotly contents={contents.json} />
+          ) : (
+            <JSONTree data={contents.json} />
+          ))}
       </Box>
       <Box>
         <Button
@@ -295,7 +279,8 @@ function GlobusEmbed({ config }: GlobusEmbedProps) {
           rel="noopener noreferrer"
           size="xs"
         >
-          Open in New Tab <ExternalLinkIcon mx="2px" />
+          Open {contents?.json ? "JSON " : ""} in New Tab{" "}
+          <ExternalLinkIcon mx="2px" />
         </Button>
       </Box>
     </>

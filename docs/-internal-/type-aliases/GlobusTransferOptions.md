@@ -26,4 +26,4 @@ The path that will be used as the `source_path` for the transfer.
 
 ## Source
 
-[src/components/Result.tsx:49](https://github.com/globus/static-search-portal/blob/baa2d7ee8b5271b1d58d6455e5096e077c19aecd/src/components/Result.tsx#L49)
+[src/components/Result.tsx:49](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/components/Result.tsx#L49)

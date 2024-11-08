@@ -71,4 +71,4 @@ https://github.com/from-static/actions
 
 ## Source
 
-[static.ts:12](https://github.com/globus/static-search-portal/blob/baa2d7ee8b5271b1d58d6455e5096e077c19aecd/static.ts#L12)
+[static.ts:12](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/static.ts#L12)
