@@ -19,6 +19,7 @@ import { isAuthorizationRequirementsError } from "@globus/sdk/core/errors";
 import { useOAuthStore } from "@/store/oauth";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { useLogin } from "@/hooks/useOAuth";
 import { PlotlyRenderer } from "./Renderer/Plotly";
 import { ObjectRenderer } from "./Renderer/Object";
 import { useGCSAsset, useGCSAssetMetadata } from "@/hooks/useGlobusAPI";
@@ -178,6 +179,9 @@ export default function GlobusEmbedField({ field }: { field: ProcessedField }) {
 }
 
 function GlobusEmbed({ config, field }: GlobusEmbedProps) {
+  const auth = useGlobusAuth();
+  const login = useLogin();
+
   const metadata = useGCSAssetMetadata({
     collection: config.collection,
     url: config.asset,
@@ -198,6 +202,19 @@ function GlobusEmbed({ config, field }: GlobusEmbedProps) {
   return (
     <>
       <Box w={`calc(${width} + 2em)`} h={`calc(${height} + 2em)`}>
+        {!auth.isAuthenticated && (
+          <Alert status="warning">
+            <AlertIcon />
+            <AlertTitle>Authentication Required</AlertTitle>
+            <AlertDescription>
+              To view this asset, you must{" "}
+              <Button variant="link" onClick={login}>
+                Sign In
+              </Button>
+              .
+            </AlertDescription>
+          </Alert>
+        )}
         {metadata.isLoading && (
           <Center>
             <HStack>
