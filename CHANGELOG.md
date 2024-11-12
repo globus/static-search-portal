@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/globus/static-search-portal/compare/1.2.0...1.3.0) (2024-11-12)
+
+
+### Features
+
+* Improves "globus.embed" behaviors ([#253](https://github.com/globus/static-search-portal/issues/253)) ([57a5a25](https://github.com/globus/static-search-portal/commit/57a5a25bfd3dfca798d122acd660d776a82ecd9e))
+
+
+### Fixes
+
+* Updates "globus.embed" fields to prompt for authorization when no session is found ([#255](https://github.com/globus/static-search-portal/issues/255)) ([bd25b05](https://github.com/globus/static-search-portal/commit/bd25b05de46cccd5f4ed7d3cf7d6d3fa235d8bf6))
+
 ## [1.2.0](https://github.com/globus/static-search-portal/compare/1.1.0...1.2.0) (2024-11-08)
 
 
