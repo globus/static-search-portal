@@ -128,13 +128,11 @@ export default function ResultWrapper({
 }: {
   result?: GMetaResult | GError;
 }) {
-  if (!result) {
-    return null;
-  }
-  if (isGError(result)) {
-    return <Error error={result} />;
-  }
-  return <Result result={result} />;
+  return !result ? null : isGError(result) ? (
+    <Error error={result} />
+  ) : (
+    <Result result={result} />
+  );
 }
 
 export async function getTransferDetailsFromResult(

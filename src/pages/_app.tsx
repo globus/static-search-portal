@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useEffect } from "react";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "../providers/theme-provider";
 import { info } from "@globus/sdk";
 
@@ -79,7 +80,10 @@ const QueryProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </>
   );
 };
