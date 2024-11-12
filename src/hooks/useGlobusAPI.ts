@@ -93,10 +93,11 @@ export function useGCSAssetMetadata({
   url: string;
 }) {
   const auth = useGlobusAuth();
+
   const token =
     auth.authorization?.tokens.getByResourceServer(collection)?.access_token;
   return useQuery({
-    enabled: !!token,
+    enabled: !!auth.isAuthenticated,
     queryKey: ["gcs", url, "metadata"],
     queryFn: async () => {
       const response = await fetch(url, {
@@ -154,7 +155,7 @@ export function useGCSAsset({
     auth.authorization?.tokens.getByResourceServer(collection)?.access_token;
 
   return useQuery({
-    enabled: !!token && enabled !== false,
+    enabled: !!auth.isAuthenticated && enabled !== false,
     queryKey: ["gcs", url],
     queryFn: async (): Promise<GCSAssetResponse> => {
       let contentType = mimeTypeHint;
@@ -214,7 +215,7 @@ export function useGCSAsset({
       });
       contentType = response.headers.get("Content-Type");
       if (!response.ok) {
-        throw new Error(
+        return Promise.reject(
           /**
            * Errors might come from GridFTP, so we need to detect whether or
            * not the response is JSON or text before throwing an error.
