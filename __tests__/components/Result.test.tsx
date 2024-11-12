@@ -6,7 +6,7 @@ import result from "../fixtures/GMetaResult.json";
 
 import Result from "../../src/components/Result";
 
-import _STATIC from "../../static.json";
+import _STATIC from "../../static.json" with { type: "json" };
 
 describe("Result", () => {
   it("renders the result component correctly", async () => {

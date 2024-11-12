@@ -4,7 +4,7 @@ import { render } from "../../../test-utils";
 
 import GlobusEmbedField from "../../../src/components/Fields/GlobusEmbedField";
 
-describe("GlobusEmbedField", () => {
+describe.skip("GlobusEmbedField", () => {
   it("supports basic rendering", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,

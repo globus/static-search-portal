@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import React, { PropsWithChildren } from "react";
 import {
   Alert,
   AlertDescription,
@@ -6,9 +6,12 @@ import {
   AlertTitle,
   Box,
   Button,
+  Center,
   Code,
   Flex,
-  Skeleton,
+  HStack,
+  Spinner,
+  Text,
 } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { ProcessedField } from "../Field";
@@ -16,10 +19,11 @@ import { isAuthorizationRequirementsError } from "@globus/sdk/core/errors";
 import { useOAuthStore } from "@/store/oauth";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { JSONTree } from "../JSONTree";
-import { Plotly } from "./Renderer/Plotly";
+import { PlotlyRenderer } from "./Renderer/Plotly";
+import { ObjectRenderer } from "./Renderer/Object";
+import { useGCSAsset, useGCSAssetMetadata } from "@/hooks/useGlobusAPI";
 
-type Renderers = "plotly" | undefined;
+type Renderers = "plotly" | "editor" | undefined;
 
 type SharedOptions = {
   /**
@@ -51,7 +55,7 @@ type SharedOptions = {
   width?: string;
 };
 
-type Definition =
+export type Definition =
   | {
       label: string;
       property: string;
@@ -117,7 +121,8 @@ function isValidValue(value: unknown): value is Value {
   );
 }
 
-type GlobusEmbedProps = PropsWithChildren<{
+export type GlobusEmbedProps = PropsWithChildren<{
+  field: ProcessedField;
   config: Definition["options"] & {
     asset: string;
   };
@@ -151,6 +156,7 @@ export default function GlobusEmbedField({ field }: { field: ProcessedField }) {
     typeof field.options?.collection === "string"
   ) {
     props = {
+      field,
       config: {
         asset: derivedValue,
         collection: field.options.collection,
@@ -161,6 +167,7 @@ export default function GlobusEmbedField({ field }: { field: ProcessedField }) {
 
   if (typeof derivedValue === "object") {
     props = {
+      field,
       /**
        * If the derived value is an object, assume it is a valid configuration object.
        */
@@ -170,104 +177,48 @@ export default function GlobusEmbedField({ field }: { field: ProcessedField }) {
   return props && <GlobusEmbed {...props} />;
 }
 
-function GlobusEmbed({ config }: GlobusEmbedProps) {
-  const auth = useGlobusAuth();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown | false>(false);
-  const [contents, setContents] = useState<{
-    url?: string;
-    json?: Record<string, unknown>;
-  } | null>(null);
-  const [contentType, setContentType] = useState<string | null>(null);
+function GlobusEmbed({ config, field }: GlobusEmbedProps) {
+  const metadata = useGCSAssetMetadata({
+    collection: config.collection,
+    url: config.asset,
+  });
 
-  const { width = "100%", height = "auto", mime } = config;
+  const asset = useGCSAsset({
+    collection: config.collection,
+    url: config.asset,
+    mimeTypeHint: config.mime || metadata.data?.contentType,
+    enabled: metadata.isFetched,
+  });
 
-  useEffect(() => {
-    async function attemptFetch() {
-      setLoading(true);
-      setError(false);
-      setContents(null);
-      const result = await fetch(config.asset, {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Authorization: `Bearer ${auth.authorization?.tokens.getByResourceServer(config.collection)?.access_token}`,
-        },
-      });
-      if (!result.ok) {
-        setError(await result.json());
-        setLoading(false);
-        return;
-      }
-      const contentType = result.headers.get("Content-Type");
-      const isJSON = contentType?.includes("application/json");
-      setContentType(contentType);
-      if (isJSON) {
-        try {
-          const json = await result.json();
-          setContents({ json });
-        } catch (e) {
-          setError(e);
-        }
-      } else {
-        const blob = await result.blob();
-        const url = URL.createObjectURL(blob);
-        setContents({ url });
-      }
-      setLoading(false);
-    }
+  const { width = "100%", height = "auto" } = config;
 
-    attemptFetch();
-
-    return () => {
-      if (contents && contents.url) {
-        URL.revokeObjectURL(contents.url);
-      }
-    };
-  }, [config]);
+  const renderer = config.renderer || asset.data?.renderer;
+  const Renderer = renderer === "plotly" ? PlotlyRenderer : ObjectRenderer;
 
   return (
     <>
       <Box w={`calc(${width} + 2em)`} h={`calc(${height} + 2em)`}>
-        {loading && (
-          <Skeleton w={`calc(${width} + 2em)`} h={`calc(${height} + 2em)`}>
-            Loading...
-          </Skeleton>
+        {metadata.isLoading && (
+          <Center>
+            <HStack>
+              <Spinner size="sm" mr={1} />
+              <Text fontSize="sm">Fetching asset metadata...</Text>
+            </HStack>
+          </Center>
         )}
-        {error !== false && <EmbedError error={error} />}
-        {!error && contents?.url && (
-          <Box
-            w={`calc(${width} + 2em)`}
-            h={`calc(${height} + 2em)`}
-            p={1}
-            border="1px solid"
-            rounded="md"
-            as="iframe"
-            allow=""
-            sandbox="allow-same-origin"
-            referrerPolicy="no-referrer"
-            srcDoc={`
-              <object
-                type="${mime || contentType}"
-                data="${contents.url}"
-                width="${width}"
-                height="${height}"
-                style="font-size: 12px; font-family: sans-serif;"
-              >
-                <b>Unable to load preview of asset.</b>
-                <div style="padding: .75em;">
-                  <code>${config.asset}</code>
-                </div>
-              </object>
-            `}
-          />
+
+        {asset.isLoading && (
+          <Center>
+            <HStack>
+              <Spinner size="sm" mr={1} />
+              <Text fontSize="sm">Fetching asset...</Text>
+            </HStack>
+          </Center>
         )}
-        {!error &&
-          contents?.json &&
-          (config.renderer === "plotly" ? (
-            <Plotly contents={contents.json} />
-          ) : (
-            <JSONTree data={contents.json} />
-          ))}
+        {asset.isError && <EmbedError error={asset.error} />}
+        {!asset.isError && asset.isFetched && (
+          <Renderer field={field} config={config} />
+        )}
       </Box>
       <Box>
         <Button
@@ -279,8 +230,7 @@ function GlobusEmbed({ config }: GlobusEmbedProps) {
           rel="noopener noreferrer"
           size="xs"
         >
-          Open {contents?.json ? "JSON " : ""} in New Tab{" "}
-          <ExternalLinkIcon mx="2px" />
+          Open in New Tab <ExternalLinkIcon mx="2px" />
         </Button>
       </Box>
     </>
