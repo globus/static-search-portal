@@ -5,6 +5,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 import { type AuthorizationManager } from "@globus/sdk/core/authorization/AuthorizationManager";
 
 import { STATIC } from "../../static";
+import type { Renderers } from "@/components/Fields/GlobusEmbedField";
 
 async function fetchCollection(
   authorization: AuthorizationManager | undefined,
@@ -127,7 +128,7 @@ type GCSAssetResponse = {
    * `renderer` that should be used to render the asset based on the observed Content-Type and user-provided `mime` type.
    * During actual rendering a user-provided `renderer` should take precedence over the inferred `renderer`.
    */
-  renderer?: "plotly";
+  renderer?: Renderers;
   content: Promise<any>;
   /**
    * The `mime` type of the asset set by the user or inferred `mime` type based on the asset response.
@@ -231,6 +232,7 @@ export function useGCSAsset({
           content: response.json(),
           mime: contentType,
           contentType,
+          renderer: "json",
         };
       }
       return {
