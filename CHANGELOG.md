@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/globus/static-search-portal/compare/1.3.0...1.3.1) (2024-11-14)
+
+
+### Fixes
+
+* Includes https://*.globusonline.org in default CSP ([#258](https://github.com/globus/static-search-portal/issues/258)) ([ebd5fe3](https://github.com/globus/static-search-portal/commit/ebd5fe39d6e474b08ab1a3b8312a000a98518eef))
+
 ## [1.3.0](https://github.com/globus/static-search-portal/compare/1.2.0...1.3.0) (2024-11-12)
 
 
