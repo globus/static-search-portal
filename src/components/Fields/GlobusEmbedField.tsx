@@ -1,5 +1,9 @@
 import React, { PropsWithChildren } from "react";
 import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Alert,
   AlertDescription,
   AlertIcon,
@@ -10,6 +14,7 @@ import {
   Code,
   Flex,
   HStack,
+  Spacer,
   Spinner,
   Text,
 } from "@chakra-ui/react";
@@ -23,6 +28,7 @@ import { useLogin } from "@/hooks/useOAuth";
 import { PlotlyRenderer } from "./Renderer/Plotly";
 import { ObjectRenderer } from "./Renderer/Object";
 import { useGCSAsset, useGCSAssetMetadata } from "@/hooks/useGlobusAPI";
+import { JSONTree } from "../JSONTree";
 
 type Renderers = "plotly" | "editor" | undefined;
 
@@ -207,11 +213,13 @@ function GlobusEmbed({ config, field }: GlobusEmbedProps) {
             <AlertIcon />
             <AlertTitle>Authentication Required</AlertTitle>
             <AlertDescription>
-              To view this asset, you must{" "}
-              <Button variant="link" onClick={login}>
-                Sign In
-              </Button>
-              .
+              <Text>
+                In order to view this embedded resource, you must{" "}
+                <Button variant="link" onClick={login} color="yellow.800">
+                  Sign In
+                </Button>
+                .
+              </Text>
             </AlertDescription>
           </Alert>
         )}
@@ -260,6 +268,19 @@ function EmbedError({ error }: { error: unknown }) {
   const pathname = usePathname();
   const search = useSearchParams();
   let handler;
+  /**
+   * Attempt to extract a `message` from the error.
+   */
+  const message =
+    error &&
+    typeof error === "object" &&
+    "message" in error &&
+    typeof error.message === "string"
+      ? error.message
+      : "An error occurred.";
+
+  let description = <Text>{message}</Text>;
+
   if (isAuthorizationRequirementsError(error)) {
     const requiredScopes = error.authorization_parameters?.required_scopes;
     handler = async () => {
@@ -274,28 +295,46 @@ function EmbedError({ error }: { error: unknown }) {
         },
       });
     };
-  }
-  /**
-   * Attempt to extract a `message` from the error.
-   */
-  const message =
-    error &&
-    typeof error === "object" &&
-    "message" in error &&
-    typeof error.message === "string"
-      ? error.message
-      : "An error occurred.";
-  return (
-    <Alert status="error">
-      <AlertIcon />
-      {message}
-      <AlertDescription>
-        {handler && (
-          <Button onClick={handler} size="xs" colorScheme="red" ml={2}>
-            Address Error
+
+    description = (
+      <>
+        <Text>
+          Your current session does not meet the requirements to view this
+          resource – you must{" "}
+          <Button onClick={handler} variant="link" color="red.800">
+            address requirements
           </Button>
-        )}
-      </AlertDescription>
+          .
+        </Text>
+      </>
+    );
+  }
+  return (
+    <Alert status="error" flexDirection="column" alignItems="flex-start">
+      <Flex>
+        <AlertIcon />
+        <AlertTitle>Unable to render resource.</AlertTitle>
+      </Flex>
+      <AlertDescription mt={1}>{description}</AlertDescription>
+      {typeof error === "object" && error && (
+        <Accordion allowToggle w="100%">
+          <AccordionItem border={0}>
+            <Flex>
+              <Spacer />
+              <AccordionButton w="auto">
+                <Button variant="link" colorScheme="black" size="xs">
+                  View Error
+                </Button>
+              </AccordionButton>
+            </Flex>
+            <AccordionPanel>
+              <Box bg="white" p={2} rounded={5}>
+                <JSONTree data={error} />
+              </Box>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      )}
     </Alert>
   );
 }
