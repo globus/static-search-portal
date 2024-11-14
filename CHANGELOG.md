@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/globus/static-search-portal/compare/1.3.1...1.4.0) (2024-11-14)
+
+
+### Features
+
+* Improves JSON rendering via react-json-view ([#260](https://github.com/globus/static-search-portal/issues/260)) ([59b6fc1](https://github.com/globus/static-search-portal/commit/59b6fc10e8d10566a19e709adc198371695acf57))
+
 ## [1.3.1](https://github.com/globus/static-search-portal/compare/1.3.0...1.3.1) (2024-11-14)
 
 
