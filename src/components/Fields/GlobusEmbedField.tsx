@@ -27,10 +27,11 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useLogin } from "@/hooks/useOAuth";
 import { PlotlyRenderer } from "./Renderer/Plotly";
 import { ObjectRenderer } from "./Renderer/Object";
+import { JsonRenderer } from "./Renderer/Json";
 import { useGCSAsset, useGCSAssetMetadata } from "@/hooks/useGlobusAPI";
 import { JSONTree } from "../JSONTree";
 
-type Renderers = "plotly" | "editor" | undefined;
+export type Renderers = "plotly" | "json" | undefined;
 
 type SharedOptions = {
   /**
@@ -203,7 +204,13 @@ function GlobusEmbed({ config, field }: GlobusEmbedProps) {
   const { width = "100%", height = "auto" } = config;
 
   const renderer = config.renderer || asset.data?.renderer;
-  const Renderer = renderer === "plotly" ? PlotlyRenderer : ObjectRenderer;
+
+  const Renderer =
+    renderer === "plotly"
+      ? PlotlyRenderer
+      : renderer === "json"
+        ? JsonRenderer
+        : ObjectRenderer;
 
   return (
     <>
