@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/globus/static-search-portal/compare/1.4.0...1.5.0) (2024-11-14)
+
+
+### Features
+
+* Adds JSON Renderer for Globus Embeds ([#262](https://github.com/globus/static-search-portal/issues/262)) ([dfd7aa0](https://github.com/globus/static-search-portal/commit/dfd7aa08065ce64d2dd1d6a057a4d7dbaa5b420c))
+
 ## [1.4.0](https://github.com/globus/static-search-portal/compare/1.3.1...1.4.0) (2024-11-14)
 
 
