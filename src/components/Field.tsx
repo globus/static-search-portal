@@ -8,6 +8,8 @@ import RgbaField from "./Fields/RgbaField";
 import ImageField from "./Fields/ImageField";
 import TableField from "./Fields/TableField";
 import LinkField from "./Fields/LinkField";
+import DateField from "./Fields/DateField";
+import BytesField from "./Fields/BytesField";
 import FallbackField from "./Fields/FallbackField";
 
 import { GMetaResult } from "@globus/sdk/services/search/service/query";
@@ -97,6 +99,15 @@ export const FieldValue = ({ field }: { field: ProcessedField }) => {
   }
   if (type === "link") {
     return <LinkField value={derivedValue} />;
+  }
+  if (type === "date") {
+    return <DateField value={derivedValue} />;
+  }
+  if (type === "date") {
+    return <DateField value={derivedValue} />;
+  }
+  if (type === "bytes") {
+    return <BytesField value={derivedValue} />;
   }
   /**
    * If no `type` is provided, or the `type` is not recognized, use the fallback field.
