@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/globus/static-search-portal/compare/1.5.0...1.6.0) (2024-12-20)
+
+
+### Features
+
+* adds basic integration with Globus Search 'Advanced' query syntax ([#283](https://github.com/globus/static-search-portal/issues/283)) ([9087f2a](https://github.com/globus/static-search-portal/commit/9087f2a56314c22f6dfafcae5e2527c5bf6e154c))
+* adds support for 'bytes' and 'date' fields ([#282](https://github.com/globus/static-search-portal/issues/282)) ([7876d97](https://github.com/globus/static-search-portal/commit/7876d97793815a95692647dfbc9e8894f92711dd))
+
 ## [1.5.0](https://github.com/globus/static-search-portal/compare/1.4.0...1.5.0) (2024-11-14)
 
 
