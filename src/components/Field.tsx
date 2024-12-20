@@ -103,9 +103,6 @@ export const FieldValue = ({ field }: { field: ProcessedField }) => {
   if (type === "date") {
     return <DateField value={derivedValue} />;
   }
-  if (type === "date") {
-    return <DateField value={derivedValue} />;
-  }
   if (type === "bytes") {
     return <BytesField value={derivedValue} />;
   }
