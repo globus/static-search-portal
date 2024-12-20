@@ -10,8 +10,11 @@ import {
   HStack,
   Text,
   Center,
+  Checkbox,
+  Tooltip,
+  Icon,
 } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon, QuestionIcon } from "@chakra-ui/icons";
 import { throttle, debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
@@ -48,7 +51,9 @@ export function Search() {
   const params = useSearchParams();
 
   const initialQuery = params.get("q") || "";
-
+  const [isAdvanced, setIsAdvanced] = useState(
+    params.get("advanced") === "true",
+  );
   const [query, setQuery] = useState<string>(initialQuery);
   const [result, setResult] = useState<undefined | GSearchResult>();
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +71,10 @@ export function Search() {
             }
           : undefined;
       const response = await gsearch.query.post(SEARCH_INDEX, {
-        payload: getSearchPayload(query, search),
+        payload: {
+          ...getSearchPayload(query, search),
+          advanced: isAdvanced,
+        },
         headers,
       });
       const results = await response.json();
@@ -78,6 +86,7 @@ export function Search() {
   }, [
     query,
     search,
+    isAdvanced,
     isAuthenticationEnabled
       ? auth.authorization?.tokens?.search?.access_token
       : undefined,
@@ -96,11 +105,31 @@ export function Search() {
               type="search"
               placeholder="Start your search here..."
               onChange={debounce((e) => {
-                router.push({ query: { q: e.target.value } });
+                router.push({ query: { ...router.query, q: e.target.value } });
                 setQuery(e.target.value);
               }, 300)}
             />
           </InputGroup>
+          <HStack>
+            <Checkbox
+              size="sm"
+              isChecked={isAdvanced}
+              onChange={(e) => {
+                router.push({
+                  query: {
+                    ...router.query,
+                    advanced: e.target.checked,
+                  },
+                });
+                setIsAdvanced(e.target.checked);
+              }}
+            >
+              Use Advanced Search
+            </Checkbox>
+            <Tooltip label="Your query will be sent to Globus Search as an advanced query and will need to comply with the Globus Search advanced query syntax.">
+              <Icon as={QuestionIcon} />
+            </Tooltip>
+          </HStack>
           <SearchFacets result={result} />
           <Pagination result={result} />
           {isLoading && (
