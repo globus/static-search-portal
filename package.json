@@ -37,7 +37,7 @@
     "next": "14.2.15",
     "plotly.js-dist-min": "^2.35.2",
     "react": "^18",
-    "react-dom": "^18",
+    "react-dom": "^19",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "@types/node": "^20",
     "@types/plotly.js-dist-min": "^2.3.4",
     "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react-dom": "^19",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.15",
     "eslint-config-prettier": "^9.1.0",
