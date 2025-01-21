@@ -1,10 +1,12 @@
-[**@globus/static-search-portal**](../../README.md) • **Docs**
+[**@globus/static-search-portal**](../../README.md)
 
 ***
 
-# Type alias: SharedDefinitionProperties
+# Type Alias: SharedDefinitionProperties
 
 > **SharedDefinitionProperties**: `object`
+
+Defined in: [src/components/Field.tsx:18](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/Field.tsx#L18)
 
 ## Type declaration
 
@@ -23,7 +25,3 @@ The label for the field.
 > `optional` **type**: `string`
 
 An option `type` to specify how the field should be rendered.
-
-## Source
-
-[src/components/Field.tsx:16](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/components/Field.tsx#L16)

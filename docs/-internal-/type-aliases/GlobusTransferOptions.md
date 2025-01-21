@@ -1,29 +1,45 @@
-[**@globus/static-search-portal**](../../README.md) • **Docs**
+[**@globus/static-search-portal**](../../README.md)
 
 ***
 
-# Type alias: GlobusTransferOptions
+# Type Alias: GlobusTransferOptions
 
 > **GlobusTransferOptions**: `object`
+
+Defined in: [src/components/Result.tsx:49](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/Result.tsx#L49)
 
 ## Type declaration
 
 ### collection
 
-> **collection**: `string` \| `object`
+> **collection**: `string` \| \{ `property`: `string`; \}
 
 The collection that will be used as the `source_endpoint` for the transfer.
 
+#### Type declaration
+
+`string`
+
+\{ `property`: `string`; \}
+
 ### path
 
-> **path**: `string` \| `object`
+> **path**: `string` \| \{ `property`: `string`; \}
 
 The path that will be used as the `source_path` for the transfer.
 
+#### Type declaration
+
+`string`
+
+\{ `property`: `string`; \}
+
 ### type?
 
-> `optional` **type**: `string` \| `object`
+> `optional` **type**: `string` \| \{ `property`: `string`; \}
 
-## Source
+#### Type declaration
 
-[src/components/Result.tsx:49](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/components/Result.tsx#L49)
+`string`
+
+\{ `property`: `string`; \}

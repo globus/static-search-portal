@@ -1,12 +1,10 @@
-[**@globus/static-search-portal**](../README.md) • **Docs**
+[**@globus/static-search-portal**](../README.md)
 
 ***
 
 # \<internal\>
 
-## Index
-
-### Type Aliases
+## Type Aliases
 
 - [ColorDefinition](type-aliases/ColorDefinition.md)
 - [FieldDefinition](type-aliases/FieldDefinition.md)

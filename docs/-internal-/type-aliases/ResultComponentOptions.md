@@ -1,10 +1,12 @@
-[**@globus/static-search-portal**](../../README.md) • **Docs**
+[**@globus/static-search-portal**](../../README.md)
 
 ***
 
-# Type alias: ResultComponentOptions
+# Type Alias: ResultComponentOptions
 
 > **ResultComponentOptions**: `object`
+
+Defined in: [src/components/Result.tsx:82](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/Result.tsx#L82)
 
 ## Type declaration
 
@@ -33,7 +35,7 @@ A field can be a string, an object with a `label` and `property`, or an object w
 
 > `optional` **globus**: `object`
 
-### globus.transfer?
+#### globus.transfer?
 
 > `optional` **transfer**: [`GlobusTransferOptions`](GlobusTransferOptions.md)
 
@@ -80,7 +82,3 @@ The field to use as the summary for the result.
 #### See
 
 https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
-
-## Source
-
-[src/components/Result.tsx:82](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/components/Result.tsx#L82)

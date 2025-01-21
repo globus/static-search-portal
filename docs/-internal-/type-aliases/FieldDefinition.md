@@ -1,11 +1,9 @@
-[**@globus/static-search-portal**](../../README.md) • **Docs**
+[**@globus/static-search-portal**](../../README.md)
 
 ***
 
-# Type alias: FieldDefinition
+# Type Alias: FieldDefinition
 
 > **FieldDefinition**: `string` \| `object` & [`SharedDefinitionProperties`](SharedDefinitionProperties.md) \| `object` & [`SharedDefinitionProperties`](SharedDefinitionProperties.md)
 
-## Source
-
-[src/components/Field.tsx:28](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/components/Field.tsx#L28)
+Defined in: [src/components/Field.tsx:30](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/Field.tsx#L30)

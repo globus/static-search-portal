@@ -1,23 +1,14 @@
-[**@globus/static-search-portal**](../../README.md) • **Docs**
+[**@globus/static-search-portal**](../../README.md)
 
 ***
 
-# Type alias: ThemeSettings
+# Type Alias: ThemeSettings
 
 > **ThemeSettings**: `object`
 
+Defined in: [src/theme.ts:27](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/theme.ts#L27)
+
 ## Type declaration
-
-### colorScheme?
-
-> `optional` **colorScheme**: `string`
-
-Apply a default color scheme to all components.
-This supports all Chakra UI color schemes and is not provided by default.
-
-#### See
-
-https://v2.chakra-ui.com/docs/styled-system/theme#colors for available color schemes.
 
 ### colors?
 
@@ -51,6 +42,17 @@ The most common use case is to define a `primary` color.
 
 https://v2.chakra-ui.com/docs/styled-system/theme#colors
 
+### colorScheme?
+
+> `optional` **colorScheme**: `string`
+
+Apply a default color scheme to all components.
+This supports all Chakra UI color schemes and is not provided by default.
+
+#### See
+
+https://v2.chakra-ui.com/docs/styled-system/theme#colors for available color schemes.
+
 ### extendTheme?
 
 > `optional` **extendTheme**: `Parameters`\<*typeof* `extendTheme`\>\[`0`\]
@@ -60,7 +62,3 @@ Extend the Chakra UI theme.
 #### See
 
 https://v2.chakra-ui.com/docs/styled-system/customize-theme#using-theme-extensions
-
-## Source
-
-[src/theme.ts:27](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/theme.ts#L27)

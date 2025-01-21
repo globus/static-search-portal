@@ -1,10 +1,12 @@
-[**@globus/static-search-portal**](../../README.md) • **Docs**
+[**@globus/static-search-portal**](../../README.md)
 
 ***
 
-# Type alias: ResultListingComponentOptions
+# Type Alias: ResultListingComponentOptions
 
 > **ResultListingComponentOptions**: `object`
+
+Defined in: [src/components/ResultListing.tsx:31](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/ResultListing.tsx#L31)
 
 ## Type declaration
 
@@ -53,7 +55,7 @@ https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
 
 ### image?
 
-> `optional` **image**: `string` \| `object`
+> `optional` **image**: `string` \| \{ `alt`: `string`; `src`: `string`; \}
 
 An image to display in the result.
 
@@ -78,7 +80,3 @@ The field to use as the summary for the result.
 #### See
 
 https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
-
-## Source
-
-[src/components/ResultListing.tsx:31](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/components/ResultListing.tsx#L31)

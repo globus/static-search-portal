@@ -1,11 +1,9 @@
-[**@globus/static-search-portal**](../../README.md) • **Docs**
+[**@globus/static-search-portal**](../../README.md)
 
 ***
 
-# Type alias: ColorDefinition
+# Type Alias: ColorDefinition
 
-> **ColorDefinition**: `object` \| `string`
+> **ColorDefinition**: \{ `100`: `string`; `200`: `string`; `300`: `string`; `400`: `string`; `50`: `string`; `500`: `string`; `600`: `string`; `700`: `string`; `800`: `string`; `900`: `string`; \} \| `string`
 
-## Source
-
-[src/theme.ts:12](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/src/theme.ts#L12)
+Defined in: [src/theme.ts:12](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/theme.ts#L12)

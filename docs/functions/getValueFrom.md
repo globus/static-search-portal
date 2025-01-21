@@ -1,4 +1,4 @@
-[**@globus/static-search-portal**](../README.md) • **Docs**
+[**@globus/static-search-portal**](../README.md)
 
 ***
 
@@ -6,22 +6,26 @@
 
 > **getValueFrom**\<`T`\>(`obj`, `key`, `defaultValue`?): `Promise`\<`T` \| `undefined`\>
 
-## Type parameters
+Defined in: [static.ts:283](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/static.ts#L283)
+
+## Type Parameters
 
 • **T**
 
 ## Parameters
 
-• **obj**: `Record`\<`string`, `any`\>
+### obj
 
-• **key**: `string`
+`Record`\<`string`, `any`\>
 
-• **defaultValue?**: `T`
+### key
+
+`string`
+
+### defaultValue?
+
+`T`
 
 ## Returns
 
 `Promise`\<`T` \| `undefined`\>
-
-## Source
-
-[static.ts:283](https://github.com/globus/static-search-portal/blob/070e36d2f911e99d43e515c735c6dc05f429a795/static.ts#L283)
