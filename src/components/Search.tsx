@@ -11,10 +11,21 @@ import {
   Text,
   Center,
   Checkbox,
-  Tooltip,
   Icon,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
+  IconButton,
+  PopoverHeader,
+  Heading,
+  Link,
+  PopoverFooter,
+  Code,
 } from "@chakra-ui/react";
-import { SearchIcon, QuestionIcon } from "@chakra-ui/icons";
+import { SearchIcon, QuestionIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { throttle, debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
@@ -126,9 +137,42 @@ export function Search() {
             >
               Use Advanced Search
             </Checkbox>
-            <Tooltip label="Your query will be sent to Globus Search as an advanced query and will need to comply with the Globus Search advanced query syntax.">
-              <Icon as={QuestionIcon} />
-            </Tooltip>
+            <Popover>
+              <PopoverTrigger>
+                <IconButton
+                  aria-label="Learn More about Advanced Search"
+                  size="xs"
+                  icon={<Icon as={QuestionIcon} />}
+                />
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader>
+                  <Heading size="xs">Using Advanced Search</Heading>
+                </PopoverHeader>
+                <PopoverBody>
+                  <Text fontSize="sm">
+                    Your query will be sent to Globus Search as an advanced
+                    query and will need to comply with the Globus Search
+                    advanced query syntax.
+                  </Text>
+                  <Text fontSize="xs" py={2}>
+                    <Code>field:value OR field:other</Code>
+                  </Text>
+                </PopoverBody>
+                <PopoverFooter>
+                  <Link
+                    fontSize="sm"
+                    href="https://docs.globus.org/api/search/query/#advanced_query_string_syntax"
+                    isExternal
+                  >
+                    Globus Search Documentation
+                    <ExternalLinkIcon mx="2px" />
+                  </Link>
+                </PopoverFooter>
+              </PopoverContent>
+            </Popover>
           </HStack>
           <SearchFacets result={result} />
           <Pagination result={result} />

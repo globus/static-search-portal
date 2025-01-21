@@ -27,6 +27,9 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
     return null;
   }
 
+  const start = search.offset > 0 ? search.offset : 1;
+  const end = Math.min(search.offset + search.limit, result.total);
+
   return (
     <Flex align="center" p={2}>
       <HStack>
@@ -53,13 +56,14 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
         </Box>
       </HStack>
       <Spacer />
-      <Text fontSize="xs" mr={2}>
-        <Text as="b">
-          {search.offset > 0 ? search.offset : 1}-
-          {Math.min(search.offset + search.limit, result.total)}
-        </Text>{" "}
-        of <Text as="b">{result.total}</Text>
-      </Text>
+      {result.total > 0 ? (
+        <Text fontSize="xs" mr={2}>
+          <Text as="b">
+            {start}-{end}
+          </Text>{" "}
+          of <Text as="b">{result.total}</Text>
+        </Text>
+      ) : null}
       <ButtonGroup variant="outline" spacing="2">
         <Button
           size="sm"
@@ -85,7 +89,9 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
 
         <Button
           size="sm"
-          isDisabled={search.offset + search.limit >= result.total}
+          isDisabled={
+            !result.total || search.offset + search.limit >= result.total
+          }
           onClick={() => {
             dispatch({
               type: "set_offset",
