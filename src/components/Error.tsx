@@ -7,6 +7,7 @@ import {
   Code,
   HStack,
 } from "@chakra-ui/react";
+import { JSONTree } from "./JSONTree";
 
 import type { GError } from "@/globus/search";
 
@@ -26,13 +27,13 @@ export const Error = ({ error }: { error: GError }) => {
       {error.error_data && (
         <AlertDescription w="100%">
           <Code
-            bgColor="red.50"
+            bgColor="white"
             display="block"
             whiteSpace="pre-wrap"
             my={2}
             p={1}
           >
-            {JSON.stringify(error, null, 2)}
+            <JSONTree data={error} />
           </Code>
         </AlertDescription>
       )}
