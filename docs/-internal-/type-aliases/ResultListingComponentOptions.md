@@ -4,15 +4,17 @@
 
 # Type Alias: ResultListingComponentOptions
 
-> **ResultListingComponentOptions**: `object`
+> **ResultListingComponentOptions** = `object`
 
-Defined in: [src/components/ResultListing.tsx:31](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/ResultListing.tsx#L31)
+Defined in: [src/components/ResultListing.tsx:31](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/ResultListing.tsx#L31)
 
-## Type declaration
+## Properties
 
 ### fields?
 
 > `optional` **fields**: [`FieldDefinition`](FieldDefinition.md)[]
+
+Defined in: [src/components/ResultListing.tsx:67](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/ResultListing.tsx#L67)
 
 The fields to display in the result.
 A field can be a string, an object with a `label` and `property`, or an object with a `label` and `value`.
@@ -31,9 +33,13 @@ A field can be a string, an object with a `label` and `property`, or an object w
 ]
 ```
 
+***
+
 ### heading?
 
 > `optional` **heading**: `string`
+
+Defined in: [src/components/ResultListing.tsx:38](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/ResultListing.tsx#L38)
 
 The field to use as the title for the result.
 
@@ -53,9 +59,13 @@ The field to use as the title for the result.
 
 https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
 
+***
+
 ### image?
 
 > `optional` **image**: `string` \| \{ `alt`: `string`; `src`: `string`; \}
+
+Defined in: [src/components/ResultListing.tsx:49](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/ResultListing.tsx#L49)
 
 An image to display in the result.
 
@@ -65,9 +75,13 @@ An image to display in the result.
 "entries[0].content.image"
 ```
 
+***
+
 ### summary?
 
 > `optional` **summary**: `string`
+
+Defined in: [src/components/ResultListing.tsx:44](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/ResultListing.tsx#L44)
 
 The field to use as the summary for the result.
 

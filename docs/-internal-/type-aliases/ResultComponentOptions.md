@@ -4,15 +4,17 @@
 
 # Type Alias: ResultComponentOptions
 
-> **ResultComponentOptions**: `object`
+> **ResultComponentOptions** = `object`
 
-Defined in: [src/components/Result.tsx:82](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/Result.tsx#L82)
+Defined in: [src/components/Result.tsx:82](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Result.tsx#L82)
 
-## Type declaration
+## Properties
 
 ### fields?
 
 > `optional` **fields**: [`FieldDefinition`](FieldDefinition.md)[]
+
+Defined in: [src/components/Result.tsx:108](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Result.tsx#L108)
 
 The fields to display in the result.
 A field can be a string, an object with a `label` and `property`, or an object with a `label` and `value`.
@@ -31,19 +33,27 @@ A field can be a string, an object with a `label` and `property`, or an object w
 ]
 ```
 
+***
+
 ### globus?
 
 > `optional` **globus**: `object`
 
-#### globus.transfer?
+Defined in: [src/components/Result.tsx:110](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Result.tsx#L110)
+
+#### transfer?
 
 > `optional` **transfer**: [`GlobusTransferOptions`](GlobusTransferOptions.md)
 
 Enables Globus Transfer UI for the result.
 
+***
+
 ### heading?
 
 > `optional` **heading**: `string`
+
+Defined in: [src/components/Result.tsx:89](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Result.tsx#L89)
 
 The field to use as the title for the result.
 
@@ -63,13 +73,21 @@ The field to use as the title for the result.
 
 https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
 
+***
+
 ### links?
 
 > `optional` **links**: [`LinkDefinition`](LinkDefinition.md)[]
 
+Defined in: [src/components/Result.tsx:109](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Result.tsx#L109)
+
+***
+
 ### summary?
 
 > `optional` **summary**: `string`
+
+Defined in: [src/components/Result.tsx:95](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Result.tsx#L95)
 
 The field to use as the summary for the result.
 

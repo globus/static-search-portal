@@ -4,13 +4,15 @@
 
 # Function: getValueFrom()
 
-> **getValueFrom**\<`T`\>(`obj`, `key`, `defaultValue`?): `Promise`\<`T` \| `undefined`\>
+> **getValueFrom**\<`T`\>(`obj`, `key`, `defaultValue`?): `Promise`\<`undefined` \| `T`\>
 
-Defined in: [static.ts:283](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/static.ts#L283)
+Defined in: [static.ts:283](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/static.ts#L283)
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Parameters
 
@@ -28,4 +30,4 @@ Defined in: [static.ts:283](https://github.com/globus/static-search-portal/blob/
 
 ## Returns
 
-`Promise`\<`T` \| `undefined`\>
+`Promise`\<`undefined` \| `T`\>

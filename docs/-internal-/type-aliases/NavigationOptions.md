@@ -4,12 +4,14 @@
 
 # Type Alias: NavigationOptions
 
-> **NavigationOptions**: `object`
+> **NavigationOptions** = `object`
 
-Defined in: [src/components/Navigation.tsx:34](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/src/components/Navigation.tsx#L34)
+Defined in: [src/components/Navigation.tsx:34](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Navigation.tsx#L34)
 
-## Type declaration
+## Properties
 
 ### items
 
 > **items**: [`NavigationItem`](NavigationItem.md)[]
+
+Defined in: [src/components/Navigation.tsx:35](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/src/components/Navigation.tsx#L35)

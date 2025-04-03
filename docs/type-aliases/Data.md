@@ -4,55 +4,57 @@
 
 # Type Alias: Data
 
-> **Data**: `object`
+> **Data** = `object`
 
-Defined in: [static.ts:42](https://github.com/globus/static-search-portal/blob/01d1d33d3d0989c593fada6bb539073cee27ae57/static.ts#L42)
+Defined in: [static.ts:42](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/static.ts#L42)
 
 The type used for `data` by the [@globus/static-search-portal generator](https://github.com/globus/static-search-portal).
 
-## Type declaration
+## Properties
 
 ### attributes
 
 > **attributes**: `object`
 
-#### attributes.components?
+Defined in: [static.ts:49](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/static.ts#L49)
+
+#### components?
 
 > `optional` **components**: `object`
 
-#### attributes.components.Result?
+##### components.Result?
 
 > `optional` **Result**: [`ResultComponentOptions`](../-internal-/type-aliases/ResultComponentOptions.md)
 
-#### attributes.components.ResultListing?
+##### components.ResultListing?
 
 > `optional` **ResultListing**: [`ResultListingComponentOptions`](../-internal-/type-aliases/ResultListingComponentOptions.md)
 
-#### attributes.content?
+#### content?
 
 > `optional` **content**: `object`
 
-#### attributes.content.headline?
+##### content.headline?
 
 > `optional` **headline**: `string`
 
-#### attributes.content.logo?
+##### content.logo?
 
 > `optional` **logo**: `object`
 
-#### attributes.content.logo.alt?
+##### content.logo.alt?
 
 > `optional` **alt**: `string`
 
-#### attributes.content.logo.src
+##### content.logo.src
 
 > **src**: `string`
 
-#### attributes.content.navigation?
+##### content.navigation?
 
 > `optional` **navigation**: [`NavigationOptions`](../-internal-/type-aliases/NavigationOptions.md)
 
-#### attributes.contentSecurityPolicy?
+#### contentSecurityPolicy?
 
 > `optional` **contentSecurityPolicy**: `string` \| `false`
 
@@ -64,66 +66,66 @@ If `false` is provided as the value, no CSP `<meta>` tag will be included.
 
 https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 
-#### attributes.features?
+#### features?
 
 > `optional` **features**: `object`
 
-#### attributes.features.authentication?
+##### features.authentication?
 
 > `optional` **authentication**: `boolean`
 
 Enable the Globus Auth functionality in the portal.
 
-#### attributes.features.jsonata?
+##### features.jsonata?
 
 > `optional` **jsonata**: `boolean`
 
 Enable JSONata support for processing the `static.json` file.
 
-##### See
+###### See
 
 https://jsonata.org/
 
-#### attributes.features.requireAuthentication?
+##### features.requireAuthentication?
 
 > `optional` **requireAuthentication**: `boolean`
 
 Force users to authenticate before accessing the portal, regardless of whether or not the
 configured Globus Index is private.
 
-#### attributes.features.transfer?
+##### features.transfer?
 
 > `optional` **transfer**: `boolean`
 
 Enables the Globus Transfer functionality in the portal.
 
-#### attributes.features.useLocalStorage?
+##### features.useLocalStorage?
 
 > `optional` **useLocalStorage**: `boolean`
 
 Whether or not authorization data should be stored in LocalStorage
 
-#### attributes.globus
+#### globus
 
 > **globus**: `object`
 
-#### attributes.globus.application?
+##### globus.application?
 
 > `optional` **application**: `object`
 
 Information about your registered Globus Auth Application (Client)
 
-##### See
+###### See
 
 https://docs.globus.org/api/auth/developer-guide/#developing-apps
 
-#### attributes.globus.application.client\_id
+##### globus.application.client\_id
 
 > **client\_id**: `string`
 
 The UUID of the client application.
 
-#### attributes.globus.application.redirect\_uri?
+##### globus.application.redirect\_uri?
 
 > `optional` **redirect\_uri**: `string`
 
@@ -131,53 +133,57 @@ The redirect URI for the Globus Auth login page to complete the OAuth2 flow.
 The portal will make a reasonable effort to determine this URI, but this field is provided as a fallback.
 To use the portal's built-in authorization handling, redirects should be sent to `/authenticate` on the host.
 
-##### Example
+###### Example
 
 ```ts
 "https://example.com/data-portal/authenticate"
 ```
 
-#### attributes.globus.application.scopes?
+##### globus.application.scopes?
 
 > `optional` **scopes**: `string`[]
 
 Additional scopes to request from the Globus Auth service when authenticating.
 
-#### attributes.globus.search
+##### globus.search
 
 > **search**: `object`
 
 Configuration for Search-related functionality in the portal.
 
-#### attributes.globus.search.facets?
+##### globus.search.facets?
 
 > `optional` **facets**: `object`[]
 
-#### attributes.globus.search.index
+##### globus.search.index
 
 > **index**: `string`
 
 The UUID of the Globus Search Index that will be used as the data source.
 
-#### attributes.metadata?
+#### metadata?
 
 > `optional` **metadata**: `object`
 
-#### attributes.metadata.description?
+##### metadata.description?
 
 > `optional` **description**: `string`
 
-#### attributes.metadata.title?
+##### metadata.title?
 
 > `optional` **title**: `string`
 
-#### attributes.theme?
+#### theme?
 
 > `optional` **theme**: [`ThemeSettings`](../-internal-/type-aliases/ThemeSettings.md)
+
+***
 
 ### version
 
 > **version**: `string`
+
+Defined in: [static.ts:48](https://github.com/globus/static-search-portal/blob/990a456048a4b0fddd1bdca97dfdd497ec165350/static.ts#L48)
 
 The version of the `data` object, which is used to determine how
 the generator will render its `attributes`.
