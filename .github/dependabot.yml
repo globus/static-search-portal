@@ -26,3 +26,4 @@ updates:
         patterns:
          - "next"
          - "eslint-config-next"
+         - "@next/mdx"
