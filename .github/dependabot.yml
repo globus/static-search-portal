@@ -27,3 +27,7 @@ updates:
          - "next"
          - "eslint-config-next"
          - "@next/mdx"
+      react-query:
+        patterns:
+         - "@tanstack/react-query"
+         - "@tanstack/react-query-devtools"
