@@ -25,13 +25,17 @@ import {
   AlertTitle,
   FormHelperText,
   AlertDescription,
+  IconButton,
 } from "@chakra-ui/react";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowTopRightOnSquareIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import { transfer, webapp } from "@globus/sdk";
 import { useGlobusAuth } from "@globus/react-auth-context";
+import { CollectionBrowser } from "@globus/react-components";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
-import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
 import { isTransferEnabled } from "../../static";
 import PathVerifier from "@/globus/PathVerifier";
 import { CollectionName } from "@/globus/Collection";
@@ -206,12 +210,35 @@ export default function TransferPage() {
                   <VStack>
                     <FormControl>
                       <FormLabel>Destination</FormLabel>
-                      <CollectionSearch
-                        value={transferStore.transfer?.destination ?? null}
-                        onSelect={(destination) => {
-                          transferStore.setDestination(destination);
-                        }}
-                      />
+                      {transferStore.transfer?.destination ? (
+                        <Flex alignItems="center">
+                          <CollectionName
+                            id={transferStore.transfer.destination.id}
+                          />
+                          <Spacer />
+                          <IconButton
+                            variant="ghost"
+                            size="sm"
+                            isRound
+                            aria-label="Clear"
+                            colorScheme="gray"
+                            icon={<Icon as={XCircleIcon} boxSize={6} />}
+                            onClick={() => {
+                              transferStore.setDestination(undefined);
+                              transferStore.setPath("");
+                            }}
+                          />
+                        </Flex>
+                      ) : (
+                        <CollectionBrowser
+                          onSelect={({ collection, path }) => {
+                            transferStore.setDestination(collection);
+                            if (path) {
+                              transferStore.setPath(path);
+                            }
+                          }}
+                        />
+                      )}
                     </FormControl>
                     <FormControl>
                       <FormLabel>Path</FormLabel>
