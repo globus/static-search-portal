@@ -27,7 +27,7 @@
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "@next/mdx": "^14.2.32",
-    "@tanstack/react-query": "^5.85.5",
+    "@tanstack/react-query": "^5.87.1",
     "@types/d3-fetch": "^3.0.7",
     "@types/mdx": "^2.0.13",
     "@uiw/react-json-view": "^2.0.0-alpha.30",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@heroicons/react": "^2.1.5",
-    "@tanstack/react-query-devtools": "^5.85.5",
+    "@tanstack/react-query-devtools": "^5.87.3",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
