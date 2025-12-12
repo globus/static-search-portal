@@ -45,7 +45,15 @@ export default function Header() {
                     objectFit="contain"
                   />
                 )}
-                <Heading as="h1" size="md" color="white">
+                <Heading
+                  as="h1"
+                  size="md"
+                  color="white"
+                  borderRadius={IMAGE ? 4 : 0}
+                  py={IMAGE ? 2 : undefined}
+                  px={IMAGE ? 4 : undefined}
+                  backgroundColor={IMAGE ? "rgba(0,0,0,0.50)" : undefined}
+                >
                   {HEADLINE}
                 </Heading>
               </HStack>
