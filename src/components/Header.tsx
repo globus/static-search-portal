@@ -12,6 +12,8 @@ const HEADLINE = getAttribute(
   `Search Index ${SEARCH_INDEX}`,
 );
 
+const IMAGE = getAttribute("content.image", null);
+
 export default function Header() {
   return (
     <Flex
@@ -20,6 +22,9 @@ export default function Header() {
       minH={{ base: "50px", md: "10vh" }}
       align="center"
       justify="center"
+      bgImage={IMAGE ? `url(${IMAGE})` : undefined}
+      bgSize={IMAGE ? "cover" : undefined}
+      bgPosition={IMAGE ? "center" : undefined}
     >
       <Container maxW="container.xl">
         <Flex

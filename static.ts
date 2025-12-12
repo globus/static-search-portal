@@ -94,6 +94,10 @@ export type Data = {
 
     content?: {
       headline?: string;
+      /**
+       * The URL of the portal's header image.
+       */
+      image?: string;
       logo?: {
         src: string;
         alt?: string;
