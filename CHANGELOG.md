@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/globus/static-search-portal/compare/1.6.0...1.7.0) (2025-12-12)
+
+
+### Features
+
+* Adds support for rendering a header background image using `data.attributes.content.image` ([#393](https://github.com/globus/static-search-portal/issues/393)) ([925db81](https://github.com/globus/static-search-portal/commit/925db81431c1fe99a92637ff8ddc3ec4ba99d574))
+
 ## [1.6.0](https://github.com/globus/static-search-portal/compare/1.5.0...1.6.0) (2025-01-21)
 
 
