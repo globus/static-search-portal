@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/globus/static-search-portal/compare/1.7.0...1.7.1) (2025-12-12)
+
+
+### Fixes
+
+* **a11y:** Add background to Header 'headline' when a background image is used to better ensure contrast. ([#395](https://github.com/globus/static-search-portal/issues/395)) ([8e2bc57](https://github.com/globus/static-search-portal/commit/8e2bc573a7f8d179d3cc60f2d27b17b7a739e372))
+
 ## [1.7.0](https://github.com/globus/static-search-portal/compare/1.6.0...1.7.0) (2025-12-12)
 
 
