@@ -135,27 +135,34 @@ function FacetMenu({ facet }: { facet: GFacetResult }) {
           </MenuItem>
         )}
 
-        <MenuOptionGroup onChange={handleChange} value={value} type="checkbox">
-          {buckets?.map((bucket) => {
-            const valueAsString =
-              typeof bucket.value === "string"
-                ? bucket.value
-                : JSON.stringify(bucket.value);
-            return (
-              <MenuItemOption key={valueAsString} value={valueAsString}>
-                <Flex align="center">
-                  {valueAsString === "" ? (
-                    <Text as="i">(Not Set)</Text>
-                  ) : (
-                    valueAsString
-                  )}
-                  <Spacer />
-                  <Badge ml={2}>{bucket.count}</Badge>
-                </Flex>
-              </MenuItemOption>
-            );
-          })}
-        </MenuOptionGroup>
+        <Box maxH="300px" overflowY="auto" w="100%">
+          <MenuOptionGroup
+            onChange={handleChange}
+            value={value}
+            type="checkbox"
+          >
+            {buckets?.map((bucket) => {
+              const valueAsString =
+                typeof bucket.value === "string"
+                  ? bucket.value
+                  : JSON.stringify(bucket.value);
+              return (
+                <MenuItemOption key={valueAsString} value={valueAsString}>
+                  <Flex align="center">
+                    {valueAsString === "" ? (
+                      <Text as="i">(Not Set)</Text>
+                    ) : (
+                      valueAsString
+                    )}
+                    <Spacer />
+                    <Badge ml={2}>{bucket.count}</Badge>
+                  </Flex>
+                </MenuItemOption>
+              );
+            })}
+          </MenuOptionGroup>
+        </Box>
+
         {value.length > 0 && (
           <>
             <MenuDivider />
