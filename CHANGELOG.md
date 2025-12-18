@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/globus/static-search-portal/compare/1.7.1...1.7.2) (2025-12-15)
+
+
+### Fixes
+
+* Updates the facets rendering to enforce a maximum height and overflow/scroll. ([#405](https://github.com/globus/static-search-portal/issues/405)) ([62c85fa](https://github.com/globus/static-search-portal/commit/62c85fae4b14e36ff5d339ad99944b36e3c9aec7)), closes [#398](https://github.com/globus/static-search-portal/issues/398)
+
 ## [1.7.1](https://github.com/globus/static-search-portal/compare/1.7.0...1.7.1) (2025-12-12)
 
 
