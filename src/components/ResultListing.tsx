@@ -166,7 +166,10 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     <Card size="sm" w="full">
       <CardHeader style={{ textWrap: "stable" }}>
         <Heading size="md" wordBreak="break-word">
-          <Link as={NextLink} href={getResultLink(gmeta.subject)}>
+          <Link
+            as={NextLink}
+            href={gmeta.subject ? getResultLink(gmeta.subject) : "#"}
+          >
             <Skeleton isLoaded={!boostrapping}>
               {heading || (
                 <Text as="em" color="gray.500">
