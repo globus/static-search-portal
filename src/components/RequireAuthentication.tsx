@@ -1,8 +1,8 @@
 import React, { PropsWithChildren } from "react";
 import { useGlobusAuth } from "@globus/react-auth-context";
-import { isFeatureEnabled } from "../../static";
-import { Alert, AlertIcon, AlertTitle, Button } from "@chakra-ui/react";
+import { Alert, Anchor } from "@mantine/core";
 import { useLogin } from "@/hooks/useOAuth";
+import { isFeatureEnabled } from "../../static";
 
 const requireAuthentication = isFeatureEnabled("requireAuthentication");
 
@@ -15,15 +15,9 @@ export function RequireAuthentication({ children }: PropsWithChildren) {
   return auth.isAuthenticated ? (
     children
   ) : (
-    <Alert status="error" my={4}>
-      <AlertIcon />
-      <AlertTitle>
-        You must{" "}
-        <Button variant="link" onClick={login}>
-          Sign In
-        </Button>{" "}
-        in order to access this section.
-      </AlertTitle>
+    <Alert variant="light" color="red">
+      You must <Anchor onClick={login}>sign in</Anchor> in order to access this
+      section.
     </Alert>
   );
 }

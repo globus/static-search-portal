@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box } from "@mantine/core";
 import { GlobusEmbedProps } from "../GlobusEmbedField";
 import { useGCSAsset } from "@/hooks/useGlobusAPI";
 /**

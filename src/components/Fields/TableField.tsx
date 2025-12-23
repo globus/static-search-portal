@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Table,
-  Tbody,
-  Tr,
-  Thead,
-  Th,
-  Td,
-  TableContainer,
-} from "@chakra-ui/react";
+import { Table } from "@mantine/core";
 import { FieldValue } from "../Field";
 
 type Value = Record<string, unknown>;
@@ -24,33 +16,31 @@ export default function TableField({ value }: { value: unknown }) {
     return;
   }
   return (
-    <TableContainer>
-      <Table size="sm">
-        <Thead>
-          <Tr>
-            <Th>Property</Th>
-            <Th>Value</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {Object.entries(value).map(([key, value]) => {
-            return (
-              <Tr key={key}>
-                <Td>{key}</Td>
-                <Td>
-                  <FieldValue
-                    field={{
-                      label: undefined,
-                      type: undefined,
-                      derivedValue: value,
-                    }}
-                  />
-                </Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <Table>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Property</Table.Th>
+          <Table.Th>Value</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        {Object.entries(value).map(([key, value]) => {
+          return (
+            <Table.Tr key={key}>
+              <Table.Td>{key}</Table.Td>
+              <Table.Td>
+                <FieldValue
+                  field={{
+                    label: undefined,
+                    type: undefined,
+                    derivedValue: value,
+                  }}
+                />
+              </Table.Td>
+            </Table.Tr>
+          );
+        })}
+      </Table.Tbody>
+    </Table>
   );
 }

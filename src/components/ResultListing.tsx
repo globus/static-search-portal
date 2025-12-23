@@ -1,20 +1,14 @@
 import React, { useEffect } from "react";
 import NextLink from "next/link";
 import {
+  Anchor,
   Card,
-  CardHeader,
-  CardBody,
-  Heading,
+  Title,
   Text,
   Table,
-  TableContainer,
-  Tbody,
-  Tr,
-  Td,
-  HStack,
-  Link,
   Skeleton,
-} from "@chakra-ui/react";
+  Stack,
+} from "@mantine/core";
 import { getValueFromAttribute, getAttribute } from "../../static";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
@@ -87,12 +81,12 @@ function ResultListingFieldTableRow({
   }
 
   return (
-    <Tr>
-      <Td>{processedField.label}</Td>
-      <Td>
+    <Table.Tr>
+      <Table.Td>{processedField.label}</Table.Td>
+      <Table.Td>
         <FieldValue field={processedField} />
-      </Td>
-    </Tr>
+      </Table.Td>
+    </Table.Tr>
   );
 }
 
@@ -107,17 +101,15 @@ function ResultListingFields({
     return null;
   }
   return (
-    <TableContainer>
-      <Table size="sm">
-        <Tbody>
-          {fields.map((field: FieldDefinition, i: number) => {
-            return (
-              <ResultListingFieldTableRow key={i} field={field} gmeta={gmeta} />
-            );
-          })}
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <Table>
+      <Table.Tbody>
+        {fields.map((field: FieldDefinition, i: number) => {
+          return (
+            <ResultListingFieldTableRow key={i} field={field} gmeta={gmeta} />
+          );
+        })}
+      </Table.Tbody>
+    </Table>
   );
 }
 
@@ -163,42 +155,38 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
   const fields = getAttribute("components.ResultListing.fields");
 
   return (
-    <Card size="sm" w="full">
-      <CardHeader style={{ textWrap: "stable" }}>
-        <Heading size="md" wordBreak="break-word">
-          <Link
-            as={NextLink}
-            href={gmeta.subject ? getResultLink(gmeta.subject) : "#"}
-          >
-            <Skeleton isLoaded={!boostrapping}>
-              {heading || (
-                <Text as="em" color="gray.500">
-                  &mdash;
-                </Text>
-              )}
-            </Skeleton>
-          </Link>
-        </Heading>
-      </CardHeader>
-      <CardBody>
-        <AddToTransferList result={gmeta} size="xs" mb={2} />
-        {image || summary || fields ? (
-          <>
-            <HStack>
-              {image && (
-                <ImageField
-                  value={{
-                    src: image.src,
-                    alt: image?.alt,
-                  }}
-                />
-              )}
-              {summary && <Text noOfLines={[3, 5, 10]}>{summary}</Text>}
-            </HStack>
-            <ResultListingFields fields={fields} gmeta={gmeta} />
-          </>
-        ) : null}
-      </CardBody>
+    <Card w="full" withBorder>
+      <Title order={3} style={{ wordBreak: "break-word" }}>
+        <Anchor
+          component={NextLink}
+          href={gmeta.subject ? getResultLink(gmeta.subject) : "#"}
+        >
+          <Skeleton visible={boostrapping}>
+            {heading || (
+              <Text component="em" c="gray.5">
+                &mdash;
+              </Text>
+            )}
+          </Skeleton>
+        </Anchor>
+      </Title>
+      <AddToTransferList result={gmeta} size="xs" mb={2} />
+      {image || summary || fields ? (
+        <>
+          <Stack>
+            {image && (
+              <ImageField
+                value={{
+                  src: image.src,
+                  alt: image?.alt,
+                }}
+              />
+            )}
+            {summary && <Text lineClamp={4}>{summary}</Text>}
+          </Stack>
+          <ResultListingFields fields={fields} gmeta={gmeta} />
+        </>
+      ) : null}
     </Card>
   );
 }

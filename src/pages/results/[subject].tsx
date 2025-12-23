@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import { Container, Text, Link, Flex, Divider } from "@chakra-ui/react";
+import { Button, Stack, Divider } from "@mantine/core";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 import { ClientSideResult } from "@/components/ClientSideResult";
@@ -20,17 +20,19 @@ export default function ResultPage() {
     ? router.query.subject[0]
     : router.query.subject;
   return (
-    <Container maxW="container.xl" p={4}>
-      <RequireAuthentication>
-        <Link as={NextLink} href="/search">
-          <Flex alignItems="center" mb={4}>
-            <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-          </Flex>
-        </Link>
-        <Divider my={2} />
+    <RequireAuthentication>
+      <Stack>
+        <Button
+          component={NextLink}
+          href="/search"
+          leftSection={<ChevronLeftIcon />}
+        >
+          Back
+        </Button>
+        <Divider />
         {subject && <ClientSideResult subject={subject} />}
-      </RequireAuthentication>
-    </Container>
+      </Stack>
+    </RequireAuthentication>
   );
 }
 
