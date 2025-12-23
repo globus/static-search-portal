@@ -102,7 +102,7 @@ export function CollectionSearch({
             variant="outline"
             key={result.id}
             onClick={() => handleSelect(result)}
-            _hover={{ cursor: "pointer", borderColor: "blue.500" }}
+            _hover={{ cursor: "pointer", borderColor: "blue" }}
           >
             <CardHeader pb={0}>
               <Text>{result.display_name || result.name}</Text>

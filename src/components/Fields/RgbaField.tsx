@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Code, VStack } from "@chakra-ui/react";
+import { Stack, Box, Code } from "@mantine/core";
 
 type Value = (string | number)[];
 
@@ -27,9 +27,9 @@ export default function RgbaField({
   };
 
   return (
-    <VStack display="inline-flex">
+    <Stack display="inline-flex">
       <Box bg={`rgba(${value.join(",")})`} {...props} />
       <Code>[{value.join(",")}]</Code>
-    </VStack>
+    </Stack>
   );
 }

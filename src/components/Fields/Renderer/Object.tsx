@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
-
+import { Paper } from "@mantine/core";
 import { GlobusEmbedProps } from "../GlobusEmbedField";
 import { useGCSAsset } from "@/hooks/useGlobusAPI";
 
@@ -46,13 +45,12 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
   return (
     objectUrl &&
     type && (
-      <Box
+      <Paper
         w={`calc(${width} + 2em)`}
         h={`calc(${height} + 2em)`}
-        p={1}
-        border="1px solid"
-        rounded="md"
-        as="iframe"
+        withBorder
+        p="xs"
+        component="iframe"
         allow=""
         sandbox="allow-same-origin"
         referrerPolicy="no-referrer"

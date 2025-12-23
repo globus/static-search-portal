@@ -81,7 +81,7 @@ export const TransferListItem = ({
                     <Icon
                       as={ExclamationCircleIcon}
                       boxSize={4}
-                      color="red.500"
+                      color="red"
                       mr={1}
                     />
                   )}
