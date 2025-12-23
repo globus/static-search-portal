@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Center, Spinner } from "@chakra-ui/react";
+import { Center, Loader } from "@mantine/core";
 import Result from "./Result";
 
 import { useSubject } from "@/hooks/useGlobusAPI";
@@ -12,13 +12,7 @@ export const ClientSideResult = ({ subject }: { subject: string }) => {
   if (isPending) {
     return (
       <Center>
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
+        <Loader size="md" />
       </Center>
     );
   }
