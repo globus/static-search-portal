@@ -3,21 +3,15 @@ import { transfer } from "@globus/sdk";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import {
   Alert,
-  AlertDescription,
-  AlertIcon,
-  Box,
-  Button,
-  Flex,
-  Icon,
-  Spinner,
+  Stack,
+  Loader,
   Text,
   Tooltip,
-  VStack,
-} from "@chakra-ui/react";
-import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-} from "@heroicons/react/24/outline";
+  Button,
+  Box,
+  Group,
+} from "@mantine/core";
+import { CircleCheck, CircleAlert } from "lucide-react";
 import {
   isAuthorizationRequirementsError,
   isConsentRequiredError,
@@ -81,11 +75,8 @@ export default function PathVerifier({
   }
 
   return hasAddressableError ? (
-    <Alert status="error">
-      <AlertIcon />
-      <AlertDescription>
-        An error was encountered trying to access the provided path.
-      </AlertDescription>
+    <Alert color="red">
+      An error was encountered trying to access the provided path.
       <Box>
         <Button
           ml={2}
@@ -101,35 +92,36 @@ export default function PathVerifier({
       </Box>
     </Alert>
   ) : (
-    <VStack align="start">
-      <Flex alignItems="center">
+    <Stack align="start">
+      <Group gap="xs">
         {isValidating ? (
-          <Spinner mr={1} />
+          <Loader size="xs" />
         ) : isValid ? (
-          <Icon as={CheckCircleIcon} mr={1} boxSize={6} />
+          <CircleCheck />
         ) : (
-          <Icon as={ExclamationCircleIcon} mr={1} boxSize={6} />
+          <CircleAlert />
         )}
         {!isValidating && isValid ? (
           <Text>Path exists on destination.</Text>
         ) : (
           <>
             <Tooltip
-              hasArrow
               label="We've attempted to reach the path you provided, but were unsuccessful. This might be intentional, or there might be a typo in your desired path."
-              placement="bottom"
+              position="bottom"
             >
               <Text
-                cursor="help"
-                textDecor="underline"
-                textDecorationStyle="dashed"
+                style={{
+                  cursor: "help",
+                  textDecoration: "underline",
+                  textDecorationStyle: "dashed",
+                }}
               >
                 Unable to access path on destination.
               </Text>
             </Tooltip>
           </>
         )}
-      </Flex>
-    </VStack>
+      </Group>
+    </Stack>
   );
 }

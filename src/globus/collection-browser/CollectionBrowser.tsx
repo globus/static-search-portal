@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Input,
-  InputGroup,
-  InputRightAddon,
-  Icon,
-  List,
-  ListItem,
-  Card,
-  CardHeader,
-  Stack,
-  CardBody,
-  Text,
-  InputRightElement,
+  TextInput,
   Button,
-} from "@chakra-ui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+  Card,
+  Text,
+  Stack,
+  Group,
+  List,
+} from "@mantine/core";
+import { Search } from "lucide-react";
 import { transfer } from "@globus/sdk";
 
 import { useGlobusAuth } from "@globus/react-auth-context";
 
 export type Endpoint = Record<string, any>;
 
+/**
+ * @todo REPLACE WITH COLLECTION SEARCH
+ */
 export function CollectionSearch({
   value = null,
   onSelect = () => {},
@@ -71,55 +68,52 @@ export function CollectionSearch({
 
   if (selection) {
     return (
-      <InputGroup>
-        <Input value={selection.display_name || selection.name} readOnly />
-        <InputRightElement width="4.5rem">
-          <Button h="1.75rem" size="sm" onClick={() => setSelection(null)}>
-            Clear
-          </Button>
-        </InputRightElement>
-      </InputGroup>
+      <Group>
+        <TextInput
+          value={selection.display_name || selection.name}
+          readOnly
+          style={{ flex: 1 }}
+        />
+        <Button size="xs" variant="outline" onClick={() => setSelection(null)}>
+          Clear
+        </Button>
+      </Group>
     );
   }
 
   return (
     <Stack>
-      <Box position="sticky" top="0" zIndex={1} bgColor="white">
-        <InputGroup>
-          <Input
-            onInput={(e) => handleSearch(e)}
-            placeholder="e.g. Globus Tutorial Collection"
-          />
-          <InputRightAddon>
-            <Icon as={MagnifyingGlassIcon} />
-          </InputRightAddon>
-        </InputGroup>
+      <Box
+        style={{ position: "sticky", top: 0, zIndex: 1, background: "white" }}
+      >
+        <TextInput
+          onInput={(e) => handleSearch(e as React.FormEvent<HTMLInputElement>)}
+          placeholder="e.g. Globus Tutorial Collection"
+          style={{ flex: 1 }}
+          rightSection={<Search width={16} height={16} />}
+        />
       </Box>
-      <Stack maxH="400px" overflowY="auto">
+      <Stack style={{ maxHeight: 400, overflowY: "auto" }}>
         {results.map((result) => (
           <Card
-            size="sm"
-            variant="outline"
             key={result.id}
+            shadow="xs"
+            withBorder
+            style={{ cursor: "pointer" }}
             onClick={() => handleSelect(result)}
-            _hover={{ cursor: "pointer", borderColor: "blue" }}
           >
-            <CardHeader pb={0}>
+            <Group>
               <Text>{result.display_name || result.name}</Text>
-              <Text fontSize="xs">{result.entity_type}</Text>
-            </CardHeader>
-            <CardBody>
-              <List fontSize="xs">
-                <ListItem>ID: {result.id}</ListItem>
-                <ListItem>Owner: {result.owner_id}</ListItem>
-                <ListItem>Domain: {result.domain || "\u2014"}</ListItem>
-                <ListItem>
-                  <Text noOfLines={1}>
-                    Description: {result.description || "\u2014"}
-                  </Text>
-                </ListItem>
-              </List>
-            </CardBody>
+              <Text size="xs">{result.entity_type}</Text>
+            </Group>
+            <List size="xs" style={{ marginTop: 5 }}>
+              <li>ID: {result.id}</li>
+              <li>Owner: {result.owner_id}</li>
+              <li>Domain: {result.domain || "\u2014"}</li>
+              <li>
+                <Text>Description: {result.description || "\u2014"}</Text>
+              </li>
+            </List>
           </Card>
         ))}
       </Stack>

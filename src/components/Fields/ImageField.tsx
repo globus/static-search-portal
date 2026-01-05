@@ -16,7 +16,7 @@ import {
   Image as MantineImage,
 } from "@mantine/core";
 
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLink } from "lucide-react";
 
 type Value =
   | string
@@ -123,7 +123,7 @@ export default function ImageField({ value }: { value: unknown }) {
                 rel="noopener noreferrer"
                 size="xs"
               >
-                Open in New Tab <ExternalLinkIcon mx="2px" />
+                Open in New Tab <ExternalLink />
               </Anchor>
             </Group>
           </Stack>

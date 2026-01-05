@@ -1,6 +1,6 @@
 import React from "react";
-import { Group, Anchor, Button, Text, Avatar, Menu } from "@mantine/core";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { Group, Anchor, Button, Text, Avatar, Menu, Box } from "@mantine/core";
+import { ExternalLink } from "lucide-react";
 import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
 
@@ -61,13 +61,9 @@ const NavigationItemLink = (props: NavigationItem) => {
   return (
     <Anchor href={props.href} pos="relative">
       {props.label}{" "}
-      <ExternalLinkIcon
-        as="sup"
-        position="absolute"
-        top={0}
-        right={0}
-        fontSize="xs"
-      />
+      <Box component="sup" pos="absolute" top={0} right={0} fontSize="xs">
+        <ExternalLink />
+      </Box>
     </Anchor>
   );
 };

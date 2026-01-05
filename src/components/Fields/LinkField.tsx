@@ -1,8 +1,8 @@
 import React from "react";
 import NextLink from "next/link";
-import { Anchor } from "@mantine/core";
+import { Anchor, Box } from "@mantine/core";
 import { isRelativePath } from "@/utils/path";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLink } from "lucide-react";
 
 type Value = string;
 
@@ -37,13 +37,9 @@ export default function LinkField({ value }: { value: unknown }) {
       pr={4}
     >
       {value}
-      <ExternalLinkIcon
-        as="sup"
-        position="absolute"
-        top={0}
-        right={0}
-        fontSize="xs"
-      />
+      <Box component="sup" pos="absolute" top={0} right={0} fz="xs">
+        <ExternalLink />
+      </Box>
     </Anchor>
   );
 }

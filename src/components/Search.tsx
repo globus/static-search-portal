@@ -1,6 +1,5 @@
 "use client";
 
-import { Icon } from "@chakra-ui/react";
 import {
   TextInput,
   Stack,
@@ -17,7 +16,7 @@ import {
   ActionIcon,
   Loader,
 } from "@mantine/core";
-import { SearchIcon, QuestionIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLink, SearchIcon, CircleQuestionMark } from "lucide-react";
 import { throttle, debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
@@ -141,7 +140,7 @@ export function Search() {
                     variant="subtle"
                     color="gray"
                   >
-                    <Icon as={QuestionIcon} />
+                    <CircleQuestionMark />
                   </ActionIcon>
                 </Popover.Target>
                 <Popover.Dropdown>
@@ -162,7 +161,7 @@ export function Search() {
                       rel="noopener noreferrer"
                     >
                       Globus Search Documentation
-                      <ExternalLinkIcon mx="2px" />
+                      <ExternalLink />
                     </Anchor>
                   </Stack>
                 </Popover.Dropdown>

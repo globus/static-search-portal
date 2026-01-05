@@ -1,4 +1,4 @@
-import _STATIC from "./static.json";
+import _STATIC from "./static-nerocart.json";
 import { defaultsDeep, get as _get } from "lodash";
 import { ThemeSettings } from "@/theme";
 

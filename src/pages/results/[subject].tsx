@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 import { Button, Stack, Divider } from "@mantine/core";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { ChevronLeft } from "lucide-react";
 
 import { ClientSideResult } from "@/components/ClientSideResult";
 
@@ -25,7 +25,7 @@ export default function ResultPage() {
         <Button
           component={NextLink}
           href="/search"
-          leftSection={<ChevronLeftIcon />}
+          leftSection={<ChevronLeft />}
         >
           Back
         </Button>

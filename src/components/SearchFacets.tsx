@@ -1,6 +1,5 @@
 "use client";
 import React, { type ComponentProps, useState } from "react";
-import { Badge, Icon, Text } from "@chakra-ui/react";
 import {
   CheckIcon,
   Combobox,
@@ -10,8 +9,10 @@ import {
   useCombobox,
   Button,
   Box,
+  Badge,
+  Text,
 } from "@mantine/core";
-import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { CirclePlus, X } from "lucide-react";
 import { getAttribute } from "../../static";
 
 import {
@@ -60,7 +61,7 @@ export default function SearchFacets({
           onClick={reset}
           variant="outline"
           color="gray"
-          leftSection={<Icon as={XMarkIcon} />}
+          leftSection={<X />}
         >
           Clear All Filters
         </Button>
@@ -186,7 +187,7 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
         >
           <Pill.Group>
             <Button
-              leftSection={<Icon as={PlusCircleIcon} />}
+              leftSection={<CirclePlus />}
               variant="outline"
               size="xs"
               color="gray"

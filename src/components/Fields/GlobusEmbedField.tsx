@@ -16,7 +16,7 @@ import { ProcessedField } from "../Field";
 import { isAuthorizationRequirementsError } from "@globus/sdk/core/errors";
 import { useOAuthStore } from "@/store/oauth";
 import { usePathname, useSearchParams } from "next/navigation";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLink } from "lucide-react";
 import { useLogin } from "@/hooks/useOAuth";
 import { PlotlyRenderer } from "./Renderer/Plotly";
 import { ObjectRenderer } from "./Renderer/Object";
@@ -241,7 +241,7 @@ function GlobusEmbed({ config, field }: GlobusEmbedProps) {
           rel="noopener noreferrer"
           size="xs"
         >
-          Open in New Tab <ExternalLinkIcon mx="2px" />
+          Open in New Tab <ExternalLink />
         </Anchor>
       </Box>
     </>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Code, Title, Image, Anchor, List, Text } from "@mantine/core";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLink } from "lucide-react";
 import NextLink from "next/link";
 import type { MDXComponents } from "mdx/types";
 import { getAbsoluteURL, isRelativePath } from "./src/utils/path";
@@ -77,7 +77,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           pr={4}
         >
           {rest.children}
-          <ExternalLinkIcon
+          <ExternalLink
             as="sup"
             position="absolute"
             top={0}

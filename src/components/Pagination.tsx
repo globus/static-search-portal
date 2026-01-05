@@ -1,11 +1,7 @@
 import React from "react";
-import { Icon } from "@chakra-ui/react";
 import { Button, Text, Group, Flex, Select } from "@mantine/core";
-import {
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  ChevronDoubleLeftIcon,
-} from "@heroicons/react/24/outline";
+
+import { ChevronRight, ChevronLeft, ChevronsLeft } from "lucide-react";
 
 import type { GSearchResult } from "@globus/sdk/services/search/service/query";
 import { useSearch, useSearchDispatch } from "@/providers/search-provider";
@@ -64,7 +60,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
               dispatch({ type: "set_offset", payload: 0 });
             }}
           >
-            <Icon as={ChevronDoubleLeftIcon} />
+            <ChevronsLeft />
           </Button>
           <Button
             variant="default"
@@ -77,7 +73,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
               });
             }}
           >
-            <Icon as={ChevronLeftIcon} />
+            <ChevronLeft />
           </Button>
           <Button
             variant="default"
@@ -92,7 +88,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
               });
             }}
           >
-            <Icon as={ChevronRightIcon} />
+            <ChevronRight />
           </Button>
         </Button.Group>
       </Group>

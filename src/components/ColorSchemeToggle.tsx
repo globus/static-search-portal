@@ -1,11 +1,11 @@
 import React from "react";
 import { ActionIcon, useMantineColorScheme } from "@mantine/core";
-import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import { Sun, Moon } from "lucide-react";
 
 export function ColorSchemeToggle() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
-  const Icon = colorScheme === "light" ? MoonIcon : SunIcon;
+  const Icon = colorScheme === "light" ? Moon : Sun;
 
   return (
     <ActionIcon
