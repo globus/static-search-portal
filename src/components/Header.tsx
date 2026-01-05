@@ -29,7 +29,7 @@ export default function Header() {
     <Stack gap={0} bg="primary.9" ref={ref}>
       <Flex
         component="header"
-        mih={{ base: "50px", md: "100px", lg: "150px" }}
+        mih={{ base: "50px", md: "100px", lg: "120px" }}
         align="center"
         justify="space-between"
         style={{

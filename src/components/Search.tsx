@@ -139,6 +139,7 @@ export function Search() {
                   <ActionIcon
                     aria-label="Learn More about Advanced Search"
                     variant="subtle"
+                    color="gray"
                   >
                     <Icon as={QuestionIcon} />
                   </ActionIcon>

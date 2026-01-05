@@ -59,6 +59,7 @@ export default function SearchFacets({
           size="xs"
           onClick={reset}
           variant="outline"
+          color="gray"
           leftSection={<Icon as={XMarkIcon} />}
         >
           Clear All Filters
@@ -156,7 +157,7 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
         <Group gap="xs" justify="space-between" w="100%">
           <Group gap="xs" align="center">
             {value.includes(valueAsString) ? <CheckIcon size={12} /> : null}
-            <Text>{valueAsString}</Text>
+            {valueAsString}
           </Group>
           <Badge size="xs">{bucket.count}</Badge>
         </Group>
@@ -184,34 +185,20 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
           variant="unstyled"
         >
           <Pill.Group>
-            {value.length > 0 ? (
-              <>
-                {facet.name}:{values}
+            <Button
+              leftSection={<Icon as={PlusCircleIcon} />}
+              variant="outline"
+              size="xs"
+              color="gray"
+            >
+              <Group gap="xs">
+                {facet.name}
+                {values}
                 {value.length > MAX_DISPLAYED_VALUES && (
                   <Pill>+{value.length - (MAX_DISPLAYED_VALUES - 1)} more</Pill>
                 )}
-              </>
-            ) : (
-              <Button
-                leftSection={<Icon as={PlusCircleIcon} />}
-                variant="transparent"
-                size="xs"
-              >
-                {facet.name}
-              </Button>
-            )}
-            {/* <Combobox.EventsTarget>
-              <PillsInput.Field
-                type="hidden"
-                onBlur={() => combobox.closeDropdown()}
-                onKeyDown={(event) => {
-                  if (event.key === "Backspace" && value.length > 0) {
-                    event.preventDefault();
-                    handleValueRemove(value[value.length - 1]);
-                  }
-                }}
-              />
-            </Combobox.EventsTarget> */}
+              </Group>
+            </Button>
           </Pill.Group>
         </PillsInput>
       </Combobox.Target>
@@ -225,7 +212,25 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
         <Combobox.Options mah={200} style={{ overflowY: "auto" }}>
           {options?.length === 0 ? <Text>No results found.</Text> : options}
         </Combobox.Options>
-        <Combobox.Footer>Clear</Combobox.Footer>
+        <Combobox.Footer>
+          <Button
+            size="xs"
+            variant="subtle"
+            color="gray"
+            onClick={() => {
+              dispatch({
+                type: "set_facet_filter",
+                payload: {
+                  facet,
+                  value: [],
+                },
+              });
+            }}
+            fullWidth
+          >
+            Clear {facet.name} Filters
+          </Button>
+        </Combobox.Footer>
       </Combobox.Dropdown>
     </Combobox>
   );
