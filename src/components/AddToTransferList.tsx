@@ -39,32 +39,34 @@ export default function AddToTransferList({
     bootstrap();
   }, [result]);
 
-  return (
-    isTransferEnabled &&
-    auth.isAuthenticated && (
-      <Button
-        as={Link}
-        size="sm"
-        onClick={
-          !isSelected
-            ? async () => {
-                const { collection, path, type } =
-                  await getTransferDetailsFromResult(result);
+  return isTransferEnabled && auth.isAuthenticated ? (
+    <Button
+      as={Link}
+      size="sm"
+      onClick={
+        !isSelected
+          ? async () => {
+              if (!result.subject) return;
 
-                addTransferItem({
-                  label: itemLabel || result.subject,
-                  subject: result.subject,
-                  collection,
-                  path,
-                  type,
-                });
-              }
-            : () => removeItemBySubject(result.subject)
-        }
-        {...rest}
-      >
-        {isSelected ? "Remove from Transfer List" : "Add to Transfer List"}
-      </Button>
-    )
-  );
+              const { collection, path, type } =
+                await getTransferDetailsFromResult(result);
+
+              addTransferItem({
+                label: itemLabel || result.subject,
+                subject: result.subject,
+                collection,
+                path,
+                type,
+              });
+            }
+          : () => {
+              if (!result.subject) return;
+              removeItemBySubject(result.subject);
+            }
+      }
+      {...rest}
+    >
+      {isSelected ? "Remove from Transfer List" : "Add to Transfer List"}
+    </Button>
+  ) : null;
 }
