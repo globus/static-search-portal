@@ -1,13 +1,7 @@
-import { STATIC } from "../static";
+// import { STATIC } from "../static";
+import { generateColors } from "@mantine/colors-generator";
 
-import {
-  theme as baseTheme,
-  extendTheme,
-  withDefaultColorScheme,
-} from "@chakra-ui/react";
-
-import "@fontsource/ibm-plex-mono";
-import "@fontsource/ibm-plex-sans";
+import { colorsTuple, createTheme, virtualColor } from "@mantine/core";
 
 export type ColorDefinition =
   | {
@@ -63,46 +57,66 @@ export type ThemeSettings = {
   extendTheme?: Parameters<typeof extendTheme>[0];
 };
 
-const primary: ColorDefinition = {
-  "50": "#E5F2FF",
-  "100": "#B8DBFF",
-  "200": "#8AC4FF",
-  "300": "#5CADFF",
-  "400": "#2E96FF",
-  "500": "#007FFF",
-  "600": "#0066CC",
-  "700": "#004C99",
-  "800": "#00264c",
-  "900": "#001933",
-};
+// const primary: ColorDefinition = {
+//   "50": "#E5F2FF",
+//   "100": "#B8DBFF",
+//   "200": "#8AC4FF",
+//   "300": "#5CADFF",
+//   "400": "#2E96FF",
+//   "500": "#007FFF",
+//   "600": "#0066CC",
+//   "700": "#004C99",
+//   "800": "#00264c",
+//   "900": "#001933",
+// };
 
-const secondary = baseTheme.colors.gray;
+// const secondary = baseTheme.colors.gray;
 
-let colorScheme = {};
-if (STATIC.data.attributes.theme?.colorScheme) {
-  colorScheme = withDefaultColorScheme({
-    colorScheme: STATIC.data.attributes.theme?.colorScheme,
-  });
-}
+// let colorScheme = {};
+// if (STATIC.data.attributes.theme?.colorScheme) {
+//   colorScheme = withDefaultColorScheme({
+//     colorScheme: STATIC.data.attributes.theme?.colorScheme,
+//   });
+// }
 
-const theme = extendTheme(
-  {
-    fonts: {
-      heading: `'IBM Plex Sans', sans-serif`,
-      body: `'IBM Plex Sans', sans-serif`,
-      mono: `'IBM Plex Mono', monospace`,
-    },
-    colors: {
-      /**
-       * Allow the legacy "brand" to be used as the primary color.
-       */
-      primary: STATIC.data.attributes.theme?.colors?.brand || primary,
-      secondary,
-      ...(STATIC.data.attributes.theme?.colors || {}),
-    },
+// const theme = extendTheme(
+//   {
+//     fonts: {
+//       heading: `'IBM Plex Sans', sans-serif`,
+//       body: `'IBM Plex Sans', sans-serif`,
+//       mono: `'IBM Plex Mono', monospace`,
+//     },
+//     colors: {
+//       /**
+//        * Allow the legacy "brand" to be used as the primary color.
+//        */
+//       primary: STATIC.data.attributes.theme?.colors?.brand || primary,
+//       secondary,
+//       ...(STATIC.data.attributes.theme?.colors || {}),
+//     },
+//   }
+//   colorScheme,
+//   STATIC.data.attributes.theme?.extendTheme || {},
+// );
+
+const theme = createTheme({
+  primaryColor: "primary",
+  colors: {
+    "primary.light": generateColors("#007FFF"),
+    "primary.dark": generateColors("#007FFF"),
+    "secondary.light": generateColors("#718096"),
+    "secondary.dark": generateColors("#718096"),
+    primary: virtualColor({
+      name: "primary",
+      dark: "primary.dark",
+      light: "primary.light",
+    }),
+    secondary: virtualColor({
+      name: "secondary",
+      dark: "secondary.dark",
+      light: "secondary.light",
+    }),
   },
-  colorScheme,
-  STATIC.data.attributes.theme?.extendTheme || {},
-);
+});
 
 export default theme;

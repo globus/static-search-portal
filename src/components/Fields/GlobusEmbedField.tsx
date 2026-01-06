@@ -1,35 +1,28 @@
 import React, { PropsWithChildren } from "react";
 import {
-  Accordion,
-  AccordionButton,
-  AccordionItem,
-  AccordionPanel,
   Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
+  Group,
+  Loader,
+  Text,
   Box,
-  Button,
   Center,
   Code,
-  Flex,
-  HStack,
-  Spacer,
-  Spinner,
-  Text,
-} from "@chakra-ui/react";
+  Anchor,
+  Stack,
+  Spoiler,
+} from "@mantine/core";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { ProcessedField } from "../Field";
 import { isAuthorizationRequirementsError } from "@globus/sdk/core/errors";
 import { useOAuthStore } from "@/store/oauth";
 import { usePathname, useSearchParams } from "next/navigation";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useLogin } from "@/hooks/useOAuth";
 import { PlotlyRenderer } from "./Renderer/Plotly";
 import { ObjectRenderer } from "./Renderer/Object";
 import { JsonRenderer } from "./Renderer/Json";
 import { useGCSAsset, useGCSAssetMetadata } from "@/hooks/useGlobusAPI";
 import { JSONTree } from "../JSONTree";
+import { AnchorExternal } from "../private/AnchorExternal";
 
 export type Renderers = "plotly" | "json" | undefined;
 
@@ -140,20 +133,10 @@ export default function GlobusEmbedField({ field }: { field: ProcessedField }) {
   const { derivedValue } = field;
   if (!isValidValue(derivedValue)) {
     return (
-      <Alert status="error" flexDirection="column" alignItems="flex-start">
-        <Flex>
-          <AlertIcon />
-          <AlertTitle>Unable to render Globus-embedded asset.</AlertTitle>
-        </Flex>
-        <AlertDescription w="100%">
-          <details>
-            Unable to interpret the provided configuration as a valid
-            Globus-embedded asset.
-            <Code as="pre" overflow="scroll" maxW="100%">
-              {JSON.stringify(field, null, 2)}
-            </Code>
-          </details>
-        </AlertDescription>
+      <Alert color="red" title="Unable to render Globus-embedded asset.">
+        Unable to interpret the provided configuration as a valid
+        Globus-embedded asset.
+        <Code block>{JSON.stringify(field, null, 2)}</Code>
       </Alert>
     );
   }
@@ -215,55 +198,46 @@ function GlobusEmbed({ config, field }: GlobusEmbedProps) {
   return (
     <>
       <Box w={`calc(${width} + 2em)`} h={`calc(${height} + 2em)`}>
-        {!auth.isAuthenticated && (
-          <Alert status="warning">
-            <AlertIcon />
-            <AlertTitle>Authentication Required</AlertTitle>
-            <AlertDescription>
+        <Stack gap="xs">
+          {!auth.isAuthenticated && (
+            <Alert
+              color="yellow"
+              title="Authentication Required"
+              variant="outline"
+            >
               <Text>
                 In order to view this embedded resource, you must{" "}
-                <Button variant="link" onClick={login} color="yellow.800">
-                  Sign In
-                </Button>
-                .
+                <Anchor onClick={login}>sign in</Anchor>.
               </Text>
-            </AlertDescription>
-          </Alert>
-        )}
-        {metadata.isLoading && (
-          <Center>
-            <HStack>
-              <Spinner size="sm" mr={1} />
-              <Text fontSize="sm">Fetching asset metadata...</Text>
-            </HStack>
-          </Center>
-        )}
+            </Alert>
+          )}
+          {metadata.isLoading && (
+            <Center>
+              <Group>
+                <Loader size="sm" />
+                <Text fz="sm">Fetching asset metadata...</Text>
+              </Group>
+            </Center>
+          )}
 
-        {asset.isLoading && (
-          <Center>
-            <HStack>
-              <Spinner size="sm" mr={1} />
-              <Text fontSize="sm">Fetching asset...</Text>
-            </HStack>
-          </Center>
-        )}
-        {asset.isError && <EmbedError error={asset.error} />}
-        {!asset.isError && asset.isFetched && (
-          <Renderer field={field} config={config} />
-        )}
+          {asset.isLoading && (
+            <Center>
+              <Group>
+                <Loader size="sm" />
+                <Text fz="sm">Fetching asset...</Text>
+              </Group>
+            </Center>
+          )}
+          {asset.isError && <EmbedError error={asset.error} />}
+          {!asset.isError && asset.isFetched && (
+            <Renderer field={field} config={config} />
+          )}
+        </Stack>
       </Box>
       <Box>
-        <Button
-          as="a"
-          variant="link"
-          colorScheme="black"
-          href={config.asset}
-          target="_blank"
-          rel="noopener noreferrer"
-          size="xs"
-        >
-          Open in New Tab <ExternalLinkIcon mx="2px" />
-        </Button>
+        <AnchorExternal href={config.asset} size="xs">
+          Open in New Tab
+        </AnchorExternal>
       </Box>
     </>
   );
@@ -284,7 +258,7 @@ function EmbedError({ error }: { error: unknown }) {
     "message" in error &&
     typeof error.message === "string"
       ? error.message
-      : "An error occurred.";
+      : "An error occurred while attempting to load the embedded resource.";
 
   let description = <Text>{message}</Text>;
 
@@ -307,41 +281,26 @@ function EmbedError({ error }: { error: unknown }) {
       <>
         <Text>
           Your current session does not meet the requirements to view this
-          resource – you must{" "}
-          <Button onClick={handler} variant="link" color="red.800">
-            address requirements
-          </Button>
-          .
+          resource &mdash; you must{" "}
+          <Anchor onClick={handler}>address requirements</Anchor>.
         </Text>
       </>
     );
   }
   return (
-    <Alert status="error" flexDirection="column" alignItems="flex-start">
-      <Flex>
-        <AlertIcon />
-        <AlertTitle>Unable to render resource.</AlertTitle>
-      </Flex>
-      <AlertDescription mt={1}>{description}</AlertDescription>
-      {typeof error === "object" && error && (
-        <Accordion allowToggle w="100%">
-          <AccordionItem border={0}>
-            <Flex>
-              <Spacer />
-              <AccordionButton w="auto">
-                <Button variant="link" colorScheme="black" size="xs">
-                  View Error
-                </Button>
-              </AccordionButton>
-            </Flex>
-            <AccordionPanel>
-              <Box bg="white" p={2} rounded={5}>
-                <JSONTree data={error} />
-              </Box>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      )}
+    <Alert color="red" title="Unable to render resource.">
+      <Stack gap="xs">
+        <Text>{description}</Text>
+        {error ? (
+          <Spoiler maxHeight={50} showLabel="View Error" hideLabel="Hide Error">
+            {typeof error === "object" ? (
+              <JSONTree data={error} />
+            ) : (
+              <Code block>{String(error)}</Code>
+            )}
+          </Spoiler>
+        ) : null}
+      </Stack>
     </Alert>
   );
 }

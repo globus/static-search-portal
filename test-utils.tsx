@@ -1,11 +1,12 @@
 import React, { ReactElement } from "react";
 import { render as _render, RenderOptions } from "@testing-library/react";
 import { Provider as GlobusAuthorizationManagerProvider } from "@globus/react-auth-context";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <GlobusAuthorizationManagerProvider client="abc" redirect="#">
-      {children}
+      <ThemeProvider>{children}</ThemeProvider>
     </GlobusAuthorizationManagerProvider>
   );
 };

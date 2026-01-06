@@ -2,16 +2,15 @@
 
 import React, { useEffect } from "react";
 import {
-  Heading,
+  Title,
   Text,
-  Box,
-  Flex,
   Button,
+  Anchor,
+  Box,
   Divider,
-  Spacer,
-  ButtonGroup,
-  Link,
-} from "@chakra-ui/react";
+  Group,
+  Stack,
+} from "@mantine/core";
 
 import {
   getAttribute,
@@ -246,51 +245,51 @@ function Result({ result }: { result: GMetaResult }) {
   }, [result]);
 
   return (
-    <>
-      <Heading as="h1" size="md" wordBreak="break-word">
-        {heading || (
-          <Text as="em" color="gray.500">
-            &mdash;
-          </Text>
-        )}
-      </Heading>
+    <Stack gap="xs">
+      <Title order={1} style={{ wordBreak: "break-word" }} size="h2">
+        {heading || <Text component="em">&mdash;</Text>}
+      </Title>
 
-      <Divider my={2} />
+      <Divider />
 
-      <Flex>
+      <Group justify="end" w="100%">
         <AddToTransferList result={result} />
-        <Spacer />
         <ResponseDrawer>
           <JSONTree data={result} />
         </ResponseDrawer>
-      </Flex>
+      </Group>
 
       {links.length > 0 && (
-        <ButtonGroup>
+        <Button.Group>
           {links.map((link: ProcessedLink, i: number) => {
             return (
-              <Button key={link.href || i} as={Link} href={link.href} size="sm">
+              <Button
+                key={link.href || i}
+                component={Anchor}
+                href={link.href}
+                size="sm"
+              >
                 {link.label}
               </Button>
             );
           })}
-        </ButtonGroup>
+        </Button.Group>
       )}
 
-      {summary && (
-        <Box my="2">
-          <Heading as="h2" size="sm" my={2}>
-            Summary
-          </Heading>
-          <Text as="p">{summary}</Text>
-        </Box>
-      )}
+      <Stack gap="xs">
+        {summary && (
+          <Box>
+            <Title order={2} size="h4">
+              Summary
+            </Title>
+            <Text>{summary}</Text>
+          </Box>
+        )}
 
-      <Box>
         {fields.map((field: FieldDefinition, i: number) => (
           <Field key={i} field={field} gmeta={result} />
         ))}
-      </Box>
-    </>
+      </Stack>
+    </Stack>
   );
 }

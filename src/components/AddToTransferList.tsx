@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, ButtonProps, Link } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@mantine/core";
 
 import { useGlobusTransferStore } from "@/store/globus-transfer";
 import { getTransferDetailsFromResult } from "./Result";
@@ -41,8 +41,8 @@ export default function AddToTransferList({
 
   return isTransferEnabled && auth.isAuthenticated ? (
     <Button
-      as={Link}
-      size="sm"
+      size="xs"
+      variant="subtle"
       onClick={
         !isSelected
           ? async () => {
