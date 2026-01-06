@@ -16,7 +16,7 @@ export default function FallbackField({ value }: { value: Value }) {
     typeof value === "number" ||
     typeof value === "boolean"
   ) {
-    return <Text>{value}</Text>;
+    return <Text>{String(value)}</Text>;
   }
   if (Array.isArray(value)) {
     return value.map((v, i) => (
