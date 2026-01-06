@@ -10,13 +10,12 @@ import {
   Text,
   Center,
   Title,
-  Anchor,
   Code,
   Popover,
   ActionIcon,
   Loader,
 } from "@mantine/core";
-import { ExternalLink, SearchIcon, CircleQuestionMark } from "lucide-react";
+import { SearchIcon, CircleQuestionMark } from "lucide-react";
 import { throttle, debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
@@ -32,6 +31,7 @@ import { Error } from "./Error";
 import { Pagination } from "./Pagination";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { AnchorExternal } from "./private/AnchorExternal";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
@@ -154,15 +154,12 @@ export function Search() {
                     <Text fz="xs" py={2}>
                       <Code>field:value OR field:other</Code>
                     </Text>
-                    <Anchor
+                    <AnchorExternal
                       fz="sm"
                       href="https://docs.globus.org/api/search/query/#advanced_query_string_syntax"
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
                       Globus Search Documentation
-                      <ExternalLink />
-                    </Anchor>
+                    </AnchorExternal>
                   </Stack>
                 </Popover.Dropdown>
               </Popover>

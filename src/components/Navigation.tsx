@@ -1,6 +1,6 @@
 import React from "react";
 import { Group, Anchor, Button, Text, Avatar, Menu, Box } from "@mantine/core";
-import { ExternalLink } from "lucide-react";
+import { AnchorExternal } from "./private/AnchorExternal";
 import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
 
@@ -58,14 +58,7 @@ const NavigationItemLink = (props: NavigationItem) => {
     return <Anchor href={props.href}>{props.label}</Anchor>;
   }
 
-  return (
-    <Anchor href={props.href} pos="relative">
-      {props.label}{" "}
-      <Box component="sup" pos="absolute" top={0} right={0} fontSize="xs">
-        <ExternalLink />
-      </Box>
-    </Anchor>
-  );
+  return <AnchorExternal href={props.href}>{props.label}</AnchorExternal>;
 };
 
 export default function Navigation() {

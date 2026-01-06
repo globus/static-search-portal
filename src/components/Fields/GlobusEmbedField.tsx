@@ -16,13 +16,13 @@ import { ProcessedField } from "../Field";
 import { isAuthorizationRequirementsError } from "@globus/sdk/core/errors";
 import { useOAuthStore } from "@/store/oauth";
 import { usePathname, useSearchParams } from "next/navigation";
-import { ExternalLink } from "lucide-react";
 import { useLogin } from "@/hooks/useOAuth";
 import { PlotlyRenderer } from "./Renderer/Plotly";
 import { ObjectRenderer } from "./Renderer/Object";
 import { JsonRenderer } from "./Renderer/Json";
 import { useGCSAsset, useGCSAssetMetadata } from "@/hooks/useGlobusAPI";
 import { JSONTree } from "../JSONTree";
+import { AnchorExternal } from "../private/AnchorExternal";
 
 export type Renderers = "plotly" | "json" | undefined;
 
@@ -235,14 +235,9 @@ function GlobusEmbed({ config, field }: GlobusEmbedProps) {
         </Stack>
       </Box>
       <Box>
-        <Anchor
-          href={config.asset}
-          target="_blank"
-          rel="noopener noreferrer"
-          size="xs"
-        >
-          Open in New Tab <ExternalLink />
-        </Anchor>
+        <AnchorExternal href={config.asset} size="xs">
+          Open in New Tab
+        </AnchorExternal>
       </Box>
     </>
   );

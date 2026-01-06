@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Code, Title, Image, Anchor, List, Text } from "@mantine/core";
-import { ExternalLink } from "lucide-react";
+import { Box, Code, Title, Image, List, Text } from "@mantine/core";
+import { Anchor } from "@/components/private/AnchorExternal";
 import NextLink from "next/link";
 import type { MDXComponents } from "mdx/types";
 import { getAbsoluteURL, isRelativePath } from "./src/utils/path";
@@ -68,22 +68,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
        * If the link is external, mark it as such.
        */
       return (
-        <Anchor
-          {...rest}
-          target="_blank"
-          rel="noopener noreferrer"
-          href={href}
-          pos="relative"
-          pr={4}
-        >
+        <Anchor {...rest} external>
           {rest.children}
-          <ExternalLink
-            as="sup"
-            position="absolute"
-            top={0}
-            right={0}
-            fontSize="xs"
-          />
         </Anchor>
       );
     },

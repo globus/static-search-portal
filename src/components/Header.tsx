@@ -6,6 +6,7 @@ import {
   Group,
   Image,
   UnstyledButton,
+  Box,
 } from "@mantine/core";
 import Link from "next/link";
 
@@ -26,10 +27,10 @@ export default function Header() {
   const ref = useRef<HTMLDivElement>(null);
 
   return (
-    <Stack gap={0} bg="primary.9" ref={ref}>
+    <Stack gap={0} ref={ref}>
       <Flex
         component="header"
-        mih={{ base: "50px", md: "100px", lg: "120px" }}
+        mih={{ base: "50px", md: IMAGE ? "100px" : undefined }}
         align="center"
         justify="space-between"
         style={{
@@ -37,13 +38,15 @@ export default function Header() {
           backgroundSize: IMAGE ? "cover" : undefined,
           backgroundPosition: IMAGE ? "center" : undefined,
         }}
-        px="xs"
+        p="xs"
       >
         <UnstyledButton component={Link} href="/" aria-label="Home">
           <Group gap="sm" align="center">
-            {LOGO && <Image src={LOGO.src} alt={LOGO.alt} w="100px" />}
+            <Box bg="primary.9" bdrs="xs" py="sm" px="md">
+              {LOGO && <Image src={LOGO.src} alt={LOGO.alt} w="100px" />}
+            </Box>
             <Title
-              c={IMAGE ? "white" : "black"}
+              c={IMAGE ? "white" : undefined}
               order={1}
               size="xl"
               bdrs={IMAGE ? 4 : 0}

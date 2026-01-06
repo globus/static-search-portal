@@ -6,7 +6,6 @@ import {
   Group,
   Stack,
   Center,
-  Anchor,
   Code,
   Loader,
   Alert,
@@ -15,8 +14,7 @@ import {
   Modal,
   Image as MantineImage,
 } from "@mantine/core";
-
-import { ExternalLink } from "lucide-react";
+import { AnchorExternal } from "../private/AnchorExternal";
 
 type Value =
   | string
@@ -117,14 +115,9 @@ export default function ImageField({ value }: { value: unknown }) {
                   View Image
                 </Button>
               )}
-              <Anchor
-                href={config.src}
-                target="_blank"
-                rel="noopener noreferrer"
-                size="xs"
-              >
-                Open in New Tab <ExternalLink />
-              </Anchor>
+              <AnchorExternal href={config.src} size="xs">
+                Open in New Tab
+              </AnchorExternal>
             </Group>
           </Stack>
         </Group>

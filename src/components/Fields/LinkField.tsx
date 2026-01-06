@@ -1,8 +1,8 @@
 import React from "react";
 import NextLink from "next/link";
-import { Anchor, Box } from "@mantine/core";
+import { Anchor } from "@mantine/core";
 import { isRelativePath } from "@/utils/path";
-import { ExternalLink } from "lucide-react";
+import { AnchorExternal } from "../private/AnchorExternal";
 
 type Value = string;
 
@@ -28,18 +28,5 @@ export default function LinkField({ value }: { value: unknown }) {
       </Anchor>
     );
   }
-  return (
-    <Anchor
-      target="_blank"
-      rel="noopener noreferrer"
-      href={value}
-      pos="relative"
-      pr={4}
-    >
-      {value}
-      <Box component="sup" pos="absolute" top={0} right={0} fz="xs">
-        <ExternalLink />
-      </Box>
-    </Anchor>
-  );
+  return <AnchorExternal href={value}>{value}</AnchorExternal>;
 }
