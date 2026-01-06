@@ -11,6 +11,9 @@ import {
   Alert,
   Stack,
   Group,
+  SimpleGrid,
+  Paper,
+  Fieldset,
 } from "@mantine/core";
 import { transfer } from "@globus/sdk";
 import { useGlobusAuth } from "@globus/react-auth-context";
@@ -21,6 +24,7 @@ import { isTransferEnabled } from "../../static";
 import PathVerifier from "@/globus/PathVerifier";
 import { CollectionName } from "@/globus/Collection";
 import { TransferListItem } from "@/components/Transfer/Drawer";
+import { notifications } from "@mantine/notifications";
 
 export default function TransferPage() {
   const auth = useGlobusAuth();
@@ -84,77 +88,84 @@ export default function TransferPage() {
         { manager: auth.authorization },
       );
       const data = await response.json();
-      // TODO: Replace Chakra toast with Mantine Notification or Alert
       if (response.ok) {
         transferStore.resetTransferSettings();
-        // Fallback: show a success alert (could be state-driven)
-        alert(`Transfer: ${data.code}\n${data.message}`);
+        notifications.show({
+          title: "Transfer Started",
+          message: `Transfer task ${data.task_id} has been started successfully.`,
+          color: "green",
+        });
       } else {
-        alert(`Error (${data.code}): ${data.message}`);
+        notifications.show({
+          title: "Transfer Error",
+          message: `Error (${data.code}): ${data.message}`,
+          color: "red",
+        });
       }
     });
   };
 
   return (
-    <Container size="xl" px={20} py={20}>
+    <Container size="xl">
       {auth.isAuthenticated === false && (
-        <Alert color="red" mb={20}>
+        <Alert color="red" title="Authentication Required" mb="md">
           You must authenticate to initiate a transfer.
         </Alert>
       )}
       {transferStore.items.length === 0 ? (
-        <Center>
-          <Text size="xl">No items in the Transfer List.</Text>
+        <Center mt="25%">
+          <Alert color="blue" title="No Items Selected for Transfer">
+            <Text>
+              Select items from search results to add them to your Transfer List
+            </Text>
+          </Alert>
         </Center>
       ) : (
-        <>
-          <Box mb={40}>
-            <Title order={2} mb={10}>
-              Transfer Data
-            </Title>
+        <Stack>
+          <Stack gap="xs">
+            <Title order={2}>Transfer Data</Title>
             <Text size="lg">
               Now that you have selected the data for transfer, you'll need to
               specify a destination collection, path, and optional label for the
               transfer.
             </Text>
-          </Box>
-          <Group align="start" style={{ gap: 40 }}>
-            <Box style={{ flex: 1 }}>
+          </Stack>
+          <SimpleGrid
+            cols={{
+              base: 1,
+              sm: 2,
+            }}
+          >
+            <Stack>
               {collections.map((collection) => (
-                <Card
-                  key={collection}
-                  shadow="sm"
-                  padding="lg"
-                  radius="md"
-                  style={{ marginBottom: 20 }}
-                >
+                <Paper key={collection} withBorder p="sm" radius="md">
                   <Group style={{ justifyContent: "space-between" }}>
                     <Title order={4}>
                       <CollectionName id={collection} />
                     </Title>
                   </Group>
-                  <Stack style={{ marginTop: 10, gap: 10 }}>
+                  <Stack gap="xs">
                     {itemsByCollection[collection].map((item) => (
                       <TransferListItem key={item.subject} item={item} />
                     ))}
                   </Stack>
-                </Card>
+                </Paper>
               ))}
-            </Box>
-            <Box style={{ flex: 1 }}>
+            </Stack>
+            <Box>
               {isMultipleCollections && (
-                <Alert color="blue" style={{ marginBottom: 20 }}>
+                <Alert color="blue" mb="md">
                   Since the data you've selected is hosted across multiple
                   sources ({collections.length}), a transfer task will be
                   created for each source.
                 </Alert>
               )}
               <form onSubmit={handleStartTransfer}>
-                <fieldset
+                <Fieldset
+                  legend="Transfer Options"
                   disabled={!auth.isAuthenticated}
-                  style={{ border: "none", padding: 0 }}
                 >
-                  <Stack style={{ gap: 20 }}>
+                  <Stack>
                     <CollectionSearch
                       value={transferStore.transfer?.destination ?? null}
                       onSelect={(destination) => {
@@ -197,11 +208,11 @@ export default function TransferPage() {
                       Start Transfer
                     </Button>
                   </Stack>
-                </fieldset>
+                </Fieldset>
               </form>
             </Box>
-          </Group>
-        </>
+          </SimpleGrid>
+        </Stack>
       )}
     </Container>
   );

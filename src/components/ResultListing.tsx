@@ -8,6 +8,8 @@ import {
   Table,
   Skeleton,
   Stack,
+  Group,
+  Box,
 } from "@mantine/core";
 import { getValueFromAttribute, getAttribute } from "../../static";
 
@@ -156,37 +158,41 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
 
   return (
     <Card w="full" withBorder>
-      <Title order={3} style={{ wordBreak: "break-word" }}>
-        <Anchor
-          component={NextLink}
-          href={gmeta.subject ? getResultLink(gmeta.subject) : "#"}
-        >
-          <Skeleton visible={boostrapping}>
-            {heading || (
-              <Text component="em" c="gray.5">
-                &mdash;
-              </Text>
-            )}
-          </Skeleton>
-        </Anchor>
-      </Title>
-      <AddToTransferList result={gmeta} size="xs" mb={2} />
-      {image || summary || fields ? (
-        <>
-          <Stack>
-            {image && (
-              <ImageField
-                value={{
-                  src: image.src,
-                  alt: image?.alt,
-                }}
-              />
-            )}
-            {summary && <Text lineClamp={4}>{summary}</Text>}
-          </Stack>
-          <ResultListingFields fields={fields} gmeta={gmeta} />
-        </>
-      ) : null}
+      <Stack gap="xs">
+        <Title order={3} style={{ wordBreak: "break-word" }}>
+          <Anchor
+            component={NextLink}
+            href={gmeta.subject ? getResultLink(gmeta.subject) : "#"}
+          >
+            <Skeleton visible={boostrapping}>
+              {heading || (
+                <Text component="em" c="gray.5">
+                  &mdash;
+                </Text>
+              )}
+            </Skeleton>
+          </Anchor>
+        </Title>
+        <Group justify="flex-end">
+          <AddToTransferList result={gmeta} size="xs" />
+        </Group>
+        {image || summary || fields ? (
+          <Box>
+            <Stack gap="xs">
+              {image && (
+                <ImageField
+                  value={{
+                    src: image.src,
+                    alt: image?.alt,
+                  }}
+                />
+              )}
+              {summary && <Text lineClamp={4}>{summary}</Text>}
+            </Stack>
+            <ResultListingFields fields={fields} gmeta={gmeta} />
+          </Box>
+        ) : null}
+      </Stack>
     </Card>
   );
 }

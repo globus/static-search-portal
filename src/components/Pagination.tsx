@@ -1,8 +1,7 @@
 import React from "react";
 import { Button, Text, Group, Flex, Select } from "@mantine/core";
-
 import { ChevronRight, ChevronLeft, ChevronsLeft } from "lucide-react";
-
+import { Icon } from "./private/Icon";
 import type { GSearchResult } from "@globus/sdk/services/search/service/query";
 import { useSearch, useSearchDispatch } from "@/providers/search-provider";
 
@@ -60,7 +59,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
               dispatch({ type: "set_offset", payload: 0 });
             }}
           >
-            <ChevronsLeft />
+            <Icon component={ChevronsLeft} />
           </Button>
           <Button
             variant="default"
@@ -73,7 +72,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
               });
             }}
           >
-            <ChevronLeft />
+            <Icon component={ChevronLeft} />
           </Button>
           <Button
             variant="default"
@@ -88,7 +87,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
               });
             }}
           >
-            <ChevronRight />
+            <Icon component={ChevronRight} />
           </Button>
         </Button.Group>
       </Group>

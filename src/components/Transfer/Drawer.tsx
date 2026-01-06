@@ -27,6 +27,7 @@ import { readableBytes } from "@globus/sdk/services/transfer/utils";
 
 import { isTransferEnabled } from "../../../static";
 import { getResultLink } from "@/utils/results";
+import { Icon } from "../private/Icon";
 
 export const TransferListItem = ({
   item,
@@ -40,8 +41,8 @@ export const TransferListItem = ({
     (state) => state.removeItemBySubject,
   );
   return (
-    <Flex key={item.subject} align="center" justify="space-between">
-      <Stack>
+    <Flex justify="space-between" align="center">
+      <Stack flex={1} miw={0}>
         <Anchor
           lineClamp={1}
           component={NextLink}
@@ -50,7 +51,8 @@ export const TransferListItem = ({
         >
           {item.label}
         </Anchor>
-        <Group>
+        <Group gap="xs" wrap="nowrap">
+          {stat.isError && <Icon component={CircleAlert} color="red" />}
           {stat.data?.type === "file" && stat.data?.size && (
             <Text fz="xs">{readableBytes(stat.data?.size)}</Text>
           )}
@@ -58,19 +60,17 @@ export const TransferListItem = ({
             label={
               stat.isError ? `Unable to access "${item.path}".` : item.path
             }
+            multiline
+            w={300}
+            style={{
+              overflowWrap: "break-word",
+              wordWrap: "break-word",
+              wordBreak: "break-word",
+              userSelect: "all",
+            }}
           >
-            <Text
-              lineClamp={1}
-              fz="xs"
-              style={{
-                overflow: "scroll",
-                whiteSpace: "nowrap",
-              }}
-            >
-              <Flex align="center">
-                {stat.isError && <CircleAlert color="red" />}
-                {item.path}
-              </Flex>
+            <Text fz="xs" lineClamp={1}>
+              {item.path}
             </Text>
           </Tooltip>
         </Group>
@@ -80,8 +80,9 @@ export const TransferListItem = ({
         color="red"
         onClick={() => removeItemBySubject(item.subject)}
         aria-label="Remove item from transfer list"
+        ml="sm"
       >
-        <CircleMinus />
+        <Icon component={CircleMinus} />
       </ActionIcon>
     </Flex>
   );
@@ -125,11 +126,10 @@ export default function TransferDrawer() {
         title="Transfer List"
         position="right"
       >
-        <Stack h="100%">
+        <Stack>
           {items.length ? (
             <Alert
               color="blue"
-              variant="outline"
               title="These are the entries that you have selected for data
                   transfer."
             >
@@ -150,7 +150,7 @@ export default function TransferDrawer() {
                   <Title size="sm">
                     <CollectionName id={collection} />
                   </Title>
-                  <Stack>
+                  <Stack gap="xs">
                     {itemsByCollection[collection].map((item) => (
                       <TransferListItem
                         key={item.subject}

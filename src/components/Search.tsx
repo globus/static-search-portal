@@ -32,6 +32,7 @@ import { Pagination } from "./Pagination";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { AnchorExternal } from "./private/AnchorExternal";
+import { Icon } from "./private/Icon";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
@@ -108,7 +109,7 @@ export function Search() {
       >
         <Stack>
           <TextInput
-            leftSection={<SearchIcon />}
+            leftSection={<Icon component={SearchIcon} />}
             defaultValue={initialQuery}
             type="search"
             placeholder="Start your search here..."
@@ -118,7 +119,7 @@ export function Search() {
             }, 300)}
           />
           <Stack>
-            <Group>
+            <Group gap="xs">
               <Checkbox
                 defaultChecked={isAdvanced}
                 onChange={(e) => {
@@ -132,7 +133,6 @@ export function Search() {
                 }}
                 label="Use Advanced Search"
               />
-
               <Popover withArrow position="top" width={260}>
                 <Popover.Target>
                   <ActionIcon
@@ -140,7 +140,7 @@ export function Search() {
                     variant="subtle"
                     color="gray"
                   >
-                    <CircleQuestionMark />
+                    <Icon component={CircleQuestionMark} />
                   </ActionIcon>
                 </Popover.Target>
                 <Popover.Dropdown>

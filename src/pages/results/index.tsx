@@ -4,6 +4,7 @@ import NextLink from "next/link";
 
 import { ChevronLeft } from "lucide-react";
 import { Divider, Button } from "@mantine/core";
+import { Icon } from "@/components/private/Icon";
 
 import { ClientSideResult } from "@/components/ClientSideResult";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
@@ -34,7 +35,7 @@ export default function ResultPage() {
         <Button
           component={NextLink}
           href="/search"
-          leftSection={<ChevronLeft />}
+          leftSection={<Icon component={ChevronLeft} />}
           size="xs"
           variant="subtle"
         >

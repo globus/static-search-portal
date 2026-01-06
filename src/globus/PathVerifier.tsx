@@ -19,6 +19,7 @@ import {
 
 import type { FileDocument } from "@globus/sdk/services/transfer/service/file-operations";
 import { useOAuthStore } from "@/store/oauth";
+import { Icon } from "@/components/private/Icon";
 
 export default function PathVerifier({
   path,
@@ -97,29 +98,29 @@ export default function PathVerifier({
         {isValidating ? (
           <Loader size="xs" />
         ) : isValid ? (
-          <CircleCheck />
+          <Icon component={CircleCheck} />
         ) : (
-          <CircleAlert />
+          <Icon component={CircleAlert} />
         )}
         {!isValidating && isValid ? (
-          <Text>Path exists on destination.</Text>
+          <Text fz="xs">Path exists on destination.</Text>
         ) : (
-          <>
-            <Tooltip
-              label="We've attempted to reach the path you provided, but were unsuccessful. This might be intentional, or there might be a typo in your desired path."
-              position="bottom"
+          <Tooltip
+            label="We've attempted to reach the path you provided, but were unsuccessful. This might be intentional, or there might be a typo in your desired path."
+            position="bottom"
+            multiline
+            w={300}
+          >
+            <Text
+              style={{
+                cursor: "help",
+                textDecoration: "underline",
+                textDecorationStyle: "dashed",
+              }}
             >
-              <Text
-                style={{
-                  cursor: "help",
-                  textDecoration: "underline",
-                  textDecorationStyle: "dashed",
-                }}
-              >
-                Unable to access path on destination.
-              </Text>
-            </Tooltip>
-          </>
+              Unable to access path on destination.
+            </Text>
+          </Tooltip>
         )}
       </Group>
     </Stack>

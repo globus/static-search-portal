@@ -3,11 +3,10 @@ import {
   Box,
   TextInput,
   Button,
-  Card,
   Text,
   Stack,
-  Group,
   List,
+  Paper,
 } from "@mantine/core";
 import { Search } from "lucide-react";
 import { transfer } from "@globus/sdk";
@@ -68,16 +67,18 @@ export function CollectionSearch({
 
   if (selection) {
     return (
-      <Group>
-        <TextInput
-          value={selection.display_name || selection.name}
-          readOnly
-          style={{ flex: 1 }}
-        />
-        <Button size="xs" variant="outline" onClick={() => setSelection(null)}>
-          Clear
-        </Button>
-      </Group>
+      <TextInput
+        label="Collection"
+        value={selection.display_name || selection.name}
+        readOnly
+        style={{ flex: 1 }}
+        rightSectionWidth={80}
+        rightSection={
+          <Button size="xs" variant="subtle" onClick={() => setSelection(null)}>
+            Clear
+          </Button>
+        }
+      />
     );
   }
 
@@ -87,6 +88,7 @@ export function CollectionSearch({
         style={{ position: "sticky", top: 0, zIndex: 1, background: "white" }}
       >
         <TextInput
+          label="Collection"
           onInput={(e) => handleSearch(e as React.FormEvent<HTMLInputElement>)}
           placeholder="e.g. Globus Tutorial Collection"
           style={{ flex: 1 }}
@@ -95,26 +97,26 @@ export function CollectionSearch({
       </Box>
       <Stack style={{ maxHeight: 400, overflowY: "auto" }}>
         {results.map((result) => (
-          <Card
+          <Paper
             key={result.id}
-            shadow="xs"
             withBorder
             style={{ cursor: "pointer" }}
             onClick={() => handleSelect(result)}
+            p="xs"
           >
-            <Group>
+            <Stack gap="xs">
               <Text>{result.display_name || result.name}</Text>
-              <Text size="xs">{result.entity_type}</Text>
-            </Group>
-            <List size="xs" style={{ marginTop: 5 }}>
-              <li>ID: {result.id}</li>
-              <li>Owner: {result.owner_id}</li>
-              <li>Domain: {result.domain || "\u2014"}</li>
-              <li>
-                <Text>Description: {result.description || "\u2014"}</Text>
-              </li>
-            </List>
-          </Card>
+              <List listStyleType="none" size="xs">
+                <List.Item>ID: {result.id}</List.Item>
+                <List.Item>Type: {result.entity_type}</List.Item>
+                <List.Item>Owner: {result.owner_id}</List.Item>
+                <List.Item>Domain: {result.domain || "\u2014"}</List.Item>
+                <List.Item>
+                  Description: {result.description || "\u2014"}
+                </List.Item>
+              </List>
+            </Stack>
+          </Paper>
         ))}
       </Stack>
     </Stack>

@@ -42,9 +42,11 @@ export default function Header() {
       >
         <UnstyledButton component={Link} href="/" aria-label="Home">
           <Group gap="sm" align="center">
-            <Box bg="primary.9" bdrs="xs" py="sm" px="md">
-              {LOGO && <Image src={LOGO.src} alt={LOGO.alt} w="100px" />}
-            </Box>
+            {LOGO && (
+              <Box bg="primary.9" bdrs="xs" py="sm" px="md">
+                <Image src={LOGO.src} alt={LOGO.alt} w="100px" />
+              </Box>
+            )}
             <Title
               c={IMAGE ? "white" : undefined}
               order={1}

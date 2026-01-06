@@ -1,7 +1,6 @@
 "use client";
 import React, { type ComponentProps, useState } from "react";
 import {
-  CheckIcon,
   Combobox,
   Group,
   Pill,
@@ -12,7 +11,8 @@ import {
   Badge,
   Text,
 } from "@mantine/core";
-import { CirclePlus, X } from "lucide-react";
+import { Check, CirclePlus, X } from "lucide-react";
+import { Icon } from "./private/Icon";
 import { getAttribute } from "../../static";
 
 import {
@@ -61,7 +61,7 @@ export default function SearchFacets({
           onClick={reset}
           variant="outline"
           color="gray"
-          leftSection={<X />}
+          leftSection={<Icon component={X} />}
         >
           Clear All Filters
         </Button>
@@ -157,7 +157,7 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
       >
         <Group gap="xs" justify="space-between" w="100%">
           <Group gap="xs" align="center">
-            {value.includes(valueAsString) ? <CheckIcon size={12} /> : null}
+            {value.includes(valueAsString) ? <Icon component={Check} /> : null}
             {valueAsString}
           </Group>
           <Badge size="xs">{bucket.count}</Badge>
@@ -187,7 +187,7 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
         >
           <Pill.Group>
             <Button
-              leftSection={<CirclePlus />}
+              leftSection={<Icon component={CirclePlus} />}
               variant="outline"
               size="xs"
               color="gray"

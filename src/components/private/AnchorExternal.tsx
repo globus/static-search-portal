@@ -17,8 +17,8 @@ export const AnchorExternal = forwardRef<
     <Anchor {...props} ref={ref} target="_blank" rel="noopener noreferrer">
       <Group pos="relative" w="fit-content">
         {props.children}
-        <Box component="sup" pos="absolute" top={-2} right={-12}>
-          <ExternalLinkIcon size={12} />
+        <Box component="sup" pos="absolute" top={-4} right={-10}>
+          <ExternalLinkIcon size={8} />
         </Box>
       </Group>
     </Anchor>

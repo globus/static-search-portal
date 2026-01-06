@@ -4,6 +4,7 @@ import { ThemeProvider } from "../providers/theme-provider";
 import { info } from "@globus/sdk";
 
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 import {
   getEnvironment,

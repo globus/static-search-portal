@@ -4,6 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   Box,
   Group,
+  Text,
   Stack,
   Center,
   Code,
@@ -45,15 +46,9 @@ export default function ImageField({ value }: { value: unknown }) {
 
   return (
     <>
-      <Paper py="sm">
+      <Paper p="sm">
         <Group gap="xs" wrap="nowrap">
-          <Box
-            h="6rem"
-            w="12rem"
-            pos="relative"
-            bd="1px solid var(--mantine-color-gray-4)"
-            bdrs="sm"
-          >
+          <Box h="6rem" w="12rem" pos="relative">
             {loading && (
               <Center
                 style={{
@@ -80,7 +75,7 @@ export default function ImageField({ value }: { value: unknown }) {
                   width: "100%",
                 }}
               >
-                Unable to load image
+                Unable to load image.
               </Alert>
             )}
             {!error && (
