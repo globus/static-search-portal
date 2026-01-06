@@ -1,21 +1,7 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  HStack,
-  Icon,
-  Select,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
-import {
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  ChevronDoubleLeftIcon,
-} from "@heroicons/react/24/outline";
-
+import { Button, Text, Group, Flex, Select } from "@mantine/core";
+import { ChevronRight, ChevronLeft, ChevronsLeft } from "lucide-react";
+import { Icon } from "./private/Icon";
 import type { GSearchResult } from "@globus/sdk/services/search/service/query";
 import { useSearch, useSearchDispatch } from "@/providers/search-provider";
 
@@ -31,77 +17,80 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
   const end = Math.min(search.offset + search.limit, result.total);
 
   return (
-    <Flex align="center" p={2}>
-      <HStack>
-        <Text fontSize="sm" as="label" htmlFor="limit">
+    <Flex justify="space-between" align="center" mb={4}>
+      <Group>
+        <Text fz="xs" component="label" htmlFor="limit">
           Results per page:
         </Text>
-        <Box>
-          <Select
-            id="limit"
-            size="sm"
-            value={search.limit}
-            onChange={(e) => {
+        <Select
+          id="limit"
+          size="xs"
+          defaultValue={`${search.limit}`}
+          onChange={(value) => {
+            dispatch({
+              type: "set_limit",
+              payload: value ? parseInt(value) : 25,
+            });
+          }}
+          data={[
+            { value: "10", label: "10" },
+            { value: "25", label: "25" },
+            { value: "50", label: "50" },
+            { value: "100", label: "100" },
+          ]}
+        />
+      </Group>
+
+      <Group>
+        {result.total > 0 ? (
+          <Text>
+            <Text component="b">
+              {start}-{end}
+            </Text>{" "}
+            of <Text component="b">{result.total}</Text>
+          </Text>
+        ) : null}
+        <Button.Group>
+          <Button
+            variant="default"
+            size="xs"
+            disabled={search.offset === 0}
+            onClick={() => {
+              dispatch({ type: "set_offset", payload: 0 });
+            }}
+          >
+            <Icon component={ChevronsLeft} />
+          </Button>
+          <Button
+            variant="default"
+            size="xs"
+            disabled={search.offset === 0}
+            onClick={() => {
               dispatch({
-                type: "set_limit",
-                payload: parseInt(e.target.value),
+                type: "set_offset",
+                payload: search.offset - search.limit,
               });
             }}
           >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-          </Select>
-        </Box>
-      </HStack>
-      <Spacer />
-      {result.total > 0 ? (
-        <Text fontSize="xs" mr={2}>
-          <Text as="b">
-            {start}-{end}
-          </Text>{" "}
-          of <Text as="b">{result.total}</Text>
-        </Text>
-      ) : null}
-      <ButtonGroup variant="outline" spacing="2">
-        <Button
-          size="sm"
-          isDisabled={search.offset === 0}
-          onClick={() => {
-            dispatch({ type: "set_offset", payload: 0 });
-          }}
-        >
-          <Icon as={ChevronDoubleLeftIcon} />
-        </Button>
-        <Button
-          size="sm"
-          isDisabled={search.offset === 0}
-          onClick={() => {
-            dispatch({
-              type: "set_offset",
-              payload: search.offset - search.limit,
-            });
-          }}
-        >
-          <Icon as={ChevronLeftIcon} />
-        </Button>
-
-        <Button
-          size="sm"
-          isDisabled={
-            !result.total || search.offset + search.limit >= result.total
-          }
-          onClick={() => {
-            dispatch({
-              type: "set_offset",
-              payload: search.offset + search.limit,
-            });
-          }}
-        >
-          <Icon as={ChevronRightIcon} />
-        </Button>
-      </ButtonGroup>
+            <Icon component={ChevronLeft} />
+          </Button>
+          <Button
+            variant="default"
+            size="xs"
+            disabled={
+              !result.total || search.offset + search.limit >= result.total
+            }
+            onClick={() => {
+              dispatch({
+                type: "set_offset",
+                payload: search.offset + search.limit,
+              });
+            }}
+          >
+            <Icon component={ChevronRight} />
+          </Button>
+        </Button.Group>
+      </Group>
     </Flex>
   );
 };

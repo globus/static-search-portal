@@ -2,8 +2,9 @@ import React from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 
-import { Container, Text, Link, Flex, Divider } from "@chakra-ui/react";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { ChevronLeft } from "lucide-react";
+import { Divider, Button } from "@mantine/core";
+import { Icon } from "@/components/private/Icon";
 
 import { ClientSideResult } from "@/components/ClientSideResult";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
@@ -30,17 +31,19 @@ export default function ResultPage() {
         <title>{title}</title>
         <meta property="og:title" content={title} key="title" />
       </Head>
-      <Container maxW="container.xl" p={4}>
-        <RequireAuthentication>
-          <Link as={NextLink} href="/search">
-            <Flex alignItems="center" mb={4}>
-              <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-            </Flex>
-          </Link>
-          <Divider my={2} />
-          {subject && <ClientSideResult subject={subject} />}
-        </RequireAuthentication>
-      </Container>
+      <RequireAuthentication>
+        <Button
+          component={NextLink}
+          href="/search"
+          leftSection={<Icon component={ChevronLeft} />}
+          size="xs"
+          variant="subtle"
+        >
+          Back to Search
+        </Button>
+        <Divider my="xs" />
+        {subject && <ClientSideResult subject={subject} />}
+      </RequireAuthentication>
     </>
   );
 }
