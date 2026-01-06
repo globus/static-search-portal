@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Text } from "@mantine/core";
 import { JSONTree } from "../JSONTree";
 
 type Value = unknown;
@@ -19,11 +19,7 @@ export default function FallbackField({ value }: { value: Value }) {
     return <Text>{String(value)}</Text>;
   }
   if (Array.isArray(value)) {
-    return value.map((v, i) => (
-      <Box key={i}>
-        <FallbackField value={v} />
-      </Box>
-    ));
+    return value.map((v, i) => <FallbackField key={i} value={v} />);
   }
   return <JSONTree data={value} />;
 }

@@ -1,31 +1,21 @@
 "use client";
 
 import {
-  InputGroup,
-  Input,
+  TextInput,
+  Stack,
+  Group,
+  Checkbox,
+  Paper,
   Box,
-  VStack,
-  InputLeftElement,
-  Spinner,
-  HStack,
   Text,
   Center,
-  Checkbox,
-  Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverBody,
-  IconButton,
-  PopoverHeader,
-  Heading,
-  Link,
-  PopoverFooter,
+  Title,
   Code,
-} from "@chakra-ui/react";
-import { SearchIcon, QuestionIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+  Popover,
+  ActionIcon,
+  Loader,
+} from "@mantine/core";
+import { SearchIcon, CircleQuestionMark } from "lucide-react";
 import { throttle, debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
@@ -41,6 +31,8 @@ import { Error } from "./Error";
 import { Pagination } from "./Pagination";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { AnchorExternal } from "./private/AnchorExternal";
+import { Icon } from "./private/Icon";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
@@ -106,101 +98,95 @@ export function Search() {
 
   return (
     <>
-      <Box py={2} position="sticky" top={0} backgroundColor="white" zIndex={1}>
-        <VStack spacing={2} align="stretch">
-          <InputGroup size="md">
-            <InputLeftElement pointerEvents="none">
-              <SearchIcon color="gray.300" />
-            </InputLeftElement>
-            <Input
-              defaultValue={initialQuery}
-              type="search"
-              placeholder="Start your search here..."
-              onChange={debounce((e) => {
-                router.push({ query: { ...router.query, q: e.target.value } });
-                setQuery(e.target.value);
-              }, 300)}
-            />
-          </InputGroup>
-          <HStack>
-            <Checkbox
-              size="sm"
-              isChecked={isAdvanced}
-              onChange={(e) => {
-                router.push({
-                  query: {
-                    ...router.query,
-                    advanced: e.target.checked,
-                  },
-                });
-                setIsAdvanced(e.target.checked);
-              }}
-            >
-              Use Advanced Search
-            </Checkbox>
-            <Popover>
-              <PopoverTrigger>
-                <IconButton
-                  aria-label="Learn More about Advanced Search"
-                  size="xs"
-                  icon={<Icon as={QuestionIcon} />}
-                />
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader>
-                  <Heading size="xs">Using Advanced Search</Heading>
-                </PopoverHeader>
-                <PopoverBody>
-                  <Text fontSize="sm">
-                    Your query will be sent to Globus Search as an advanced
-                    query and will need to comply with the Globus Search
-                    advanced query syntax.
-                  </Text>
-                  <Text fontSize="xs" py={2}>
-                    <Code>field:value OR field:other</Code>
-                  </Text>
-                </PopoverBody>
-                <PopoverFooter>
-                  <Link
-                    fontSize="sm"
-                    href="https://docs.globus.org/api/search/query/#advanced_query_string_syntax"
-                    isExternal
+      <Paper
+        pos="sticky"
+        top={0}
+        withBorder
+        p="sm"
+        style={{
+          zIndex: 1,
+        }}
+      >
+        <Stack>
+          <TextInput
+            leftSection={<Icon component={SearchIcon} />}
+            defaultValue={initialQuery}
+            type="search"
+            placeholder="Start your search here..."
+            onChange={debounce((e) => {
+              router.push({ query: { ...router.query, q: e.target.value } });
+              setQuery(e.target.value);
+            }, 300)}
+          />
+          <Stack>
+            <Group gap="xs">
+              <Checkbox
+                defaultChecked={isAdvanced}
+                onChange={(e) => {
+                  router.push({
+                    query: {
+                      ...router.query,
+                      advanced: e.target.checked,
+                    },
+                  });
+                  setIsAdvanced(e.target.checked);
+                }}
+                label="Use Advanced Search"
+              />
+              <Popover withArrow position="top" width={260}>
+                <Popover.Target>
+                  <ActionIcon
+                    aria-label="Learn More about Advanced Search"
+                    variant="subtle"
+                    color="gray"
                   >
-                    Globus Search Documentation
-                    <ExternalLinkIcon mx="2px" />
-                  </Link>
-                </PopoverFooter>
-              </PopoverContent>
-            </Popover>
-          </HStack>
+                    <Icon component={CircleQuestionMark} />
+                  </ActionIcon>
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <Stack gap="xs">
+                    <Title order={6}>Using Advanced Search</Title>
+                    <Text fz="sm">
+                      Your query will be sent to Globus Search as an advanced
+                      query and will need to comply with the Globus Search
+                      advanced query syntax.
+                    </Text>
+                    <Text fz="xs" py={2}>
+                      <Code>field:value OR field:other</Code>
+                    </Text>
+                    <AnchorExternal
+                      fz="sm"
+                      href="https://docs.globus.org/api/search/query/#advanced_query_string_syntax"
+                    >
+                      Globus Search Documentation
+                    </AnchorExternal>
+                  </Stack>
+                </Popover.Dropdown>
+              </Popover>
+            </Group>
+          </Stack>
           <SearchFacets result={result} />
           <Pagination result={result} />
           {isLoading && (
             <Center>
-              <HStack>
-                <Spinner size="sm" />{" "}
-                <Text fontSize="sm">Fetching results...</Text>
-              </HStack>
+              <Group gap="xs">
+                <Loader size="sm" />
+                <Text fz="sm">Fetching results...</Text>
+              </Group>
             </Center>
           )}
-        </VStack>
-      </Box>
-      <Box>
-        <Box p={4}>
-          {isGError(result) && <Error error={result} />}
-          {result && result.total > 0 && (
-            <>
-              <VStack py={2} spacing={5} align="stretch">
-                {result.gmeta?.map((gmeta, i) => (
-                  <ResultListing key={gmeta.subject} gmeta={gmeta} />
-                ))}
-              </VStack>
-            </>
-          )}
-          {result && result.total === 0 && <Box>No datasets found.</Box>}
-        </Box>
+        </Stack>
+      </Paper>
+      <Box py="xs">
+        {isGError(result) && <Error error={result} />}
+        {result && result.total > 0 && (
+          <Stack py="xs" align="stretch">
+            {result.gmeta?.map((gmeta, i) => (
+              <ResultListing key={gmeta.subject} gmeta={gmeta} />
+            ))}
+          </Stack>
+        )}
+        {result && result.total === 0 && <Box>No datasets found.</Box>}
       </Box>
     </>
   );

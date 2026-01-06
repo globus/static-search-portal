@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Tooltip } from "@chakra-ui/react";
+import { Text, Tooltip } from "@mantine/core";
 import { readableBytes } from "@globus/sdk/services/transfer/utils";
 
 type Value = string | number;
@@ -14,11 +14,7 @@ export default function BytesField({ value }: { value: unknown }) {
   }
   const asInt = typeof value === "string" ? parseInt(value) : value;
   return (
-    <Tooltip
-      label={`${asInt} bytes`}
-      variant="outline"
-      placement="bottom-start"
-    >
+    <Tooltip label={`${asInt} bytes`}>
       <Text>{readableBytes(asInt)}</Text>
     </Tooltip>
   );
