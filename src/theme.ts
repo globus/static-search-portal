@@ -1,7 +1,7 @@
 // import { STATIC } from "../static";
 import { generateColors } from "@mantine/colors-generator";
 
-import { colorsTuple, createTheme, virtualColor } from "@mantine/core";
+import { createTheme, virtualColor } from "@mantine/core";
 
 export type ColorDefinition =
   | {
@@ -54,7 +54,7 @@ export type ThemeSettings = {
    * Extend the Chakra UI theme.
    * @see https://v2.chakra-ui.com/docs/styled-system/customize-theme#using-theme-extensions
    */
-  extendTheme?: Parameters<typeof extendTheme>[0];
+  extendTheme?: Parameters<typeof createTheme>[0];
 };
 
 // const primary: ColorDefinition = {
