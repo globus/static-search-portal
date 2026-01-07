@@ -4,7 +4,6 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   Box,
   Group,
-  Text,
   Stack,
   Center,
   Code,
