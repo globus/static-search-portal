@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Code, Title, Image, List, Text } from "@mantine/core";
-import { Anchor } from "@/components/private/AnchorExternal";
+import { Code, Title, Image, List, Text, Anchor } from "@mantine/core";
+import { AnchorExternal } from "@/components/private/AnchorExternal";
 import NextLink from "next/link";
 import type { MDXComponents } from "mdx/types";
 import { getAbsoluteURL, isRelativePath } from "./src/utils/path";
@@ -12,7 +12,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return <List listStyleType="disc" {...props} />;
     },
     li(props) {
-      return <Box component="li" {...props} />;
+      return <List.Item component="li" {...props} />;
     },
     pre(props: any) {
       return (
@@ -67,11 +67,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       /**
        * If the link is external, mark it as such.
        */
-      return (
-        <Anchor {...rest} external>
-          {rest.children}
-        </Anchor>
-      );
+      return <AnchorExternal {...rest}>{rest.children}</AnchorExternal>;
     },
   };
 }
