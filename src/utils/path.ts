@@ -1,8 +1,4 @@
-import getConfig from "next/config";
-
-const { publicRuntimeConfig } = getConfig();
-
-export const basePath = publicRuntimeConfig.basePath || "";
+export const basePath = process.env.BASE_PATH || "";
 
 export function getPublicPath(path?: string) {
   return `${basePath}${path}`;
