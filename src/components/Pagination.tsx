@@ -3,11 +3,11 @@ import { Button, Text, Group, Flex, Select } from "@mantine/core";
 import { ChevronRight, ChevronLeft, ChevronsLeft } from "lucide-react";
 import { Icon } from "./private/Icon";
 import type { GSearchResult } from "@globus/sdk/services/search/service/query";
-import { useSearch, useSearchDispatch } from "@/providers/search-provider";
+import { useSearchActions, useSearchContext } from "@/store/search";
 
 export const Pagination = ({ result }: { result?: GSearchResult }) => {
-  const search = useSearch();
-  const dispatch = useSearchDispatch();
+  const search = useSearchContext();
+  const actions = useSearchActions();
 
   if (!result) {
     return null;
@@ -27,10 +27,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
           size="xs"
           defaultValue={`${search.limit}`}
           onChange={(value) => {
-            dispatch({
-              type: "set_limit",
-              payload: value ? parseInt(value) : 25,
-            });
+            actions.setLimit(value ? parseInt(value) : 25);
           }}
           data={[
             { value: "10", label: "10" },
@@ -56,7 +53,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
             size="xs"
             disabled={search.offset === 0}
             onClick={() => {
-              dispatch({ type: "set_offset", payload: 0 });
+              actions.setOffset(0);
             }}
           >
             <Icon component={ChevronsLeft} />
@@ -66,10 +63,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
             size="xs"
             disabled={search.offset === 0}
             onClick={() => {
-              dispatch({
-                type: "set_offset",
-                payload: search.offset - search.limit,
-              });
+              actions.setOffset(search.offset - search.limit);
             }}
           >
             <Icon component={ChevronLeft} />
@@ -81,10 +75,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
               !result.total || search.offset + search.limit >= result.total
             }
             onClick={() => {
-              dispatch({
-                type: "set_offset",
-                payload: search.offset + search.limit,
-              });
+              actions.setOffset(search.offset + search.limit);
             }}
           >
             <Icon component={ChevronRight} />
