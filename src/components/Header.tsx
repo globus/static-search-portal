@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import {
   Flex,
   Stack,
@@ -9,10 +9,12 @@ import {
   Box,
 } from "@mantine/core";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 import { getAttribute } from "../../static";
-import Navigation from "./Navigation";
 import { ColorSchemeToggle } from "./ColorSchemeToggle";
+
+const Navigation = dynamic(() => import("./Navigation"), { ssr: false });
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const LOGO = getAttribute("content.logo");
