@@ -1,5 +1,5 @@
 import React from "react";
-import { Group, Anchor, Button, Text, Avatar, Menu, Box } from "@mantine/core";
+import { Group, Anchor, Button, Text, Avatar, Menu } from "@mantine/core";
 import { AnchorExternal } from "./private/AnchorExternal";
 import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
