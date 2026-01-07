@@ -17,14 +17,16 @@ import {
 } from "@mantine/core";
 import { SearchIcon, CircleQuestionMark } from "lucide-react";
 import { throttle, debounce } from "lodash";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { search as gsearch } from "@globus/sdk";
 import { useGlobusAuth } from "@globus/react-auth-context";
-import type { GSearchResult } from "@globus/sdk/services/search/service/query";
+import type {
+  GSearchRequest,
+  GSearchResult,
+} from "@globus/sdk/services/search/service/query";
 
 import { isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
-import { SearchState, useSearch } from "../providers/search-provider";
 import { getAttribute, isAuthenticationEnabled } from "../../static";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
@@ -33,11 +35,15 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { AnchorExternal } from "./private/AnchorExternal";
 import { Icon } from "./private/Icon";
+import { SearchState, useSearchContext } from "@/store/search";
 
 const SEARCH_INDEX = getAttribute("globus.search.index");
 const FACETS = getAttribute("globus.search.facets", []);
 
-function getSearchPayload(query: string, state: SearchState) {
+function getSearchPayload(
+  query: string,
+  state: SearchState["context"],
+): GSearchRequest {
   return {
     q: query,
     facets: FACETS,
@@ -50,7 +56,7 @@ function getSearchPayload(query: string, state: SearchState) {
 export function Search() {
   const auth = useGlobusAuth();
   const router = useRouter();
-  const search = useSearch();
+  const search = useSearchContext();
   const params = useSearchParams();
 
   const initialQuery = params.get("q") || "";

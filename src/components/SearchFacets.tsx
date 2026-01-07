@@ -1,5 +1,5 @@
 "use client";
-import React, { type ComponentProps, useState } from "react";
+import { type ComponentProps, useState } from "react";
 import {
   Combobox,
   Group,
@@ -15,16 +15,15 @@ import { Check, CirclePlus, X } from "lucide-react";
 import { Icon } from "./private/Icon";
 import { getAttribute } from "../../static";
 
-import {
-  getFacetFieldNameByName,
-  useSearchDispatch,
-  useSearch,
-} from "@/providers/search-provider";
-
 import type {
   GSearchResult,
   GFacetResult,
 } from "@globus/sdk/services/search/service/query";
+import {
+  getFacetFieldNameByName,
+  useSearchActions,
+  useSearchContext,
+} from "@/store/search";
 
 const FACETS = getAttribute("globus.search.facets", []);
 
@@ -34,8 +33,8 @@ export default function SearchFacets({
 }: {
   result?: GSearchResult;
 } & ComponentProps<typeof Box>) {
-  const dispatch = useSearchDispatch();
-  const search = useSearch();
+  const actions = useSearchActions();
+  const search = useSearchContext();
 
   if (FACETS.length === 0 || !result || !result.facet_results) {
     return null;
@@ -44,7 +43,7 @@ export default function SearchFacets({
   const hasFacetFilters = Object.keys(search.facetFilters).length > 0;
 
   const reset = () => {
-    dispatch({ type: "reset_facet_filters" });
+    actions.resetFacetFilters();
   };
 
   return (
@@ -73,8 +72,8 @@ export default function SearchFacets({
 const MAX_DISPLAYED_VALUES = 2;
 
 export function FacetCombobox({ facet }: { facet: GFacetResult }) {
-  const search = useSearch();
-  const dispatch = useSearchDispatch();
+  const search = useSearchContext();
+  const actions = useSearchActions();
   const combobox = useCombobox({
     onDropdownClose: () => {
       combobox.resetSelectedOption();
@@ -102,20 +101,14 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
       payload.value = [...value, val];
     }
 
-    dispatch({
-      type: "set_facet_filter",
-      payload,
-    });
+    actions.setFacetFilter(facet, payload.value);
   };
 
   const handleValueRemove = (val: string) =>
-    dispatch({
-      type: "set_facet_filter",
-      payload: {
-        facet,
-        value: value.filter((v) => v !== val),
-      },
-    });
+    actions.setFacetFilter(
+      facet,
+      value.filter((v) => v !== val),
+    );
 
   const values = value
     .slice(
@@ -219,13 +212,7 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
             variant="subtle"
             color="gray"
             onClick={() => {
-              dispatch({
-                type: "set_facet_filter",
-                payload: {
-                  facet,
-                  value: [],
-                },
-              });
+              actions.setFacetFilter(facet, []);
             }}
             fullWidth
           >
