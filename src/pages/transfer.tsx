@@ -87,7 +87,11 @@ export default function TransferPage() {
         { manager: auth.authorization },
       );
       const data = await response.json();
-      if (response.ok) {
+      if (
+        response.ok &&
+        "DATA_TYPE" in data &&
+        data.DATA_TYPE === "transfer_result"
+      ) {
         transferStore.resetTransferSettings();
         notifications.show({
           title: "Transfer Started",
