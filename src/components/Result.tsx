@@ -265,9 +265,10 @@ function Result({ result }: { result: GMetaResult }) {
             return (
               <Button
                 key={link.href || i}
-                component={Anchor}
+                component="a"
                 href={link.href}
                 size="sm"
+                variant="subtle"
               >
                 {link.label}
               </Button>
