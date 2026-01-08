@@ -1,16 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import {
-  Title,
-  Text,
-  Button,
-  Anchor,
-  Box,
-  Divider,
-  Group,
-  Stack,
-} from "@mantine/core";
+import { Title, Text, Button, Box, Divider, Group, Stack } from "@mantine/core";
 
 import {
   getAttribute,

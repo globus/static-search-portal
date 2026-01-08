@@ -14,7 +14,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     li(props) {
       return <List.Item component="li" {...props} />;
     },
-    pre(props: any) {
+    pre(props) {
       return (
         <Code
           w="100%"

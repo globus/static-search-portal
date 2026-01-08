@@ -11,11 +11,9 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// eslint-disable-next-line import/export
 export * from "@testing-library/react";
-// eslint-disable-next-line import/export
 export const render = (
-  ui: ReactElement<any>,
+  ui: ReactElement,
   options?: Omit<RenderOptions, "wrapper">,
 ) => {
   return _render(ui, { wrapper: Providers, ...options });

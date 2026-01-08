@@ -84,7 +84,6 @@ export function Search() {
           ...getSearchPayload(query, search),
           advanced: isAdvanced,
         },
-        // @ts-expect-error @globus/sdk incorrectly types the `options` object for this method. (https://github.com/globus/globus-sdk-javascript/pull/719)
         headers,
       });
       const results = await response.json();
@@ -186,7 +185,7 @@ export function Search() {
         {isGError(result) && <Error error={result} />}
         {result && result.total > 0 && (
           <Stack py="xs" align="stretch">
-            {result.gmeta?.map((gmeta, i) => (
+            {result.gmeta?.map((gmeta) => (
               <ResultListing key={gmeta.subject} gmeta={gmeta} />
             ))}
           </Stack>

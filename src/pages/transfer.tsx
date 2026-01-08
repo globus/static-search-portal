@@ -128,9 +128,9 @@ export default function TransferPage() {
           <Stack gap="xs">
             <Title order={2}>Transfer Data</Title>
             <Text size="lg">
-              Now that you have selected the data for transfer, you'll need to
-              specify a destination collection, path, and optional label for the
-              transfer.
+              Now that you have selected the data for transfer, you&apos;ll need
+              to specify a destination collection, path, and optional label for
+              the transfer.
             </Text>
           </Stack>
           <SimpleGrid
@@ -158,7 +158,7 @@ export default function TransferPage() {
             <Box>
               {isMultipleCollections && (
                 <Alert color="blue" mb="md">
-                  Since the data you've selected is hosted across multiple
+                  Since the data you&apos;ve selected is hosted across multiple
                   sources ({collections.length}), a transfer task will be
                   created for each source.
                 </Alert>

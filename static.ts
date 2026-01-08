@@ -239,14 +239,14 @@ export function getRedirectUri() {
  * Get a value by key (JSONPath) from the `static.json`.
  * @private
  */
-export function get(key: string, defaultValue?: any) {
+export function get(key: string, defaultValue?: unknown) {
   return _get(STATIC, key, defaultValue);
 }
 /**
  * Get an attribute (`data.attributes` member) by key from the `static.json`.
  * @private
  */
-export function getAttribute(key: string, defaultValue?: any) {
+export function getAttribute(key: string, defaultValue?: unknown) {
   return get(`data.attributes.${key}`, defaultValue);
 }
 
@@ -281,11 +281,14 @@ export async function getValueFromAttribute<T>(
   defaultValue?: T,
 ): Promise<T | undefined> {
   const resolvedKey = getAttribute(key);
+  if (typeof resolvedKey !== "string") {
+    return defaultValue;
+  }
   return await getValueFrom<T>(obj, resolvedKey, defaultValue);
 }
 
 export async function getValueFrom<T>(
-  obj: Record<string, any>,
+  obj: Record<string, unknown>,
   key: string,
   defaultValue?: T,
 ): Promise<T | undefined> {
@@ -296,6 +299,9 @@ export async function getValueFrom<T>(
   if (useJSONata && jsonata && key) {
     const expression = jsonata(key);
     return (await expression.evaluate(obj)) || defaultValue;
+  }
+  if (!key || obj === null || obj === undefined) {
+    return defaultValue;
   }
   return _get(obj, key, defaultValue);
 }
