@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "../../../test-utils";
 import ImageField from "../../../src/components/Fields/ImageField";
 
@@ -9,7 +8,9 @@ describe("ImageField", () => {
   });
 
   it("renders for object src", () => {
-    const { container } = render(<ImageField value={{ src: "/test2.png", alt: "desc" }} />);
+    const { container } = render(
+      <ImageField value={{ src: "/test2.png", alt: "desc" }} />,
+    );
     expect(container.querySelector("img")).toBeInTheDocument();
   });
 

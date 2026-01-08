@@ -26,9 +26,12 @@ import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import Head from "next/head";
 
+declare global {
+  var GLOBUS_SDK_ENVIRONMENT: string | undefined;
+}
+
 const env = getEnvironment();
 if (env) {
-  // @ts-ignore
   globalThis.GLOBUS_SDK_ENVIRONMENT = env;
 }
 

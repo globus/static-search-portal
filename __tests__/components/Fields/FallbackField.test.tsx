@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "../../../test-utils";
 import FallbackField from "../../../src/components/Fields/FallbackField";
 
@@ -11,7 +10,9 @@ describe("FallbackField", () => {
   it("renders primitive values", () => {
     const { getByText } = render(<FallbackField value={42} />);
     expect(getByText("42")).toBeInTheDocument();
-    expect(render(<FallbackField value="foo" />).getByText("foo")).toBeInTheDocument();
+    expect(
+      render(<FallbackField value="foo" />).getByText("foo"),
+    ).toBeInTheDocument();
     // Boolean values are rendered as strings, but may not be found directly
     const { container } = render(<FallbackField value={true} />);
     expect(container.textContent).toContain("true");

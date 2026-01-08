@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Paper } from "@mantine/core";
 import { GlobusEmbedProps } from "../GlobusEmbedField";
 import { useGCSAsset } from "@/hooks/useGlobusAPI";
@@ -24,6 +24,7 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
     async function renderAsset() {
       if (!asset.data) return;
       const contents = await asset.data?.content;
+      if (!contents || !(contents instanceof Blob)) return;
       setBlob(contents);
       setType(asset.data?.contentType ?? undefined);
     }
@@ -31,7 +32,7 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
   }, [asset.data]);
 
   useEffect(() => {
-    if (blob) {
+    if (blob && !objectUrl) {
       const url = URL.createObjectURL(blob);
       setObjectURL(url);
     }
@@ -40,7 +41,7 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
         URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [blob]);
+  }, [blob, objectUrl]);
 
   return (
     objectUrl &&

@@ -10,7 +10,7 @@ import _STATIC from "../../static.json" with { type: "json" };
 
 describe("Result", () => {
   it("renders the result component correctly", async () => {
-    // @ts-expect-error
+    // @ts-expect-error Need to improve the `result` prop type definition
     render(<Result result={result} />);
     await screen.findByText(result.entries[0].content.title);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
@@ -24,7 +24,7 @@ describe("Result", () => {
      */
     _STATIC.data.attributes.components.Result.heading =
       "entries[0].content.purpose";
-    // @ts-expect-error
+    // @ts-expect-error Need to improve the `result` prop type definition
     render(<Result result={result} />);
     await screen.findByText(result.entries[0].content.purpose);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(

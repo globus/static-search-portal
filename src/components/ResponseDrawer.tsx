@@ -1,8 +1,8 @@
-import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Drawer } from "@mantine/core";
+import { PropsWithChildren } from "react";
 
-export default function ResponseDrawer({ children }: { children: any }) {
+export default function ResponseDrawer({ children }: PropsWithChildren) {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
