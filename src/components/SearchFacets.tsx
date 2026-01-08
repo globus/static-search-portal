@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { Check, CirclePlus, X } from "lucide-react";
 import { Icon } from "./private/Icon";
-import { getAttribute } from "../../static";
+import { STATIC } from "../../static";
 
 import type {
   GSearchResult,
@@ -25,7 +25,7 @@ import {
   useSearchContext,
 } from "@/store/search";
 
-const FACETS = getAttribute("globus.search.facets", []);
+const FACETS = STATIC.data.attributes.globus.search.facets || [];
 
 export default function SearchFacets({
   result,

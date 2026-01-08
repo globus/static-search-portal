@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   TextInput,
@@ -12,8 +12,7 @@ import { Search } from "lucide-react";
 import { transfer } from "@globus/sdk";
 
 import { useGlobusAuth } from "@globus/react-auth-context";
-
-export type Endpoint = Record<string, any>;
+import type { EndpointDocument } from "@globus/sdk/services/transfer/service/endpoint";
 
 /**
  * @todo REPLACE WITH COLLECTION SEARCH
@@ -22,19 +21,12 @@ export function CollectionSearch({
   value = null,
   onSelect = () => {},
 }: {
-  value?: Endpoint | null;
-  onSelect: (endpoint: Endpoint) => void;
+  value?: EndpointDocument | null;
+  onSelect: (endpoint: EndpointDocument) => void;
 }) {
   const auth = useGlobusAuth();
-  const [results, setResults] = useState<Endpoint[]>([]);
+  const [results, setResults] = useState<EndpointDocument[]>([]);
   const [selection, setSelection] = useState(value);
-
-  useEffect(() => {
-    setSelection(value);
-    if (value === null) {
-      setResults([]);
-    }
-  }, [value]);
 
   async function handleSearch(e: React.FormEvent<HTMLInputElement>) {
     const query = e.currentTarget.value;
@@ -60,7 +52,7 @@ export function CollectionSearch({
     setResults(data.DATA);
   }
 
-  function handleSelect(endpoint: Endpoint) {
+  function handleSelect(endpoint: EndpointDocument) {
     setSelection(endpoint);
     onSelect(endpoint);
   }
@@ -107,10 +99,9 @@ export function CollectionSearch({
             <Stack gap="xs">
               <Text>{result.display_name || result.name}</Text>
               <List listStyleType="none" size="xs">
-                <List.Item>ID: {result.id}</List.Item>
+                <List.Item>UUID: {result.id}</List.Item>
                 <List.Item>Type: {result.entity_type}</List.Item>
                 <List.Item>Owner: {result.owner_id}</List.Item>
-                <List.Item>Domain: {result.domain || "\u2014"}</List.Item>
                 <List.Item>
                   Description: {result.description || "\u2014"}
                 </List.Item>

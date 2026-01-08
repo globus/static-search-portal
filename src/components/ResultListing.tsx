@@ -11,7 +11,7 @@ import {
   Group,
   Box,
 } from "@mantine/core";
-import { getValueFromAttribute, getAttribute } from "../../static";
+import { getValueFromAttribute, STATIC } from "../../static";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import {
@@ -154,7 +154,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     resolveAttributes();
   }, [gmeta]);
 
-  const fields = getAttribute("components.ResultListing.fields");
+  const fields = STATIC.data.attributes.components?.ResultListing?.fields || [];
 
   return (
     <Card w="full" withBorder>
