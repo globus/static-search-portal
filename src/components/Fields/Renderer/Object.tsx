@@ -11,7 +11,6 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
   const { config, field } = props;
   const { width = "100%", height = "auto" } = config;
 
-  const [blob, setBlob] = useState<Blob>();
   const [objectUrl, setObjectURL] = useState<string>();
   const [type, setType] = useState<string | undefined>(config.mime);
 
@@ -25,23 +24,17 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
       if (!asset.data) return;
       const contents = await asset.data?.content;
       if (!contents || !(contents instanceof Blob)) return;
-      setBlob(contents);
       setType(asset.data?.contentType ?? undefined);
-    }
-    renderAsset();
-  }, [asset.data]);
-
-  useEffect(() => {
-    if (blob && !objectUrl) {
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(contents);
       setObjectURL(url);
     }
+    renderAsset();
     return () => {
       if (objectUrl) {
         URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [blob, objectUrl]);
+  }, [asset.data]);
 
   return (
     objectUrl &&

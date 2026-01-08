@@ -2,12 +2,9 @@
 
 import React, { useEffect } from "react";
 import { Title, Text, Button, Box, Divider, Group, Stack } from "@mantine/core";
+import { get } from "lodash";
 
-import {
-  getAttribute,
-  getValueFrom,
-  getValueFromAttribute,
-} from "../../static";
+import { STATIC, getValueFrom, getValueFromAttribute } from "../../static";
 import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
 import { Field, type FieldDefinition } from "./Field";
@@ -135,7 +132,7 @@ export async function getTransferDetailsFromResult(
   /**
    * The configuration for Globus Transfer found in the `static.json` file.
    */
-  const config = getAttribute("components.Result.globus.transfer");
+  const config = STATIC.data.attributes.components?.Result?.globus?.transfer;
   /**
    * Properties that can be set on the result itself that will take precedence over the configuration.
    */
@@ -197,9 +194,13 @@ function Result({ result }: { result: GMetaResult }) {
         result,
         "components.Result.summary",
       );
-      const fields = getAttribute("components.Result.fields", []);
+      const fields = get(
+        STATIC.data.attributes?.components?.Result,
+        "fields",
+        [],
+      );
       const links = await Promise.all(
-        getAttribute("components.Result.links", []).map(
+        get(STATIC.data.attributes?.components?.Result, "links", []).map(
           async (link: LinkDefinition) => {
             const processedLink: ProcessedLink = {
               label: undefined,

@@ -1,6 +1,5 @@
-import React from "react";
 import { Html, Head, Main, NextScript } from "next/document";
-import { getAttribute } from "../../static";
+import { STATIC } from "../../static";
 
 /**
  * Content Security Policy (CSP) for the portal. This policy attempts to be as strict as possible,
@@ -8,7 +7,7 @@ import { getAttribute } from "../../static";
  *
  * @see https://nextjs.org/docs/pages/building-your-application/configuring/content-security-policy#without-nonces
  */
-const DEFALUT_CSP = `
+const DEFAULT_CSP = `
     default-src 'self';
     connect-src 'self' https://*.globus.org https://*.globuscs.info https://*.globusonline.org;
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
@@ -21,7 +20,10 @@ const DEFALUT_CSP = `
     upgrade-insecure-requests;
 `;
 
-const CSP = getAttribute("contentSecurityPolicy", DEFALUT_CSP);
+const CSP =
+  "contentSecurityPolicy" in STATIC.data.attributes
+    ? STATIC.data.attributes.contentSecurityPolicy
+    : DEFAULT_CSP;
 
 export default function Document() {
   return (
