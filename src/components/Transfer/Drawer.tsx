@@ -144,7 +144,7 @@ export default function TransferDrawer() {
                 will appear here.
               </Alert>
             )}
-            {Object.keys(itemsByCollection).map((collection, i) => (
+            {Object.keys(itemsByCollection).map((collection) => (
               <Paper key={collection} p="sm" withBorder>
                 <Stack>
                   <Title size="sm">

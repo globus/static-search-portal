@@ -129,7 +129,7 @@ type GCSAssetResponse = {
    * During actual rendering a user-provided `renderer` should take precedence over the inferred `renderer`.
    */
   renderer?: Renderers;
-  content: Promise<any>;
+  content: Promise<unknown>;
   /**
    * The `mime` type of the asset set by the user or inferred `mime` type based on the asset response.
    */
