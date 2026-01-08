@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Text, Group, Flex, Select } from "@mantine/core";
 import { ChevronRight, ChevronLeft, ChevronsLeft } from "lucide-react";
 import { Icon } from "./private/Icon";
@@ -17,8 +16,8 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
   const end = Math.min(search.offset + search.limit, result.total);
 
   return (
-    <Flex justify="space-between" align="center" mb={4}>
-      <Group>
+    <Flex justify="space-between" align="center">
+      <Group gap="xs">
         <Text fz="xs" component="label" htmlFor="limit">
           Results per page:
         </Text>
@@ -40,11 +39,14 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
 
       <Group>
         {result.total > 0 ? (
-          <Text>
-            <Text component="b">
+          <Text fz="xs">
+            <Text fw={700} fz="xs" span>
               {start}-{end}
             </Text>{" "}
-            of <Text component="b">{result.total}</Text>
+            of{" "}
+            <Text fw={700} fz="xs" span>
+              {result.total}
+            </Text>
           </Text>
         ) : null}
         <Button.Group>
