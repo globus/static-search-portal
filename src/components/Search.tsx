@@ -113,7 +113,7 @@ export function Search() {
           zIndex: 1,
         }}
       >
-        <Stack>
+        <Stack gap="xs">
           <TextInput
             leftSection={<Icon component={SearchIcon} />}
             defaultValue={initialQuery}
@@ -124,53 +124,52 @@ export function Search() {
               setQuery(e.target.value);
             }, 300)}
           />
-          <Stack>
-            <Group gap="xs">
-              <Checkbox
-                defaultChecked={isAdvanced}
-                onChange={(e) => {
-                  router.push({
-                    query: {
-                      ...router.query,
-                      advanced: e.target.checked,
-                    },
-                  });
-                  setIsAdvanced(e.target.checked);
-                }}
-                label="Use Advanced Search"
-              />
-              <Popover withArrow position="top" width={260}>
-                <Popover.Target>
-                  <ActionIcon
-                    aria-label="Learn More about Advanced Search"
-                    variant="subtle"
-                    color="gray"
+          <Group gap="xs">
+            <Checkbox
+              defaultChecked={isAdvanced}
+              onChange={(e) => {
+                router.push({
+                  query: {
+                    ...router.query,
+                    advanced: e.target.checked,
+                  },
+                });
+                setIsAdvanced(e.target.checked);
+              }}
+              label="Use Advanced Search"
+              size="xs"
+            />
+            <Popover withArrow position="top" width={260}>
+              <Popover.Target>
+                <ActionIcon
+                  aria-label="Learn More about Advanced Search"
+                  variant="subtle"
+                  color="gray"
+                >
+                  <Icon component={CircleQuestionMark} />
+                </ActionIcon>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Stack gap="xs">
+                  <Title order={6}>Using Advanced Search</Title>
+                  <Text fz="sm">
+                    Your query will be sent to Globus Search as an advanced
+                    query and will need to comply with the Globus Search
+                    advanced query syntax.
+                  </Text>
+                  <Text fz="xs" py={2}>
+                    <Code>field:value OR field:other</Code>
+                  </Text>
+                  <AnchorExternal
+                    fz="sm"
+                    href="https://docs.globus.org/api/search/query/#advanced_query_string_syntax"
                   >
-                    <Icon component={CircleQuestionMark} />
-                  </ActionIcon>
-                </Popover.Target>
-                <Popover.Dropdown>
-                  <Stack gap="xs">
-                    <Title order={6}>Using Advanced Search</Title>
-                    <Text fz="sm">
-                      Your query will be sent to Globus Search as an advanced
-                      query and will need to comply with the Globus Search
-                      advanced query syntax.
-                    </Text>
-                    <Text fz="xs" py={2}>
-                      <Code>field:value OR field:other</Code>
-                    </Text>
-                    <AnchorExternal
-                      fz="sm"
-                      href="https://docs.globus.org/api/search/query/#advanced_query_string_syntax"
-                    >
-                      Globus Search Documentation
-                    </AnchorExternal>
-                  </Stack>
-                </Popover.Dropdown>
-              </Popover>
-            </Group>
-          </Stack>
+                    Globus Search Documentation
+                  </AnchorExternal>
+                </Stack>
+              </Popover.Dropdown>
+            </Popover>
+          </Group>
           <SearchFacets result={result} />
           <Pagination result={result} />
           {isLoading && (

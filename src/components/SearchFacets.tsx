@@ -55,11 +55,9 @@ export default function SearchFacets({
       </Group>
       {hasFacetFilters && (
         <Button
-          mt={2}
           size="xs"
           onClick={reset}
           variant="outline"
-          color="gray"
           leftSection={<Icon component={X} />}
         >
           Clear All Filters
@@ -183,7 +181,6 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
               leftSection={<Icon component={CirclePlus} />}
               variant="outline"
               size="xs"
-              color="gray"
             >
               <Group gap="xs">
                 {facet.name}
