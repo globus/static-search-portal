@@ -1,8 +1,8 @@
 import React from "react";
 import NextLink from "next/link";
-import { Link } from "@chakra-ui/react";
+import { Anchor } from "@mantine/core";
 import { isRelativePath } from "@/utils/path";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { AnchorExternal } from "../private/AnchorExternal";
 
 type Value = string;
 
@@ -23,28 +23,10 @@ export default function LinkField({ value }: { value: unknown }) {
      * If the link is relative, use Next.js's `Link` component.
      */
     return (
-      <Link as={NextLink} href={value}>
+      <Anchor component={NextLink} href={value}>
         {value}
-      </Link>
+      </Anchor>
     );
   }
-  return (
-    <Link
-      target="_blank"
-      rel="noopener noreferrer"
-      href={value}
-      position="relative"
-      pr={4}
-      isExternal
-    >
-      {value}
-      <ExternalLinkIcon
-        as="sup"
-        position="absolute"
-        top={0}
-        right={0}
-        fontSize="xs"
-      />
-    </Link>
-  );
+  return <AnchorExternal href={value}>{value}</AnchorExternal>;
 }

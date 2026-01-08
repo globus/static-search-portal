@@ -1,4 +1,4 @@
-import _STATIC from "./static.json";
+import _STATIC from "./static-xpcs.json";
 import { defaultsDeep, get as _get } from "lodash";
 import { ThemeSettings } from "@/theme";
 
@@ -235,38 +235,47 @@ export function getRedirectUri() {
   return `${baseURL}/authenticate`;
 }
 
-/**
- * Get a value by key (JSONPath) from the `static.json`.
- * @private
- */
-export function get(key: string, defaultValue?: any) {
-  return _get(STATIC, key, defaultValue);
-}
-/**
- * Get an attribute (`data.attributes` member) by key from the `static.json`.
- * @private
- */
-export function getAttribute(key: string, defaultValue?: any) {
-  return get(`data.attributes.${key}`, defaultValue);
-}
+type Features = keyof NonNullable<Data["attributes"]["features"]>;
 
 /**
  * Whether or not a feature is enabled in the `static.json`.
  * @private
  */
-export function isFeatureEnabled(key: string, defaultValue?: boolean) {
-  return Boolean(get(`data.attributes.features.${key}`, defaultValue));
+export function isFeatureEnabled(key: Features, defaultValue?: boolean) {
+  return Boolean(attributes.features?.[key] ?? defaultValue);
 }
 /**
  * @private
  */
 export function withFeature<T>(
-  key: string,
+  key: Features,
   a: () => T,
   b: () => T | null = () => null,
 ) {
   return isFeatureEnabled(key) ? a() : b();
 }
+
+/**
+ * Whether or not the Globus Transfer is enabled based on the state of the `static.json`.
+ */
+export const isTransferEnabled = Boolean(
+  isFeatureEnabled("transfer") ||
+    attributes.components?.Result?.globus?.transfer,
+);
+
+/**
+ * Whether or not a user can "Sign In" to the portal.
+ * If Transfer functionality is enabled (`isTransferEnabled`), then authentication is enabled.
+ */
+export const isAuthenticationEnabled =
+  isTransferEnabled || isFeatureEnabled("authentication");
+
+export const areSEOResultsEnabled = isFeatureEnabled("seo_results");
+
+export const METADATA = {
+  title: attributes.metadata?.title || "Search Portal",
+  description: attributes.metadata?.description || "",
+};
 
 let jsonata: typeof import("jsonata") | null = null;
 
@@ -280,12 +289,15 @@ export async function getValueFromAttribute<T>(
   key: string,
   defaultValue?: T,
 ): Promise<T | undefined> {
-  const resolvedKey = getAttribute(key);
+  const resolvedKey = _get(STATIC.data.attributes, key);
+  if (typeof resolvedKey !== "string") {
+    return defaultValue;
+  }
   return await getValueFrom<T>(obj, resolvedKey, defaultValue);
 }
 
 export async function getValueFrom<T>(
-  obj: Record<string, any>,
+  obj: Record<string, unknown>,
   key: string,
   defaultValue?: T,
 ): Promise<T | undefined> {
@@ -297,29 +309,8 @@ export async function getValueFrom<T>(
     const expression = jsonata(key);
     return (await expression.evaluate(obj)) || defaultValue;
   }
+  if (!key || obj === null || obj === undefined) {
+    return defaultValue;
+  }
   return _get(obj, key, defaultValue);
 }
-
-/**
- * Whether or not the Globus Transfer is enabled based on the state of the `static.json`.
- */
-export const isTransferEnabled = Boolean(
-  getAttribute(
-    "features.transfer",
-    getAttribute("components.Result.globus.transfer"),
-  ),
-);
-
-/**
- * Whether or not a user can "Sign In" to the portal.
- * If Transfer functionality is enabled (`isTransferEnabled`), then authentication is enabled.
- */
-export const isAuthenticationEnabled =
-  isTransferEnabled || isFeatureEnabled("authentication");
-
-export const areSEOResultsEnabled = isFeatureEnabled("seo_results");
-
-export const METADATA = {
-  title: getAttribute("metadata.title", "Search Portal"),
-  description: getAttribute("metadata.description", ""),
-};

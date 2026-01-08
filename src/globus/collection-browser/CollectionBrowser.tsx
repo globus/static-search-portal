@@ -1,44 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
-  Input,
-  InputGroup,
-  InputRightAddon,
-  Icon,
-  List,
-  ListItem,
-  Card,
-  CardHeader,
-  Stack,
-  CardBody,
-  Text,
-  InputRightElement,
+  TextInput,
   Button,
-} from "@chakra-ui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+  Text,
+  Stack,
+  List,
+  Paper,
+} from "@mantine/core";
+import { Search } from "lucide-react";
 import { transfer } from "@globus/sdk";
 
 import { useGlobusAuth } from "@globus/react-auth-context";
+import type { EndpointDocument } from "@globus/sdk/services/transfer/service/endpoint";
 
-export type Endpoint = Record<string, any>;
-
+/**
+ * @todo REPLACE WITH COLLECTION SEARCH
+ */
 export function CollectionSearch({
   value = null,
   onSelect = () => {},
 }: {
-  value?: Endpoint | null;
-  onSelect: (endpoint: Endpoint) => void;
+  value?: EndpointDocument | null;
+  onSelect: (endpoint: EndpointDocument) => void;
 }) {
   const auth = useGlobusAuth();
-  const [results, setResults] = useState<Endpoint[]>([]);
+  const [results, setResults] = useState<EndpointDocument[]>([]);
   const [selection, setSelection] = useState(value);
-
-  useEffect(() => {
-    setSelection(value);
-    if (value === null) {
-      setResults([]);
-    }
-  }, [value]);
 
   async function handleSearch(e: React.FormEvent<HTMLInputElement>) {
     const query = e.currentTarget.value;
@@ -64,63 +52,62 @@ export function CollectionSearch({
     setResults(data.DATA);
   }
 
-  function handleSelect(endpoint: Endpoint) {
+  function handleSelect(endpoint: EndpointDocument) {
     setSelection(endpoint);
     onSelect(endpoint);
   }
 
   if (selection) {
     return (
-      <InputGroup>
-        <Input value={selection.display_name || selection.name} readOnly />
-        <InputRightElement width="4.5rem">
-          <Button h="1.75rem" size="sm" onClick={() => setSelection(null)}>
+      <TextInput
+        label="Collection"
+        value={selection.display_name || selection.name}
+        readOnly
+        style={{ flex: 1 }}
+        rightSectionWidth={80}
+        rightSection={
+          <Button size="xs" variant="subtle" onClick={() => setSelection(null)}>
             Clear
           </Button>
-        </InputRightElement>
-      </InputGroup>
+        }
+      />
     );
   }
 
   return (
     <Stack>
-      <Box position="sticky" top="0" zIndex={1} bgColor="white">
-        <InputGroup>
-          <Input
-            onInput={(e) => handleSearch(e)}
-            placeholder="e.g. Globus Tutorial Collection"
-          />
-          <InputRightAddon>
-            <Icon as={MagnifyingGlassIcon} />
-          </InputRightAddon>
-        </InputGroup>
+      <Box
+        style={{ position: "sticky", top: 0, zIndex: 1, background: "white" }}
+      >
+        <TextInput
+          label="Collection"
+          onInput={(e) => handleSearch(e as React.FormEvent<HTMLInputElement>)}
+          placeholder="e.g. Globus Tutorial Collection"
+          style={{ flex: 1 }}
+          rightSection={<Search width={16} height={16} />}
+        />
       </Box>
-      <Stack maxH="400px" overflowY="auto">
+      <Stack style={{ maxHeight: 400, overflowY: "auto" }}>
         {results.map((result) => (
-          <Card
-            size="sm"
-            variant="outline"
+          <Paper
             key={result.id}
+            withBorder
+            style={{ cursor: "pointer" }}
             onClick={() => handleSelect(result)}
-            _hover={{ cursor: "pointer", borderColor: "blue.500" }}
+            p="xs"
           >
-            <CardHeader pb={0}>
+            <Stack gap="xs">
               <Text>{result.display_name || result.name}</Text>
-              <Text fontSize="xs">{result.entity_type}</Text>
-            </CardHeader>
-            <CardBody>
-              <List fontSize="xs">
-                <ListItem>ID: {result.id}</ListItem>
-                <ListItem>Owner: {result.owner_id}</ListItem>
-                <ListItem>Domain: {result.domain || "\u2014"}</ListItem>
-                <ListItem>
-                  <Text noOfLines={1}>
-                    Description: {result.description || "\u2014"}
-                  </Text>
-                </ListItem>
+              <List listStyleType="none" size="xs">
+                <List.Item>UUID: {result.id}</List.Item>
+                <List.Item>Type: {result.entity_type}</List.Item>
+                <List.Item>Owner: {result.owner_id}</List.Item>
+                <List.Item>
+                  Description: {result.description || "\u2014"}
+                </List.Item>
               </List>
-            </CardBody>
-          </Card>
+            </Stack>
+          </Paper>
         ))}
       </Stack>
     </Stack>

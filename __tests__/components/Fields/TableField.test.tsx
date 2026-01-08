@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "../../../test-utils";
 import TableField from "../../../src/components/Fields/TableField";
 
