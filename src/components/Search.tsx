@@ -27,7 +27,7 @@ import type {
 
 import { isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
-import { getAttribute, isAuthenticationEnabled } from "../../static";
+import { STATIC, isAuthenticationEnabled } from "../../static";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";
@@ -37,8 +37,8 @@ import { AnchorExternal } from "./private/AnchorExternal";
 import { Icon } from "./private/Icon";
 import { SearchState, useSearchContext } from "@/store/search";
 
-const SEARCH_INDEX = getAttribute("globus.search.index");
-const FACETS = getAttribute("globus.search.facets", []);
+const SEARCH_INDEX = STATIC.data.attributes.globus.search.index;
+const FACETS = STATIC.data.attributes.globus.search.facets || [];
 
 function getSearchPayload(
   query: string,

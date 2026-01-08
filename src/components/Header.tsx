@@ -11,19 +11,16 @@ import {
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-import { getAttribute } from "../../static";
+import { STATIC } from "../../static";
 import { ColorSchemeToggle } from "./ColorSchemeToggle";
 
 const Navigation = dynamic(() => import("./Navigation"), { ssr: false });
 
-const SEARCH_INDEX = getAttribute("globus.search.index");
-const LOGO = getAttribute("content.logo");
-const HEADLINE = getAttribute(
-  "content.headline",
-  `Search Index ${SEARCH_INDEX}`,
-);
-
-const IMAGE = getAttribute("content.image", null);
+const SEARCH_INDEX = STATIC.data.attributes.globus.search.index;
+const LOGO = STATIC.data.attributes.content?.logo;
+const HEADLINE =
+  STATIC.data.attributes.content?.headline || `Search Index ${SEARCH_INDEX}`;
+const IMAGE = STATIC.data.attributes.content?.image || null;
 
 export default function Header() {
   const ref = useRef<HTMLDivElement>(null);

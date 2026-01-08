@@ -9,11 +9,11 @@ import "@mantine/notifications/styles.css";
 import {
   getEnvironment,
   getRedirectUri,
-  getAttribute,
   isTransferEnabled,
   isAuthenticationEnabled,
   isFeatureEnabled,
   METADATA,
+  STATIC,
 } from "../../static";
 
 import {
@@ -38,7 +38,7 @@ if (env) {
 info.addClientInfo(CLIENT_INFO);
 
 const redirect = getRedirectUri();
-const client = getAttribute("globus.application.client_id");
+const client = STATIC.data.attributes.globus.application?.client_id;
 const storage = isFeatureEnabled("useLocalStorage")
   ? globalThis.localStorage
   : undefined;
@@ -52,7 +52,7 @@ const scopes = [
     ? "urn:globus:auth:scope:transfer.api.globus.org:all"
     : null,
 ]
-  .concat(getAttribute("globus.application.scopes", []))
+  .concat(STATIC.data.attributes.globus.application?.scopes || [])
   .filter(Boolean)
   .join(" ");
 

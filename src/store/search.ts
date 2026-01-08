@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
-import { Static, getAttribute } from "../../static";
+import { STATIC, Static } from "../../static";
 
 import type { GFacetResult } from "@globus/sdk/services/search/service/query";
 
-const FACETS = getAttribute("globus.search.facets", []);
+const FACETS = STATIC.data.attributes.globus.search.facets || [];
 type Facet = NonNullable<
   Static["data"]["attributes"]["globus"]["search"]["facets"]
 >[0];
