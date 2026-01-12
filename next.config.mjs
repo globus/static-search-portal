@@ -19,8 +19,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  publicRuntimeConfig: {
-    basePath: `${STATIC._static?.host?.base_path || ""}`,
+  env: {
+    BASE_PATH: STATIC._static?.host?.base_path || "",
   },
 };
 

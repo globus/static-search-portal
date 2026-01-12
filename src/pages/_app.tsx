@@ -3,14 +3,17 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "../providers/theme-provider";
 import { info } from "@globus/sdk";
 
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+
 import {
   getEnvironment,
   getRedirectUri,
-  getAttribute,
   isTransferEnabled,
   isAuthenticationEnabled,
   isFeatureEnabled,
   METADATA,
+  STATIC,
 } from "../../static";
 
 import {
@@ -23,16 +26,19 @@ import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import Head from "next/head";
 
+declare global {
+  var GLOBUS_SDK_ENVIRONMENT: string | undefined;
+}
+
 const env = getEnvironment();
 if (env) {
-  // @ts-ignore
   globalThis.GLOBUS_SDK_ENVIRONMENT = env;
 }
 
 info.addClientInfo(CLIENT_INFO);
 
 const redirect = getRedirectUri();
-const client = getAttribute("globus.application.client_id");
+const client = STATIC.data.attributes.globus.application?.client_id;
 const storage = isFeatureEnabled("useLocalStorage")
   ? globalThis.localStorage
   : undefined;
@@ -46,7 +52,7 @@ const scopes = [
     ? "urn:globus:auth:scope:transfer.api.globus.org:all"
     : null,
 ]
-  .concat(getAttribute("globus.application.scopes", []))
+  .concat(STATIC.data.attributes.globus.application?.scopes || [])
   .filter(Boolean)
   .join(" ");
 

@@ -32,7 +32,19 @@
           "src": "https://www.usgs.gov/themes/custom/usgs_tantalum/usgs_logo.png",
           "alt": "USGS – science for a changing world"
         },
-        "headline": "ScienceBase Data Releases"
+        "headline": "ScienceBase Data Releases",
+        "navigation": {
+          "items": [
+            {
+              "label": "Home",
+              "href": "/"
+            },
+            {
+              "label": "About",
+              "href": "/about"
+            }
+          ]
+        }
       },
       "components": {
         "Result": {

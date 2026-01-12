@@ -1,17 +1,6 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  HStack,
-  Link,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Text,
-} from "@chakra-ui/react";
-import { ChevronDownIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+import { Group, Anchor, Button, Text, Avatar, Menu } from "@mantine/core";
+import { AnchorExternal } from "./private/AnchorExternal";
 import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
 
@@ -55,9 +44,9 @@ const NAVIGATION = {
 const NavigationItemLink = (props: NavigationItem) => {
   if ("to" in props) {
     return (
-      <Link as={NextLink} href={props.to}>
+      <Anchor component={NextLink} href={props.to}>
         {props.label}
-      </Link>
+      </Anchor>
     );
   }
 
@@ -66,30 +55,19 @@ const NavigationItemLink = (props: NavigationItem) => {
    */
   const isExternal = props.href.startsWith("http");
   if (!isExternal) {
-    return <Link href={props.href}>{props.label}</Link>;
+    return <Anchor href={props.href}>{props.label}</Anchor>;
   }
 
-  return (
-    <Link href={props.href} position="relative" pr={4} isExternal>
-      {props.label}{" "}
-      <ExternalLinkIcon
-        as="sup"
-        position="absolute"
-        top={0}
-        right={0}
-        fontSize="xs"
-      />
-    </Link>
-  );
+  return <AnchorExternal href={props.href}>{props.label}</AnchorExternal>;
 };
 
 export default function Navigation() {
   const auth = useGlobusAuth();
   const nav = NAVIGATION;
   return (
-    <HStack justify="space-between" fontSize="md">
-      <HStack py={2} px={4}>
-        <HStack as="nav" spacing={4} textColor="white">
+    <Group fz="md">
+      <Group py={2} px={4}>
+        <Group component="nav" gap="xs">
           {nav.items
             .filter((item) => {
               if (!item.authenticated) {
@@ -98,18 +76,14 @@ export default function Navigation() {
               return auth.isAuthenticated;
             })
             .map((item, index) => (
-              <Box key={index} fontWeight={500} p={2}>
-                <NavigationItemLink {...item} />
-              </Box>
+              <NavigationItemLink key={index} {...item} />
             ))}
-        </HStack>
+        </Group>
         {withFeature("authentication", () => (
-          <Box>
-            <Authentication />
-          </Box>
+          <Authentication />
         ))}
-      </HStack>
-    </HStack>
+      </Group>
+    </Group>
   );
 }
 
@@ -120,35 +94,39 @@ export function Authentication() {
   return (
     <>
       {auth.isAuthenticated && user ? (
-        <>
-          <HStack as="nav" spacing={4}>
-            <TransferDrawer />
-            <Menu placement="bottom-end">
-              <MenuButton
-                colorScheme="gray"
-                size="sm"
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
+        <Group component="nav" gap="xs">
+          <TransferDrawer />
+          <Menu
+            withArrow
+            width={300}
+            position="bottom"
+            transitionProps={{ transition: "pop" }}
+            withinPortal
+          >
+            <Menu.Target>
+              <Button size="sm">{user.preferred_username}</Button>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Group gap="sm" px="xs" py="sm">
+                <Avatar radius="xs" name={user.name} color="initials" />
+                <div>
+                  <Text fw={500}>{user.name}</Text>
+                  <Text size="xs" c="dimmed">
+                    {user.email}
+                  </Text>
+                  <Text fz="xs">{user.organization}</Text>
+                </div>
+              </Group>
+              <Menu.Item
+                onClick={async () => await auth.authorization?.revoke()}
               >
-                {user?.preferred_username}
-              </MenuButton>
-              <MenuList zIndex={2}>
-                <Box px={2} textAlign="right">
-                  <Text>{user?.name}</Text>
-                  <Text fontSize="sm">{user?.organization}</Text>
-                </Box>
-                <MenuDivider />
-                <MenuItem
-                  onClick={async () => await auth.authorization?.revoke()}
-                >
-                  Log Out
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </HStack>
-        </>
+                Log Out
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
       ) : (
-        <Button size="sm" onClick={login} colorScheme="blue">
+        <Button size="sm" onClick={login}>
           Sign In
         </Button>
       )}

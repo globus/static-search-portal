@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { get } from "lodash";
-import { Heading, Box } from "@chakra-ui/react";
+import { Title, Box } from "@mantine/core";
 import jsonata from "jsonata";
 
 import GlobusEmbedField from "./Fields/GlobusEmbedField";
@@ -129,11 +129,11 @@ export const Field = ({
     return null;
   }
   return (
-    <Box my="2">
+    <Box>
       {processedField.label && (
-        <Heading as="h2" size="sm" my={2}>
+        <Title order={2} size="h4">
           {processedField.label}
-        </Heading>
+        </Title>
       )}
       <FieldValue field={processedField} />
     </Box>
