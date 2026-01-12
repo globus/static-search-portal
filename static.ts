@@ -1,203 +1,204 @@
-import _STATIC from "./static.json";
-import { defaultsDeep, get as _get } from "lodash";
-import { ThemeSettings } from "@/theme";
+import _STATIC from "./static.json" assert { type: "json" };
+import { z } from "zod";
+import { get as _get } from "lodash";
+import { ThemeSchema } from "@/theme";
 
-import type { ResultListingComponentOptions } from "@/components/ResultListing";
-import type { ResultComponentOptions } from "@/components/Result";
-import { NavigationOptions } from "@/components/Navigation";
+import { ResultListingOptionsSchema } from "@/components/ResultListing";
+import { ResultOptionsSchema } from "@/components/Result";
+import { NavigationOptionsSchema } from "@/components/Navigation";
 
-/**
- * The base type for a `static.json` file.
- */
-export type Base = {
-  _static: {
-    generator: {
-      /**
-       * The name of the generator used to build the `static.json` file.
-       * This should be a reference to the package name of the generator.
-       * @example "@globus/static-data-portal"
-       */
-      name: string;
-    };
+const Static = z.object({
+  _static: z.object({
+    generator: z.object({
+      name: z.string(),
+    }),
+    host: z
+      .object({
+        base_url: z.string(),
+        origin: z.string(),
+        host: z.string(),
+        base_path: z.string(),
+      })
+      .optional(),
+  }),
+  data: z.object({
     /**
-     * GitHub Action-injected environment variables.
-     * @see https://github.com/from-static/actions
+     * The version of the `data` object, which is used to determine how
+     * the generator will render its `attributes`.
+     * @example "1.0.0"
      */
-    host?: {
-      base_url: string;
-      origin: string;
-      host: string;
-      base_path: string;
-    };
-  };
-  data: {
-    version: string;
-    attributes: Record<string, unknown>;
-  };
-};
+    version: z.string(),
+    attributes: z.object(),
+  }),
+});
 
 /**
  * The type used for `data` by the [@globus/static-search-portal generator](https://github.com/globus/static-search-portal).
  */
-export type Data = {
-  /**
-   * The version of the `data` object, which is used to determine how
-   * the generator will render its `attributes`.
-   * @example "1.0.0"
-   */
-  version: string;
-  attributes: {
-    features?: {
-      /**
-       * Enable JSONata support for processing the `static.json` file.
-       * @see https://jsonata.org/
-       */
-      jsonata?: boolean;
-      /**
-       * Enable the Globus Auth functionality in the portal.
-       */
-      authentication?: boolean;
-      /**
-       * Force users to authenticate before accessing the portal, regardless of whether or not the
-       * configured Globus Index is private.
-       */
-      requireAuthentication?: boolean;
-      /**
-       * Enables the Globus Transfer functionality in the portal.
-       */
-      transfer?: boolean;
-      /**
-       * Whether or not authorization data should be stored in LocalStorage
-       */
-      useLocalStorage?: boolean;
-      /**
-       * Enable SEO results in the portal; This feature is not yet available.
-       * @private
-       */
-      seo_results?: boolean;
-    };
-
-    theme?: ThemeSettings;
-
-    metadata?: {
-      title?: string;
-      description?: string;
-    };
-
+const Data = z.object({
+  version: z.union([z.literal("1.0.0")]).default("1.0.0"),
+  attributes: z.object({
+    features: z
+      .object({
+        /**
+         * Enable JSONata support for processing the `static.json` file.
+         * @see https://jsonata.org/
+         */
+        jsonata: z.boolean().optional().default(false),
+        /**
+         * Enable the Globus Auth functionality in the portal.
+         */
+        authentication: z
+          .boolean()
+          .optional()
+          /**
+           * If a Globus Auth client ID is provided, `authentication` is enabled by default.
+           */
+          .default(
+            Boolean(_STATIC.data.attributes?.globus?.application?.client_id),
+          ),
+        /**
+         * Force users to authenticate before accessing the portal, regardless of whether or not the
+         * configured Globus Index is private.
+         */
+        requireAuthentication: z.boolean().optional().default(false),
+        /**
+         * Enables the Globus Transfer functionality in the portal.
+         */
+        transfer: z.boolean().optional().default(false),
+        /**
+         * Whether or not authorization data should be stored in LocalStorage
+         */
+        useLocalStorage: z.boolean().optional().default(false),
+        /**
+         * Enable SEO results in the portal; This feature is not yet available.
+         * @private
+         */
+        seoResults: z.boolean().optional().default(false),
+      })
+      .optional(),
+    theme: ThemeSchema.optional(),
+    metadata: z
+      .object({
+        title: z.string().optional(),
+        description: z.string().optional(),
+      })
+      .optional(),
     /**
      * The Content Security Policy (CSP) for the portal that will be included in a `<meta>` tag.
      * If no value is provided, a default CSP will be used.
      * If `false` is provided as the value, no CSP `<meta>` tag will be included.
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
      */
-    contentSecurityPolicy?: string | false;
-
-    content?: {
-      headline?: string;
-      /**
-       * The URL of the portal's header image.
-       */
-      image?: string;
-      logo?: {
-        src: string;
-        alt?: string;
-      };
-      navigation?: NavigationOptions;
-    };
-
-    components?: {
-      Result?: ResultComponentOptions;
-      ResultListing?: ResultListingComponentOptions;
-    };
-
-    globus: {
+    contentSecurityPolicy: z.union([z.string(), z.literal(false)]).optional(),
+    content: z
+      .object({
+        headline: z.string().optional(),
+        /**
+         * The URL of the portal's header image.
+         */
+        image: z.string().optional(),
+        logo: z
+          .object({
+            src: z.string(),
+            alt: z.string().optional(),
+          })
+          .optional(),
+        navigation: NavigationOptionsSchema.optional(),
+      })
+      .optional(),
+    components: z
+      .object({
+        Result: ResultOptionsSchema.optional(),
+        ResultListing: ResultListingOptionsSchema.optional(),
+        Navigation: NavigationOptionsSchema.optional(),
+      })
+      .optional()
+      .transform((obj) => {
+        return {
+          ...obj,
+          Result: {
+            heading: obj?.ResultListing?.heading || "subject",
+            summary: obj?.ResultListing?.summary || undefined,
+            ...obj?.Result,
+          },
+          ResultListing: {
+            heading: obj?.Result?.heading || "subject",
+            summary: obj?.Result?.summary || undefined,
+            ...obj?.ResultListing,
+          },
+        };
+      }),
+    globus: z.object({
       /**
        * The Globus platform environment.
        * @private
        */
-      environment?: string;
+      environment: z.string().optional(),
       /**
        * Information about your registered Globus Auth Application (Client)
        * @see https://docs.globus.org/api/auth/developer-guide/#developing-apps
        */
-      application?: {
+      application: z
+        .object({
+          /**
+           * The UUID of the client application.
+           */
+          client_id: z.string(),
+          /**
+           * The redirect URI for the Globus Auth login page to complete the OAuth2 flow.
+           * The portal will make a reasonable effort to determine this URI, but this field is provided as a fallback.
+           * To use the portal's built-in authorization handling, redirects should be sent to `/authenticate` on the host.
+           * @example "https://example.com/data-portal/authenticate"
+           */
+          redirect_uri: z.string().optional(),
+          /**
+           * Additional scopes to request from the Globus Auth service when authenticating.
+           */
+          scopes: z.array(z.string()).optional(),
+        })
+        .optional(),
+      search: z.object({
         /**
-         * The UUID of the client application.
+         * Configuration for Search-related functionality in the portal.
          */
-        client_id: string;
-        /**
-         * The redirect URI for the Globus Auth login page to complete the OAuth2 flow.
-         * The portal will make a reasonable effort to determine this URI, but this field is provided as a fallback.
-         * To use the portal's built-in authorization handling, redirects should be sent to `/authenticate` on the host.
-         * @example "https://example.com/data-portal/authenticate"
-         */
-        redirect_uri?: string;
-        /**
-         * Additional scopes to request from the Globus Auth service when authenticating.
-         */
-        scopes?: string[];
-      };
-      /**
-       * Configuration for Search-related functionality in the portal.
-       */
-      search: {
+        index: z.string(),
         /**
          * The UUID of the Globus Search Index that will be used as the data source.
          */
-        index: string;
-        facets?: {
-          name?: string;
-          field_name: string;
-          type: string;
-          size: number;
-        }[];
-      };
-    };
-  };
+        facets: z
+          .array(
+            z.object({
+              name: z.string().optional(),
+              field_name: z.string(),
+              type: z.string().optional(),
+            }),
+          )
+          .optional(),
+      }),
+    }),
+  }),
+});
+
+export type Static = z.infer<typeof Static> & {
+  data: z.infer<typeof Data>;
 };
 
-export type Static = Base & {
-  data: Data;
-};
+const GeneratorSchema = Static.extend({
+  data: Data,
+});
+
+const result = GeneratorSchema.safeParse(_STATIC);
+
+if (result.error) {
+  z.prettifyError(result.error);
+}
 
 /**
  * Reference to the `static.json` file.
  * @private
  */
-export const STATIC: Static = _STATIC;
-
-defaultsDeep(STATIC, {
-  data: {
-    attributes: {
-      features: {
-        /**
-         * If a Globus Auth client ID is provided, `authentication` is enabled by default.
-         */
-        authentication: Boolean(
-          STATIC.data.attributes?.globus?.application?.client_id,
-        ),
-      },
-      components: {
-        /**
-         * For `summary` and `heading` properties the `Result` and `ResultListing` components
-         * fallback to one another if not provided...
-         */
-        Result: {
-          heading:
-            STATIC.data.attributes?.components?.ResultListing?.heading ||
-            "subject",
-          summary:
-            STATIC.data.attributes?.components?.ResultListing?.summary || null,
-        },
-        ResultListing: {
-          heading:
-            STATIC.data.attributes?.components?.Result?.heading || "subject",
-          summary: STATIC.data.attributes?.components?.Result?.summary || null,
-        },
-      },
-    },
-  },
-});
+export const STATIC = GeneratorSchema.parse(_STATIC);
 
 const {
   data: { attributes },
@@ -226,7 +227,7 @@ export function getRedirectUri() {
   }
   /**
    * If all else fails, try to construct the redirect URI from the current location.
-   * The fallback here is mostly to account for SSR.
+   * The fallback here is mostly to accoun`t` for SSR.
    * @todo This could likely be configured to get `basePath` and host information for the Next.js configuration or environment.
    */
   const baseURL = globalThis.location
@@ -235,7 +236,9 @@ export function getRedirectUri() {
   return `${baseURL}/authenticate`;
 }
 
-type Features = keyof NonNullable<Data["attributes"]["features"]>;
+type Features = keyof NonNullable<
+  z.infer<typeof Data>["attributes"]["features"]
+>;
 
 /**
  * Whether or not a feature is enabled in the `static.json`.
@@ -270,7 +273,7 @@ export const isTransferEnabled = Boolean(
 export const isAuthenticationEnabled =
   isTransferEnabled || isFeatureEnabled("authentication");
 
-export const areSEOResultsEnabled = isFeatureEnabled("seo_results");
+export const areSEOResultsEnabled = isFeatureEnabled("seoResults");
 
 export const METADATA = {
   title: attributes.metadata?.title || "Search Portal",

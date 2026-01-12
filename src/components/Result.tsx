@@ -7,79 +7,90 @@ import { get } from "lodash";
 import { STATIC, getValueFrom, getValueFromAttribute } from "../../static";
 import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
-import { Field, type FieldDefinition } from "./Field";
+import { Field, FieldSchema, type FieldDefinition } from "./Field";
 import { JSONTree } from "./JSONTree";
 import ResponseDrawer from "./ResponseDrawer";
 import AddToTransferList from "./AddToTransferList";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
+import z from "zod";
 
-type LinkDefinition = {
-  /**
-   * The label that will be rendered as the link text.
-   */
-  label: string | { property: string; fallback?: string };
-  /**
-   * The location that will be used as the `href` for the link.
-   */
-  href:
-    | string
-    | {
-        property: string;
-        /**
-         * A fallback value that will be used if the property is not found.
-         */
-        fallback?: string;
-      };
-};
-
-export type GlobusTransferOptions = {
-  type?:
-    | string
-    | {
+type GlobusTransferOptions = z.infer<typeof GlobusTransferOptionsSchema>;
+const GlobusTransferOptionsSchema = z.object({
+  type: z
+    .union([
+      z.string(),
+      z.object({
         /**
          * `property` can be used to reference a value from the result (subject) using JSONata.
          */
-        property: string;
-      };
+        property: z.string(),
+      }),
+    ])
+    .optional(),
   /**
    * The collection that will be used as the `source_endpoint` for the transfer.
    */
-  collection:
-    | string
-    | {
-        /**
-         * `property` can be used to reference a value from the result (subject) using JSONata.
-         */
-        property: string;
-      };
+  collection: z.union([
+    z.string(),
+    z.object({
+      /**
+       * `property` can be used to reference a value from the result (subject) using JSONata.
+       */
+      property: z.string(),
+    }),
+  ]),
   /**
    * The path that will be used as the `source_path` for the transfer.
    */
-  path:
-    | string
-    | {
-        /**
-         * `property` can be used to reference a value from the result (subject) using JSONata.
-         */
-        property: string;
-      };
-};
+  path: z.union([
+    z.string(),
+    z.object({
+      /**
+       * `property` can be used to reference a value from the result (subject) using JSONata.
+       */
+      property: z.string(),
+    }),
+  ]),
+});
 
-export type ResultComponentOptions = {
+const LinkSchema = z.object({
+  /**
+   * The label that will be rendered as the link text.
+   */
+  label: z.union([
+    z.string(),
+    z.object({
+      property: z.string(),
+      fallback: z.string().optional(),
+    }),
+  ]),
+  /**
+   * The location that will be used as the `href` for the link.
+   */
+  href: z.union([
+    z.string(),
+    z.object({
+      property: z.string(),
+      fallback: z.string().optional(),
+    }),
+  ]),
+});
+
+export const ResultOptionsSchema = z.object({
   /**
    * The field to use as the title for the result.
    * @default "subject"
    * @example "entries[0].content.title"
    * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
    */
-  heading?: string;
+  heading: z.string().optional().default("subject"),
   /**
    * The field to use as the summary for the result.
    * @example "entries[0].content.summary"
    * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
    */
-  summary?: string;
+  summary: z.string().optional(),
   /**
    * The fields to display in the result.
    * A field can be a string, an object with a `label` and `property`, or an object with a `label` and `value`.
@@ -92,15 +103,16 @@ export type ResultComponentOptions = {
    *    { label: "Note", value: "Lorem ipsum dolor sit amet."}
    * ]
    */
-  fields?: FieldDefinition[];
-  links?: LinkDefinition[];
-  globus?: {
-    /**
-     * Enables Globus Transfer UI for the result.
-     */
-    transfer?: GlobusTransferOptions;
-  };
-};
+  fields: z.array(FieldSchema).optional(),
+  links: z.array(LinkSchema).optional(),
+  globus: z
+    .object({
+      tranfer: GlobusTransferOptionsSchema.optional(),
+    })
+    .optional(),
+});
+
+export type ResultComponentOptions = z.infer<typeof ResultOptionsSchema>;
 
 type ProcessedLink = {
   label: string | undefined;
@@ -201,7 +213,7 @@ function Result({ result }: { result: GMetaResult }) {
       );
       const links = await Promise.all(
         get(STATIC.data.attributes?.components?.Result, "links", []).map(
-          async (link: LinkDefinition) => {
+          async (link: z.infer<typeof LinkSchema>) => {
             const processedLink: ProcessedLink = {
               label: undefined,
               href: undefined,

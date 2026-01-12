@@ -5,7 +5,7 @@ import { areSEOResultsEnabled } from "../../static";
 export function getResultLink(subject: string) {
   const urlSafeSubject = encodeURIComponent(subject);
   /**
-   * If `features.seo_results` is enabled, we'll use the build-time generated result pages.
+   * If `features.seoResults` is enabled, we'll use the build-time generated result pages.
    */
   return areSEOResultsEnabled
     ? `/results/${urlSafeSubject}`

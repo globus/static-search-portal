@@ -1,28 +1,33 @@
-import React from "react";
 import { Group, Anchor, Button, Text, Avatar, Menu } from "@mantine/core";
 import { AnchorExternal } from "./private/AnchorExternal";
 import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
+import { z } from "zod";
 
 import { STATIC, withFeature } from "../../static";
 import TransferDrawer from "./Transfer/Drawer";
 import { useLogin } from "@/hooks/useOAuth";
 
-export type NavigationItem =
-  | {
-      label: string;
-      to: string;
-      authenticated?: boolean;
-    }
-  | {
-      label: string;
-      href: string;
-      authenticated?: boolean;
-    };
+const NavigationItemSchema = z.union([
+  z.object({
+    label: z.string(),
+    to: z.string(),
+    authenticated: z.boolean().optional(),
+  }),
+  z.object({
+    label: z.string(),
+    href: z.string(),
+    authenticated: z.boolean().optional(),
+  }),
+]);
 
-export type NavigationOptions = {
-  items: NavigationItem[];
-};
+export const NavigationOptionsSchema = z.object({
+  items: z.array(NavigationItemSchema),
+});
+
+export type NavigationItem = z.infer<typeof NavigationItemSchema>;
+
+export type NavigationOptions = z.infer<typeof NavigationOptionsSchema>;
 
 const DEFAULT_NAVIGATION: NavigationOptions = {
   items: [
@@ -30,14 +35,6 @@ const DEFAULT_NAVIGATION: NavigationOptions = {
       label: "Search",
       to: "/search",
     },
-  ],
-};
-
-const NAVIGATION = {
-  ...(STATIC.data.attributes.content?.navigation || {}),
-  items: [
-    ...(STATIC.data.attributes.content?.navigation?.items || []),
-    ...DEFAULT_NAVIGATION.items,
   ],
 };
 
@@ -63,7 +60,13 @@ const NavigationItemLink = (props: NavigationItem) => {
 
 export default function Navigation() {
   const auth = useGlobusAuth();
-  const nav = NAVIGATION;
+  const nav = {
+    ...(STATIC.data.attributes.content?.navigation || {}),
+    items: [
+      ...(STATIC.data.attributes.content?.navigation?.items || []),
+      ...DEFAULT_NAVIGATION.items,
+    ],
+  };
   return (
     <Group fz="md">
       <Group py={2} px={4}>
