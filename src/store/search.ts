@@ -13,7 +13,7 @@ type Facet = NonNullable<
  * when processing a `GFacetResult` to map to a `GFilter`, we need to
  * figure out what the configured `field_name` is for the facet.
  */
-export function getFacetFieldNameByName(name: string) {
+export function getFacetFieldNameByName(name: string): string | undefined {
   let match = FACETS.find((facet: Facet) => facet.name === name)?.field_name;
   if (!match) {
     match = FACETS.find(
