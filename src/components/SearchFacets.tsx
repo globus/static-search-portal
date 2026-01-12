@@ -1,5 +1,5 @@
 "use client";
-import { type ComponentProps, useState } from "react";
+import { useState } from "react";
 import {
   Combobox,
   Group,
@@ -7,9 +7,9 @@ import {
   PillsInput,
   useCombobox,
   Button,
-  Box,
   Badge,
   Text,
+  Stack,
 } from "@mantine/core";
 import { Check, CirclePlus, X } from "lucide-react";
 import { Icon } from "./private/Icon";
@@ -27,12 +27,7 @@ import {
 
 const FACETS = STATIC.data.attributes.globus.search.facets || [];
 
-export default function SearchFacets({
-  result,
-  ...rest
-}: {
-  result?: GSearchResult;
-} & ComponentProps<typeof Box>) {
+export default function SearchFacets({ result }: { result?: GSearchResult }) {
   const actions = useSearchActions();
   const search = useSearchContext();
 
@@ -47,23 +42,26 @@ export default function SearchFacets({
   };
 
   return (
-    <Box {...rest}>
+    <Stack gap="sm">
       <Group gap="sm">
         {result.facet_results.map((facet, i) => (
           <FacetCombobox facet={facet} key={i} />
         ))}
       </Group>
       {hasFacetFilters && (
-        <Button
-          size="xs"
-          onClick={reset}
-          variant="outline"
-          leftSection={<Icon component={X} />}
-        >
-          Clear All Filters
-        </Button>
+        <Group>
+          <Button
+            size="xs"
+            onClick={reset}
+            variant="subtle"
+            leftSection={<Icon component={X} size={12} />}
+            color="default"
+          >
+            Clear All Filters
+          </Button>
+        </Group>
       )}
-    </Box>
+    </Stack>
   );
 }
 
@@ -87,7 +85,7 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const fieldName = getFacetFieldNameByName(facet.name);
-  const value = search.facetFilters[fieldName]?.values || [];
+  const value = fieldName ? search.facetFilters[fieldName]?.values || [] : [];
   const handleValueSelect = (val: string) => {
     const payload = {
       facet,
@@ -174,22 +172,14 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
           pointer
           onClick={() => combobox.toggleDropdown()}
           aria-label={facet.name}
-          variant="unstyled"
+          leftSection={<Icon component={CirclePlus} />}
         >
           <Pill.Group>
-            <Button
-              leftSection={<Icon component={CirclePlus} />}
-              variant="outline"
-              size="xs"
-            >
-              <Group gap="xs">
-                {facet.name}
-                {values}
-                {value.length > MAX_DISPLAYED_VALUES && (
-                  <Pill>+{value.length - (MAX_DISPLAYED_VALUES - 1)} more</Pill>
-                )}
-              </Group>
-            </Button>
+            {facet.name}
+            {values}
+            {value.length > MAX_DISPLAYED_VALUES && (
+              <Pill>+{value.length - (MAX_DISPLAYED_VALUES - 1)} more</Pill>
+            )}
           </Pill.Group>
         </PillsInput>
       </Combobox.Target>
@@ -203,19 +193,21 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
         <Combobox.Options mah={200} style={{ overflowY: "auto" }}>
           {options?.length === 0 ? <Text>No results found.</Text> : options}
         </Combobox.Options>
-        <Combobox.Footer>
-          <Button
-            size="xs"
-            variant="subtle"
-            color="gray"
-            onClick={() => {
-              actions.setFacetFilter(facet, []);
-            }}
-            fullWidth
-          >
-            Clear {facet.name} Filters
-          </Button>
-        </Combobox.Footer>
+
+        {fieldName && search.facetFilters[fieldName] && (
+          <Combobox.Footer>
+            <Button
+              size="xs"
+              variant="subtle"
+              onClick={() => {
+                actions.setFacetFilter(facet, []);
+              }}
+              fullWidth
+            >
+              Clear Filters
+            </Button>
+          </Combobox.Footer>
+        )}
       </Combobox.Dropdown>
     </Combobox>
   );

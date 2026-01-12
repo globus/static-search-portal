@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { Alert, Anchor } from "@mantine/core";
 import { useLogin } from "@/hooks/useOAuth";
