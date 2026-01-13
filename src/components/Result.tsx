@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { Title, Text, Button, Box, Divider, Group, Stack } from "@mantine/core";
 import { get } from "lodash";
 
-import { STATIC, getValueFrom, getValueFromAttribute } from "../../static";
+import { STATIC, getValueFrom } from "../../static";
 import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
 import { Field, FieldSchema, type FieldDefinition } from "./Field";
@@ -107,7 +107,7 @@ export const ResultOptionsSchema = z.object({
   links: z.array(LinkSchema).optional(),
   globus: z
     .object({
-      tranfer: GlobusTransferOptionsSchema.optional(),
+      transfer: GlobusTransferOptionsSchema.optional(),
     })
     .optional(),
 });
@@ -197,14 +197,14 @@ function Result({ result }: { result: GMetaResult }) {
 
   useEffect(() => {
     async function bootstrap() {
-      const heading = await getValueFromAttribute<string>(
+      const heading = await getValueFrom<string>(
         result,
-        "components.Result.heading",
+        STATIC.data.attributes.components.Result.heading,
       );
 
-      const summary = await getValueFromAttribute<string>(
+      const summary = await getValueFrom<string>(
         result,
-        "components.Result.summary",
+        STATIC.data.attributes.components.Result.summary,
       );
       const fields = get(
         STATIC.data.attributes?.components?.Result,

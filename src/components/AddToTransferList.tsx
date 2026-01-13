@@ -4,7 +4,7 @@ import { Button, ButtonProps } from "@mantine/core";
 import { useGlobusTransferStore } from "@/store/globus-transfer";
 import { getTransferDetailsFromResult } from "./Result";
 
-import { getValueFromAttribute, isTransferEnabled } from "../../static";
+import { getValueFrom, isTransferEnabled, STATIC } from "../../static";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import { useGlobusAuth } from "@globus/react-auth-context";
@@ -30,9 +30,9 @@ export default function AddToTransferList({
 
   useEffect(() => {
     async function bootstrap() {
-      const heading = await getValueFromAttribute<string>(
+      const heading = await getValueFrom<string>(
         result,
-        "components.Result.heading",
+        STATIC.data.attributes.components.Result.heading,
       );
       setItemLabel(heading);
     }

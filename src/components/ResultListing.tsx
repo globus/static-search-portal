@@ -11,7 +11,7 @@ import {
   Group,
   Box,
 } from "@mantine/core";
-import { getValueFromAttribute, STATIC } from "../../static";
+import { getValueFrom, STATIC } from "../../static";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import {
@@ -148,21 +148,21 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
 
   useEffect(() => {
     async function resolveAttributes() {
-      const heading = await getValueFromAttribute<string>(
+      const heading = await getValueFrom<string>(
         gmeta,
-        "components.ResultListing.heading",
+        STATIC.data.attributes.components?.ResultListing?.heading,
       );
-      const summary = await getValueFromAttribute<string>(
+      const summary = await getValueFrom<string>(
         gmeta,
-        "components.ResultListing.summary",
+        STATIC.data.attributes.components?.ResultListing?.summary,
       );
-      let image = await getValueFromAttribute<
+      let image = await getValueFrom<
         | string
         | {
             src: string;
             alt?: string;
           }
-      >(gmeta, "components.ResultListing.image");
+      >(gmeta, STATIC.data.attributes.components?.ResultListing?.image);
 
       setHeading(heading);
       setSummary(summary);
