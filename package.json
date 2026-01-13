@@ -35,7 +35,7 @@
     "framer-motion": "^11.11.11",
     "lodash": "^4.17.21",
     "next": "14.2.35",
-    "plotly.js-dist-min": "^2.35.3",
+    "plotly.js-dist-min": "^3.3.1",
     "react": "^18",
     "react-dom": "^18",
     "zustand": "^5.0.3"
