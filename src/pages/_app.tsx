@@ -10,12 +10,12 @@ import { ThemeProvider } from "../providers/theme-provider";
 import {
   getEnvironment,
   getRedirectUri,
-  isTransferEnabled,
   getMetadata,
   getStatic,
   isFeatureEnabled,
-  isAuthenticationEnabled,
 } from "@from-static/generator-kit";
+
+import { isAuthenticationEnabled, isTransferEnabled } from "@generator";
 
 import { StaticError } from "@from-static/generator-kit/react/StaticError";
 

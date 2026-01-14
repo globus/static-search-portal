@@ -19,7 +19,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
-import { isTransferEnabled } from "@from-static/generator-kit";
+import { isTransferEnabled } from "@generator";
 import PathVerifier from "@/globus/PathVerifier";
 import { CollectionName } from "@/globus/Collection";
 import { TransferListItem } from "@/components/Transfer/Drawer";

@@ -20,6 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@generator": ["./generator/index.ts"],
+      "@generator/*": ["./generator/*"],
       "@from-static/generator-kit": ["./packages/generator-kit/index.ts"],
       "@from-static/generator-kit/*": ["./packages/generator-kit/*"]
     }
