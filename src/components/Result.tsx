@@ -8,7 +8,7 @@ import {
   getStatic,
   getValueFrom,
   isObjectWithProperty,
-} from "../../static-lib";
+} from "@from-static/generator-kit";
 import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
 import { Field, FieldSchema, type FieldDefinition } from "./Field";

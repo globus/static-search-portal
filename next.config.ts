@@ -1,5 +1,5 @@
 import _STATIC from "./static.json" with { type: "json" };
-import { StaticSchema } from "./static-lib/schemas/static";
+import { StaticSchema } from "@from-static/generator-kit/schemas/static";
 
 import type { NextConfig } from "next";
 

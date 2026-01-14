@@ -4,7 +4,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { type AuthorizationManager } from "@globus/sdk/core/authorization/AuthorizationManager";
 
-import { getStatic } from "../../static-lib";
+import { getStatic } from "@from-static/generator-kit";
 import type { Renderers } from "@/components/Fields/GlobusEmbedField";
 
 async function fetchCollection(

@@ -11,7 +11,7 @@ import {
   Group,
   Box,
 } from "@mantine/core";
-import { getValueFrom, getStatic } from "../../static-lib";
+import { getValueFrom, getStatic } from "@from-static/generator-kit";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import {

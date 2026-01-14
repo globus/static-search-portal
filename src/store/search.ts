@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { getStatic } from "../../static-lib";
+import { getStatic } from "@from-static/generator-kit";
 
 import type { GFacetResult } from "@globus/sdk/services/search/service/query";
 

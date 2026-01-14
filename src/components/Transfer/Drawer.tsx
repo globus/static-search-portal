@@ -25,7 +25,7 @@ import { CollectionName } from "@/globus/Collection";
 import { useStat } from "@/hooks/useGlobusAPI";
 import { readableBytes } from "@globus/sdk/services/transfer/utils";
 
-import { isTransferEnabled } from "../../../static-lib";
+import { isTransferEnabled } from "@from-static/generator-kit";
 import { getResultLink } from "@/utils/results";
 import { Icon } from "../private/Icon";
 

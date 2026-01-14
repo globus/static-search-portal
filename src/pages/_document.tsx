@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import { safeParse } from "../../static-lib";
+import { safeParse } from "@from-static/generator-kit";
 
 /**
  * Content Security Policy (CSP) for the portal. This policy attempts to be as strict as possible,

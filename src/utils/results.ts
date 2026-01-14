@@ -1,4 +1,4 @@
-import { isFeatureEnabled } from "../../static-lib";
+import { isFeatureEnabled } from "@from-static/generator-kit";
 /**
  * Get the link to the results page for a given subject, accounting for the current configuration.
  */

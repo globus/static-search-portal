@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-import { getStatic } from "../../static-lib";
+import { getStatic } from "@from-static/generator-kit";
 import { ColorSchemeToggle } from "./ColorSchemeToggle";
 
 const Navigation = dynamic(() => import("./Navigation"), { ssr: false });

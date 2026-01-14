@@ -1,6 +1,6 @@
 import { z } from "zod";
-import _STATIC from "../static.json" assert { type: "json" };
-import { safeParse } from ".";
+import _STATIC from "../../../static.json" assert { type: "json" };
+import { safeParse } from "..";
 import { PropsWithChildren } from "react";
 
 export function StaticError({ children }: PropsWithChildren) {
