@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { StaticSchema } from "./static";
+import { StaticSchema } from "@from-static/generator-kit/schemas/static";
 import { ThemeSchema } from "@/theme";
 import { ResultListingOptionsSchema } from "@/components/ResultListing";
 import { ResultOptionsSchema } from "@/components/Result";

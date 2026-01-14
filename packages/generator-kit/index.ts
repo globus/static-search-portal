@@ -5,7 +5,7 @@ import {
   GeneratorConfiguration,
   GeneratorFeatures,
   GeneratorSchema,
-} from "./schemas/generator";
+} from "../../generator/schema";
 
 export function safeParse() {
   return GeneratorSchema.safeParse(_STATIC);
@@ -46,7 +46,7 @@ export function getRedirectUri() {
   }
   /**
    * If all else fails, try to construct the redirect URI from the current location.
-   * The fallback here is mostly to accoun`t` for SSR.
+   * The fallback here is mostly to account for SSR.
    * @todo This could likely be configured to get `basePath` and host information for the Next.js configuration or environment.
    */
   const baseURL = globalThis.location
@@ -119,23 +119,3 @@ export function isObjectWithProperty(
 }
 
 export const get = _get;
-
-// GENERATOR-SPECIFIC UTILITIES
-
-/**
- * Whether or not the Globus Transfer is enabled based on the state of the `static.json`.
- */
-export function isTransferEnabled() {
-  return (
-    isFeatureEnabled("transfer") ||
-    Boolean(getStatic().data.attributes.components?.Result?.globus?.transfer)
-  );
-}
-
-/**
- * Whether or not a user can "Sign In" to the portal.
- * If Transfer functionality is enabled (`isTransferEnabled`), then authentication is enabled.
- */
-export function isAuthenticationEnabled() {
-  return isTransferEnabled() || isFeatureEnabled("authentication");
-}

@@ -4,11 +4,9 @@ import { Button, ButtonProps } from "@mantine/core";
 import { useGlobusTransferStore } from "@/store/globus-transfer";
 import { getTransferDetailsFromResult } from "./Result";
 
-import {
-  getValueFrom,
-  isTransferEnabled,
-  getStatic,
-} from "@from-static/generator-kit";
+import { getValueFrom, getStatic } from "@from-static/generator-kit";
+
+import { isTransferEnabled } from "@generator";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import { useGlobusAuth } from "@globus/react-auth-context";
