@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { z } from "zod";
 
-import { STATIC, withFeature } from "../../static";
+import { getStatic, withFeature } from "../../static-lib";
 import TransferDrawer from "./Transfer/Drawer";
 import { useLogin } from "@/hooks/useOAuth";
 
@@ -61,9 +61,9 @@ const NavigationItemLink = (props: NavigationItem) => {
 export default function Navigation() {
   const auth = useGlobusAuth();
   const nav = {
-    ...(STATIC.data.attributes.content?.navigation || {}),
+    ...(getStatic().data.attributes.content?.navigation || {}),
     items: [
-      ...(STATIC.data.attributes.content?.navigation?.items || []),
+      ...(getStatic().data.attributes.content?.navigation?.items || []),
       ...DEFAULT_NAVIGATION.items,
     ],
   };

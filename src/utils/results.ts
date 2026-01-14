@@ -1,4 +1,4 @@
-import { areSEOResultsEnabled } from "../../static";
+import { isFeatureEnabled } from "../../static-lib";
 /**
  * Get the link to the results page for a given subject, accounting for the current configuration.
  */
@@ -7,7 +7,7 @@ export function getResultLink(subject: string) {
   /**
    * If `features.seoResults` is enabled, we'll use the build-time generated result pages.
    */
-  return areSEOResultsEnabled
+  return isFeatureEnabled("seoResults")
     ? `/results/${urlSafeSubject}`
     : `/results?subject=${urlSafeSubject}`;
 }

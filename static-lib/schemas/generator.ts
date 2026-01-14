@@ -1,45 +1,14 @@
-import _STATIC from "./static.json" assert { type: "json" };
 import { z } from "zod";
-import { get as _get } from "lodash";
+import { StaticSchema } from "./static";
 import { ThemeSchema } from "@/theme";
-
 import { ResultListingOptionsSchema } from "@/components/ResultListing";
 import { ResultOptionsSchema } from "@/components/Result";
 import { NavigationOptionsSchema } from "@/components/Navigation";
 
 /**
- * The general schema of `static.json` configuration objects.
- * This can be shared across all generators and then extended by overriding `data` to reflect generator-specific options.
- */
-const Static = z.object({
-  _static: z.object({
-    generator: z.object({
-      name: z.string(),
-    }),
-    host: z
-      .object({
-        base_url: z.string(),
-        origin: z.string(),
-        host: z.string(),
-        base_path: z.string(),
-      })
-      .optional(),
-  }),
-  data: z.object({
-    /**
-     * The version of the `data` object, which is used to determine how
-     * the generator will render its `attributes`.
-     * @example "1.0.0"
-     */
-    version: z.string(),
-    attributes: z.object(),
-  }),
-});
-
-/**
  * The type used for `data` by the [@globus/static-search-portal generator](https://github.com/globus/static-search-portal).
  */
-const Data = z.object({
+const DataSchema = z.object({
   /**
    * There is only one supported version for the `data` object at this time.
    */
@@ -183,7 +152,7 @@ const Data = z.object({
               z.object({
                 name: z.string().optional(),
                 field_name: z.string(),
-                type: z.string().optional(),
+                type: z.enum(["terms"]).default("terms"),
               }),
             )
             .optional(),
@@ -204,129 +173,11 @@ const Data = z.object({
     }),
 });
 
-export type Static = z.infer<typeof Static> & {
-  data: z.infer<typeof Data>;
-};
-
-const GeneratorSchema = Static.extend({
-  data: Data,
+export const GeneratorSchema = StaticSchema.extend({
+  data: DataSchema,
 });
 
-const result = GeneratorSchema.safeParse(_STATIC);
-
-if (result.error) {
-  z.prettifyError(result.error);
-}
-
-/**
- * Reference to the `static.json` file.
- * @private
- */
-export const STATIC = GeneratorSchema.parse(_STATIC);
-
-const {
-  data: { attributes },
-} = STATIC;
-
-export function getEnvironment() {
-  return attributes.globus.environment || null;
-}
-
-/**
- * @returns The redirect URI for the Globus Auth login page.
- * @private
- */
-export function getRedirectUri() {
-  /**
-   * If the `redirect_uri` is specified in the `static.json`, use it.
-   */
-  if (attributes.globus.application?.redirect_uri) {
-    return attributes.globus.application.redirect_uri;
-  }
-  /**
-   * If this is a static-managed deployment, use the `base_url` from the `static.json`.
-   */
-  if (STATIC._static.host?.base_url) {
-    return `${STATIC._static.host?.base_url}/authenticate`;
-  }
-  /**
-   * If all else fails, try to construct the redirect URI from the current location.
-   * The fallback here is mostly to accoun`t` for SSR.
-   * @todo This could likely be configured to get `basePath` and host information for the Next.js configuration or environment.
-   */
-  const baseURL = globalThis.location
-    ? `${globalThis.location.protocol}//${globalThis.location.host}`
-    : "";
-  return `${baseURL}/authenticate`;
-}
-
-type Features = keyof NonNullable<
-  z.infer<typeof Data>["attributes"]["features"]
+export type GeneratorConfiguration = z.infer<typeof GeneratorSchema>;
+export type GeneratorFeatures = keyof NonNullable<
+  GeneratorConfiguration["data"]["attributes"]["features"]
 >;
-
-/**
- * Whether or not a feature is enabled in the `static.json`.
- * @private
- */
-export function isFeatureEnabled(key: Features, defaultValue?: boolean) {
-  return Boolean(attributes.features?.[key] ?? defaultValue);
-}
-/**
- * @private
- */
-export function withFeature<T>(
-  key: Features,
-  a: () => T,
-  b: () => T | null = () => null,
-) {
-  return isFeatureEnabled(key) ? a() : b();
-}
-
-/**
- * Whether or not the Globus Transfer is enabled based on the state of the `static.json`.
- */
-export const isTransferEnabled = Boolean(
-  isFeatureEnabled("transfer") ||
-    attributes.components?.Result?.globus?.transfer,
-);
-
-/**
- * Whether or not a user can "Sign In" to the portal.
- * If Transfer functionality is enabled (`isTransferEnabled`), then authentication is enabled.
- */
-export const isAuthenticationEnabled =
-  isTransferEnabled || isFeatureEnabled("authentication");
-
-export const areSEOResultsEnabled = isFeatureEnabled("seoResults");
-
-export const METADATA = {
-  title: attributes.metadata?.title || "Search Portal",
-  description: attributes.metadata?.description || "",
-};
-
-let jsonata: typeof import("jsonata") | null = null;
-
-/**
- * Get a value from an object using a key that can be a JSONata expression.
- * @private
- */
-export async function getValueFrom<T>(
-  obj: unknown,
-  key: unknown,
-  defaultValue?: T,
-): Promise<T | undefined> {
-  if (!key || obj === null || obj === undefined || typeof key !== "string") {
-    return defaultValue;
-  }
-
-  const useJSONata = isFeatureEnabled("jsonata");
-  if (!useJSONata) {
-    return _get(obj, key, defaultValue) as T;
-  }
-
-  if (!jsonata) {
-    jsonata = (await import("jsonata")).default;
-  }
-  const expression = jsonata(key);
-  return (await expression.evaluate(obj)) || defaultValue;
-}

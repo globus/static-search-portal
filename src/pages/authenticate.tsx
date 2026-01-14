@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { Center, Loader, Text, Group } from "@mantine/core";
-import { isFeatureEnabled } from "../../static";
+import { isFeatureEnabled } from "../../static-lib";
 import { useOAuthStore } from "@/store/oauth";
 
 function Authenticate() {

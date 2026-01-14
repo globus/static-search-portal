@@ -10,7 +10,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
 
 /**
- * @todo This page implementaiton and `getStaticPaths` should use the `areSEOResultsEnabled` flag to
+ * @todo This page implementaiton and `getStaticPaths` should use the `isFeatureEnabled('seoResults')` flag to
  * determine if a list of results paths should be generated at build time. For now, this route
  * exists as a bit of a fallback for existing portals, but will result in 404s when hard-refreshed.
  */

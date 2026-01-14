@@ -10,7 +10,7 @@ import { ClientSideResult } from "@/components/ClientSideResult";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
 import Head from "next/head";
 
-import { METADATA } from "../../../static";
+import { getMetadata } from "../../../static-lib";
 
 /**
  * The `/results` route uses client-side rendering exclusively in order to support the static export of
@@ -23,7 +23,7 @@ export default function ResultPage() {
     ? router.query.subject[0]
     : router.query.subject;
 
-  const title = `${METADATA.title} | Results | ${subject}`;
+  const title = `${getMetadata().title} | Results | ${subject}`;
 
   return (
     <>

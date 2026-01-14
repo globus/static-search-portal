@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-import type { Endpoint } from "@/globus/collection-browser/CollectionBrowser";
+import type { EndpointDocument } from "@globus/sdk/services/transfer/service/endpoint";
 
 /**
  * Items that will be transferred to the destination.
@@ -17,7 +17,7 @@ export type Item = {
  * Represents the information required to initiate a Globus transfer of the items.
  */
 export type Transfer = {
-  destination?: Endpoint;
+  destination?: EndpointDocument;
   path?: string;
   label?: string;
 };
@@ -29,7 +29,7 @@ type State = {
 
 type Actions = {
   setLabel: (label: string) => void;
-  setDestination: (destination: Endpoint) => void;
+  setDestination: (destination: EndpointDocument) => void;
   setPath: (path: string) => void;
   removeItemBySubject: (subject: Item["subject"]) => void;
   addItem: (item: Item) => void;
@@ -55,7 +55,7 @@ export const useGlobusTransferStore = create<State & Actions>()(
           },
         }));
       },
-      setDestination: (destination: Endpoint) => {
+      setDestination: (destination: EndpointDocument) => {
         return set((state) => ({
           ...state,
           transfer: {

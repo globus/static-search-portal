@@ -14,7 +14,7 @@ import BytesField from "./Fields/BytesField";
 import FallbackField from "./Fields/FallbackField";
 
 import { GMetaResult } from "@globus/sdk/services/search/service/query";
-import { isFeatureEnabled } from "../../static";
+import { isFeatureEnabled } from "../../static-lib";
 
 const Definition = z.object({
   /**
