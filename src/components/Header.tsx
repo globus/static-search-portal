@@ -11,18 +11,19 @@ import {
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-import { STATIC } from "../../static";
+import { getStatic } from "../../static-lib";
 import { ColorSchemeToggle } from "./ColorSchemeToggle";
 
 const Navigation = dynamic(() => import("./Navigation"), { ssr: false });
 
-const SEARCH_INDEX = STATIC.data.attributes.globus.search.index;
-const LOGO = STATIC.data.attributes.content?.logo;
-const HEADLINE =
-  STATIC.data.attributes.content?.headline || `Search Index ${SEARCH_INDEX}`;
-const IMAGE = STATIC.data.attributes.content?.image || null;
-
 export default function Header() {
+  const SEARCH_INDEX = getStatic().data.attributes.globus.search.index;
+  const LOGO = getStatic().data.attributes.content?.logo;
+  const HEADLINE =
+    getStatic().data.attributes.content?.headline ||
+    `Search Index ${SEARCH_INDEX}`;
+  const IMAGE = getStatic().data.attributes.content?.image || null;
+
   const ref = useRef<HTMLDivElement>(null);
 
   return (

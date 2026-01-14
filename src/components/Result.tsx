@@ -2,9 +2,13 @@
 
 import React, { useEffect } from "react";
 import { Title, Text, Button, Box, Divider, Group, Stack } from "@mantine/core";
-import { get } from "lodash";
 
-import { STATIC, getValueFrom } from "../../static";
+import {
+  get,
+  getStatic,
+  getValueFrom,
+  isObjectWithProperty,
+} from "../../static-lib";
 import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
 import { Field, FieldSchema, type FieldDefinition } from "./Field";
@@ -15,11 +19,10 @@ import AddToTransferList from "./AddToTransferList";
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import z from "zod";
 
-type GlobusTransferOptions = z.infer<typeof GlobusTransferOptionsSchema>;
 const GlobusTransferOptionsSchema = z.object({
   type: z
     .union([
-      z.string(),
+      z.enum(["file", "directory"]),
       z.object({
         /**
          * `property` can be used to reference a value from the result (subject) using JSONata.
@@ -134,17 +137,15 @@ export default function ResultWrapper({
   );
 }
 
-export async function getTransferDetailsFromResult(
-  result: GMetaResult,
-): Promise<{
-  collection: string;
-  path: string;
-  type: "file" | "directory";
-}> {
+/**
+ * Given a `GMetaResult`, extract the necessary information to add the result to a Globus Transfer list.
+ */
+export async function getTransferDetailsFromResult(result: GMetaResult) {
   /**
    * The configuration for Globus Transfer found in the `static.json` file.
    */
-  const config = STATIC.data.attributes.components?.Result?.globus?.transfer;
+  const config =
+    getStatic().data.attributes.components?.Result?.globus?.transfer;
   /**
    * Properties that can be set on the result itself that will take precedence over the configuration.
    */
@@ -155,37 +156,53 @@ export async function getTransferDetailsFromResult(
    * either using a string value or property reference.
    */
 
-  async function getTransferValue(property: "collection" | "path" | "type") {
+  async function getTransferValue(
+    property: "collection" | "path" | "type",
+  ): Promise<string | undefined> {
     /**
      * Attempt to get the value from the result itself.
      */
     const { globus } = result.entries[0].content;
-    const value = (globus as { transfer?: GlobusTransferOptions })?.transfer?.[
-      property
-    ];
-    if (value) {
-      return value;
+    if (
+      isObjectWithProperty(globus, "transfer") &&
+      isObjectWithProperty(globus.transfer, property) &&
+      typeof globus.transfer[property] === "string"
+    ) {
+      const value = globus.transfer[property];
+      if (typeof value === "string") {
+        return value;
+      }
     }
-    if (typeof config[property] === "string") {
-      /**
-       * If the `static.json` configuration for the property is a string, return that value.
-       */
-      return config[property];
+    if (config) {
+      const value = config[property];
+      if (value === undefined) {
+        return undefined;
+      }
+      if (typeof value === "string") {
+        /**
+         * If the `static.json` configuration for the property is a string, return that value.
+         */
+        return value;
+      }
+      return await getValueFrom<string>(result, value.property);
     }
     /**
      * Otherwise, attempt to get the value from the result using the property reference.
      */
-    return getValueFrom<string>(result, config[property]?.property);
+    return undefined;
   }
 
   const collection = await getTransferValue("collection");
   const path = await getTransferValue("path");
-  const type = await getTransferValue("type");
+
+  const typeValue = await getTransferValue("type");
+  const isValidType = typeValue === "file" || typeValue === "directory";
+  const type: "file" | "directory" = isValidType ? typeValue : "file";
 
   return {
     collection,
     path,
-    type: type || "file",
+    type,
   };
 }
 
@@ -199,20 +216,20 @@ function Result({ result }: { result: GMetaResult }) {
     async function bootstrap() {
       const heading = await getValueFrom<string>(
         result,
-        STATIC.data.attributes.components.Result.heading,
+        getStatic().data.attributes.components.Result.heading,
       );
 
       const summary = await getValueFrom<string>(
         result,
-        STATIC.data.attributes.components.Result.summary,
+        getStatic().data.attributes.components.Result.summary,
       );
       const fields = get(
-        STATIC.data.attributes?.components?.Result,
+        getStatic().data.attributes?.components?.Result,
         "fields",
         [],
       );
       const links = await Promise.all(
-        get(STATIC.data.attributes?.components?.Result, "links", []).map(
+        get(getStatic().data.attributes?.components?.Result, "links", []).map(
           async (link: z.infer<typeof LinkSchema>) => {
             const processedLink: ProcessedLink = {
               label: undefined,

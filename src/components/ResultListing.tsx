@@ -11,7 +11,7 @@ import {
   Group,
   Box,
 } from "@mantine/core";
-import { getValueFrom, STATIC } from "../../static";
+import { getValueFrom, getStatic } from "../../static-lib";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import {
@@ -150,11 +150,11 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     async function resolveAttributes() {
       const heading = await getValueFrom<string>(
         gmeta,
-        STATIC.data.attributes.components?.ResultListing?.heading,
+        getStatic().data.attributes.components?.ResultListing?.heading,
       );
       const summary = await getValueFrom<string>(
         gmeta,
-        STATIC.data.attributes.components?.ResultListing?.summary,
+        getStatic().data.attributes.components?.ResultListing?.summary,
       );
       let image = await getValueFrom<
         | string
@@ -162,7 +162,7 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
             src: string;
             alt?: string;
           }
-      >(gmeta, STATIC.data.attributes.components?.ResultListing?.image);
+      >(gmeta, getStatic().data.attributes.components?.ResultListing?.image);
 
       setHeading(heading);
       setSummary(summary);
@@ -176,7 +176,8 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     resolveAttributes();
   }, [gmeta]);
 
-  const fields = STATIC.data.attributes.components?.ResultListing?.fields || [];
+  const fields =
+    getStatic().data.attributes.components?.ResultListing?.fields || [];
 
   return (
     <Card w="full" withBorder>
