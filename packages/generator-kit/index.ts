@@ -1,4 +1,4 @@
-import _STATIC from "../static.json" assert { type: "json" };
+import _STATIC from "../../static.json" assert { type: "json" };
 import { get as _get, isObject as _isObject } from "lodash";
 
 import {

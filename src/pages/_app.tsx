@@ -15,9 +15,9 @@ import {
   getStatic,
   isFeatureEnabled,
   isAuthenticationEnabled,
-} from "../../static-lib";
+} from "@from-static/generator-kit";
 
-import { StaticError } from "../../static-lib/StaticError";
+import { StaticError } from "@from-static/generator-kit/react/StaticError";
 
 import {
   Provider as GlobusAuthorizationManagerProvider,

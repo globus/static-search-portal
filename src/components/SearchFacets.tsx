@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { Check, CirclePlus, X } from "lucide-react";
 import { Icon } from "./private/Icon";
-import { getStatic } from "../../static-lib";
+import { getStatic } from "@from-static/generator-kit";
 
 import type {
   GSearchResult,

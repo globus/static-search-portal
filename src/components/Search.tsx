@@ -27,7 +27,7 @@ import type {
 
 import { isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
-import { getStatic, isAuthenticationEnabled } from "../../static-lib";
+import { getStatic, isAuthenticationEnabled } from "@from-static/generator-kit";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";

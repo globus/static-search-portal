@@ -10,7 +10,7 @@ import { ClientSideResult } from "@/components/ClientSideResult";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
 import Head from "next/head";
 
-import { getMetadata } from "../../../static-lib";
+import { getMetadata } from "@from-static/generator-kit";
 
 /**
  * The `/results` route uses client-side rendering exclusively in order to support the static export of

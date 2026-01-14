@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { z } from "zod";
 
-import { getStatic, withFeature } from "../../static-lib";
+import { getStatic, withFeature } from "@from-static/generator-kit";
 import TransferDrawer from "./Transfer/Drawer";
 import { useLogin } from "@/hooks/useOAuth";
 
