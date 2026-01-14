@@ -11,7 +11,7 @@ import {
   Group,
   Box,
 } from "@mantine/core";
-import { getValueFromAttribute, STATIC } from "../../static";
+import { getValueFrom, getStatic } from "@from-static/generator-kit";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import {
@@ -23,31 +23,35 @@ import {
 import ImageField from "./Fields/ImageField";
 import AddToTransferList from "./AddToTransferList";
 import { getResultLink } from "@/utils/results";
+import { z } from "zod";
 
-export type ResultListingComponentOptions = {
+export const ResultListingOptionsSchema = z.object({
   /**
    * The field to use as the title for the result.
    * @default "subject"
    * @example "entries[0].content.title"
    * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
    */
-  heading?: string;
+  heading: z.string().optional().default("subject"),
   /**
    * The field to use as the summary for the result.
    * @example "entries[0].content.summary"
    * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
    */
-  summary?: string;
+  summary: z.string().optional(),
   /**
    * An image to display in the result.
    * @example "entries[0].content.image"
    */
-  image?:
-    | string
-    | {
-        src: string;
-        alt?: string;
-      };
+  image: z
+    .union([
+      z.string(),
+      z.object({
+        src: z.string(),
+        alt: z.string().optional(),
+      }),
+    ])
+    .optional(),
   /**
    * The fields to display in the result.
    * A field can be a string, an object with a `label` and `property`, or an object with a `label` and `value`.
@@ -60,8 +64,26 @@ export type ResultListingComponentOptions = {
    *    { label: "Note", value: "Lorem ipsum dolor sit amet."}
    * ]
    */
-  fields?: FieldDefinition[];
-};
+  fields: z
+    .array(
+      z.union([
+        z.string(),
+        z.object({
+          label: z.string(),
+          property: z.string(),
+        }),
+        z.object({
+          label: z.string(),
+          value: z.string(),
+        }),
+      ]),
+    )
+    .optional(),
+});
+
+export type ResultListingComponentOptions = z.infer<
+  typeof ResultListingOptionsSchema
+>;
 
 function ResultListingFieldTableRow({
   field,
@@ -126,21 +148,21 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
 
   useEffect(() => {
     async function resolveAttributes() {
-      const heading = await getValueFromAttribute<string>(
+      const heading = await getValueFrom<string>(
         gmeta,
-        "components.ResultListing.heading",
+        getStatic().data.attributes.components?.ResultListing?.heading,
       );
-      const summary = await getValueFromAttribute<string>(
+      const summary = await getValueFrom<string>(
         gmeta,
-        "components.ResultListing.summary",
+        getStatic().data.attributes.components?.ResultListing?.summary,
       );
-      let image = await getValueFromAttribute<
+      let image = await getValueFrom<
         | string
         | {
             src: string;
             alt?: string;
           }
-      >(gmeta, "components.ResultListing.image");
+      >(gmeta, getStatic().data.attributes.components?.ResultListing?.image);
 
       setHeading(heading);
       setSummary(summary);
@@ -154,7 +176,8 @@ export default function ResultListing({ gmeta }: { gmeta: GMetaResult }) {
     resolveAttributes();
   }, [gmeta]);
 
-  const fields = STATIC.data.attributes.components?.ResultListing?.fields || [];
+  const fields =
+    getStatic().data.attributes.components?.ResultListing?.fields || [];
 
   return (
     <Card w="full" withBorder>

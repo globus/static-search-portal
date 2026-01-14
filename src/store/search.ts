@@ -1,24 +1,20 @@
 import { create } from "zustand";
 
-import { STATIC, Static } from "../../static";
+import { getStatic } from "@from-static/generator-kit";
 
 import type { GFacetResult } from "@globus/sdk/services/search/service/query";
 
-const FACETS = STATIC.data.attributes.globus.search.facets || [];
-type Facet = NonNullable<
-  Static["data"]["attributes"]["globus"]["search"]["facets"]
->[0];
+const FACETS = getStatic().data.attributes.globus.search.facets || [];
+
 /**
  * Since a `GFacet` can be expressed with or without a `name`, when
  * when processing a `GFacetResult` to map to a `GFilter`, we need to
  * figure out what the configured `field_name` is for the facet.
  */
-export function getFacetFieldNameByName(name: string): string | undefined {
-  let match = FACETS.find((facet: Facet) => facet.name === name)?.field_name;
+export function getFacetFieldNameByName(name: string) {
+  let match = FACETS.find((facet) => facet.name === name)?.field_name;
   if (!match) {
-    match = FACETS.find(
-      (facet: Facet) => facet.field_name === name,
-    )?.field_name;
+    match = FACETS.find((facet) => facet.field_name === name)?.field_name;
   }
   return match;
 }
@@ -69,8 +65,10 @@ export const useSearchStore = create<SearchState>()((set) => ({
     setFacetFilter: (facet: GFacetResult, value: string[]) =>
       set((state) => {
         const fieldName = getFacetFieldNameByName(facet.name);
+        if (!fieldName) {
+          return state;
+        }
         const { facetFilters } = state.context;
-
         if (value.length === 0 && facetFilters[fieldName]) {
           const { [fieldName]: _, ...rest } = facetFilters;
           return {

@@ -1,5 +1,4 @@
-import React from "react";
-import { Stack, Box, Code } from "@mantine/core";
+import { Group, Box, Code } from "@mantine/core";
 
 type Value = (string | number)[];
 
@@ -27,9 +26,11 @@ export default function RgbaField({
   };
 
   return (
-    <Stack display="inline-flex">
+    <Group>
       <Box bg={`rgba(${value.join(",")})`} {...props} />
-      <Code>[{value.join(",")}]</Code>
-    </Stack>
+      <Code>
+        R:{value[0]} G:{value[1]} B:{value[2]} {value[3] && `A: ${value[3]}`}
+      </Code>
+    </Group>
   );
 }

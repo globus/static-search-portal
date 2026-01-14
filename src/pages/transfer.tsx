@@ -19,7 +19,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { Item, useGlobusTransferStore } from "@/store/globus-transfer";
 import { CollectionSearch } from "@/globus/collection-browser/CollectionBrowser";
-import { isTransferEnabled } from "../../static";
+import { isTransferEnabled } from "@generator";
 import PathVerifier from "@/globus/PathVerifier";
 import { CollectionName } from "@/globus/Collection";
 import { TransferListItem } from "@/components/Transfer/Drawer";
@@ -29,7 +29,7 @@ export default function TransferPage() {
   const auth = useGlobusAuth();
   const transferStore = useGlobusTransferStore();
 
-  if (isTransferEnabled === false) {
+  if (isTransferEnabled() === false) {
     return (
       <Center mt={20}>
         <Text size="xl">

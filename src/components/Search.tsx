@@ -27,7 +27,8 @@ import type {
 
 import { isGError } from "@/globus/search";
 import SearchFacets from "./SearchFacets";
-import { STATIC, isAuthenticationEnabled } from "../../static";
+import { getStatic } from "@from-static/generator-kit";
+import { isAuthenticationEnabled } from "@generator";
 import ResultListing from "./ResultListing";
 import { Error } from "./Error";
 import { Pagination } from "./Pagination";
@@ -37,16 +38,14 @@ import { AnchorExternal } from "./private/AnchorExternal";
 import { Icon } from "./private/Icon";
 import { SearchState, useSearchContext } from "@/store/search";
 
-const SEARCH_INDEX = STATIC.data.attributes.globus.search.index;
-const FACETS = STATIC.data.attributes.globus.search.facets || [];
-
 function getSearchPayload(
   query: string,
   state: SearchState["context"],
 ): GSearchRequest {
+  console.log(getStatic().data.attributes.globus.search.facets);
   return {
     q: query,
-    facets: FACETS,
+    facets: getStatic().data.attributes.globus.search.facets || [],
     offset: state.offset,
     limit: state.limit,
     filters: Object.values(state.facetFilters).filter((f) => Boolean(f)),
@@ -54,6 +53,8 @@ function getSearchPayload(
 }
 
 export function Search() {
+  const SEARCH_INDEX = getStatic().data.attributes.globus.search.index;
+
   const auth = useGlobusAuth();
   const router = useRouter();
   const search = useSearchContext();
@@ -72,7 +73,7 @@ export function Search() {
       setIsLoading(true);
 
       const headers =
-        isAuthenticationEnabled &&
+        isAuthenticationEnabled() &&
         auth.isAuthenticated &&
         auth.authorization?.tokens?.search?.access_token
           ? {
@@ -84,6 +85,7 @@ export function Search() {
           ...getSearchPayload(query, search),
           advanced: isAdvanced,
         },
+        // @ts-expect-error Needs @globus/sdk Upgrade
         headers,
       });
       const results = await response.json();
@@ -96,7 +98,7 @@ export function Search() {
     query,
     search,
     isAdvanced,
-    isAuthenticationEnabled
+    isAuthenticationEnabled()
       ? auth.authorization?.tokens?.search?.access_token
       : undefined,
   ]);

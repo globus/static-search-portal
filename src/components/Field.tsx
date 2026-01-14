@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { get } from "lodash";
 import { Title, Box } from "@mantine/core";
 import jsonata from "jsonata";
+import z from "zod";
 
 import GlobusEmbedField from "./Fields/GlobusEmbedField";
 import RgbaField from "./Fields/RgbaField";
@@ -13,44 +14,52 @@ import BytesField from "./Fields/BytesField";
 import FallbackField from "./Fields/FallbackField";
 
 import { GMetaResult } from "@globus/sdk/services/search/service/query";
-import { isFeatureEnabled } from "../../static";
+import { isFeatureEnabled } from "@from-static/generator-kit";
 
-type SharedDefinitionProperties = {
+const Definition = z.object({
   /**
    * The label for the field.
    */
-  label?: string;
+  label: z.string().optional(),
   /**
    * An option `type` to specify how the field should be rendered.
    */
-  type?: string;
-  options?: Record<string, unknown>;
-};
+  type: z.string().optional(),
+  options: z.record(z.string(), z.unknown()).optional(),
+});
 
-export type FieldDefinition =
+export const FieldSchema = z.union([
   /**
    * When a string value is provided, it is assumed to be equivalent to a `property` definition.
    */
-  | string
-  | ({
-      /**
-       * When `property` it is assumed to be a pointer to a property on the object currently being processed/displayed.
-       */
-      property: string;
-    } & SharedDefinitionProperties)
-  | ({
-      value: unknown;
-    } & SharedDefinitionProperties);
+  z.string(),
+  /**
+   * When `property` it is assumed to be a pointer to a property on the object currently being processed/displayed.
+   */
+  Definition.extend({
+    property: z.string(),
+  }),
+  Definition.extend({
+    value: z.unknown(),
+  }),
+]);
+
+export type FieldDefinition = z.infer<typeof FieldSchema>;
 
 /**
  * The processed field object is the result of processing a `FieldDefinition` object to a more standard/predictable object.
  */
-export type ProcessedField = {
+const ProcessedFieldSchema = Definition.extend({
   /**
    * The derived `value` of either the original provided `value` or the result of the `property` lookup.
    */
-  derivedValue: unknown;
-} & SharedDefinitionProperties;
+  derivedValue: z.unknown(),
+});
+
+/**
+ * The processed field object is the result of processing a `FieldDefinition` object to a more standard/predictable object.
+ */
+export type ProcessedField = z.infer<typeof ProcessedFieldSchema>;
 
 /**
  * Get the processed field object from a `FieldDefinition` object and a `GMetaResult` object.
