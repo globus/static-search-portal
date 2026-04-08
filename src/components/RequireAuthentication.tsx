@@ -15,9 +15,12 @@ export function RequireAuthentication({ children }: PropsWithChildren) {
   return auth.isAuthenticated ? (
     children
   ) : (
-    <Alert variant="light" color="red">
-      You must <Anchor onClick={login}>sign in</Anchor> in order to access this
-      section.
+    <Alert variant="light" color="red" title="Authentication Required">
+      You must{" "}
+      <Anchor onClick={login} inherit>
+        sign in
+      </Anchor>{" "}
+      in order to access this section.
     </Alert>
   );
 }

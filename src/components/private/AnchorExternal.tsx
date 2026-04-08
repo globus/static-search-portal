@@ -14,7 +14,13 @@ export const AnchorExternal = forwardRef<
   AnchorExternalProps
 >(({ ...props }, ref) => {
   return (
-    <Anchor {...props} ref={ref} target="_blank" rel="noopener noreferrer">
+    <Anchor
+      {...props}
+      ref={ref}
+      target="_blank"
+      rel="noopener noreferrer"
+      mr={10}
+    >
       <Group pos="relative" w="fit-content">
         {props.children}
         <Box component="sup" pos="absolute" top={-4} right={-10}>
