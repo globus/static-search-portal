@@ -136,7 +136,6 @@ export function Search() {
                 setIsAdvanced(e.target.checked);
               }}
               label="Use Advanced Search"
-              size="xs"
             />
             <Popover withArrow position="top" width={260}>
               <Popover.Target>

@@ -145,11 +145,13 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
         active={value.includes(valueAsString)}
       >
         <Group gap="xs" justify="space-between" w="100%">
-          <Group gap="xs" align="center">
+          <Group gap="xs" align="center" wrap="nowrap">
             {value.includes(valueAsString) ? <Icon component={Check} /> : null}
             {valueAsString}
           </Group>
-          <Badge size="xs">{bucket.count}</Badge>
+          <Badge size="xs" variant="light">
+            {bucket.count}
+          </Badge>
         </Group>
       </Combobox.Option>
     );
