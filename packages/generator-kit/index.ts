@@ -1,11 +1,7 @@
-import _STATIC from "../../static.json" assert { type: "json" };
+import _STATIC from "../../static.json" with { type: "json" };
 import { get as _get, isObject as _isObject } from "lodash";
 
-import {
-  GeneratorConfiguration,
-  GeneratorFeatures,
-  GeneratorSchema,
-} from "../../generator/schema";
+import { GeneratorFeatures, GeneratorSchema } from "../../generator/schema";
 
 export function safeParse() {
   return GeneratorSchema.safeParse(_STATIC);
@@ -15,7 +11,7 @@ export function parse() {
   return GeneratorSchema.parse(_STATIC);
 }
 
-let __PARSED_STATIC: GeneratorConfiguration;
+let __PARSED_STATIC: ReturnType<typeof parse> | null = null;
 export function getStatic() {
   if (!__PARSED_STATIC) {
     __PARSED_STATIC = parse();

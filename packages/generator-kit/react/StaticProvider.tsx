@@ -1,5 +1,5 @@
 import { createContext, useContext, PropsWithChildren, useMemo } from "react";
-import { StaticConfiguration, StaticSchema } from "../schemas/static";
+import { StaticConfiguration } from "../schemas/static";
 import { isFeatureEnabled } from "../index";
 
 interface StaticAPI {
@@ -9,9 +9,7 @@ interface StaticAPI {
   };
 
   helpers: {
-    isFeatureEnabled: (
-      feature: Parameters<typeof isFeatureEnabled>[1],
-    ) => boolean;
+    isFeatureEnabled: (...args: Parameters<typeof isFeatureEnabled>) => boolean;
   };
 }
 
@@ -33,8 +31,8 @@ export function StaticProvider({
         config: state.config,
       },
       helpers: {
-        isFeatureEnabled: (feature: Parameters<typeof isFeatureEnabled>[1]) =>
-          isFeatureEnabled(state.config, feature),
+        isFeatureEnabled: (...args: Parameters<typeof isFeatureEnabled>) =>
+          isFeatureEnabled(...args),
       },
     };
   }, [state]);
