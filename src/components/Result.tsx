@@ -19,6 +19,8 @@ import AddToTransferList from "./AddToTransferList";
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import { z } from "zod";
 
+console.log(getStatic);
+
 const GlobusTransferOptionsSchema = z.object({
   type: z
     .union([
@@ -218,6 +220,8 @@ function Result({ result }: { result: GMetaResult }) {
         result,
         getStatic().data.attributes.components.Result.heading,
       );
+
+      console.log(getStatic().data.attributes.components.Result.heading);
 
       const summary = await getValueFrom<string>(
         result,
