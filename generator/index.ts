@@ -15,5 +15,9 @@ export function isTransferEnabled() {
  * If Transfer functionality is enabled (`isTransferEnabled`), then authentication is enabled.
  */
 export function isAuthenticationEnabled() {
-  return isTransferEnabled() || isFeatureEnabled("authentication");
+  return (
+    isTransferEnabled() ||
+    isFeatureEnabled("authentication") ||
+    isFeatureEnabled("requireAuthentication")
+  );
 }

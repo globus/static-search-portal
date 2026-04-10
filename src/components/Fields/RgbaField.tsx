@@ -29,7 +29,8 @@ export default function RgbaField({
     <Group>
       <Box bg={`rgba(${value.join(",")})`} {...props} />
       <Code>
-        R:{value[0]} G:{value[1]} B:{value[2]} {value[3] && `A: ${value[3]}`}
+        R:{value[0]} G:{value[1]} B:{value[2]}{" "}
+        {value.length > 3 ? `A: ${value[3]}` : null}
       </Code>
     </Group>
   );

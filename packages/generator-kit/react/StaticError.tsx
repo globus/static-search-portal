@@ -1,5 +1,5 @@
+import _STATIC from "../../../static.json" with { type: "json" };
 import { z } from "zod";
-import _STATIC from "../../../static.json" assert { type: "json" };
 import { safeParse } from "..";
 import { PropsWithChildren } from "react";
 

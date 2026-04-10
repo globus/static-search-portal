@@ -110,9 +110,10 @@ export default function TransferDrawer() {
       <Button
         disabled={pathname === "/transfer"}
         size="sm"
+        variant="subtle"
         onClick={open}
         rightSection={
-          <Badge variant="default" circle>
+          <Badge variant="filled" color="red" circle size="sm">
             {items.length}
           </Badge>
         }

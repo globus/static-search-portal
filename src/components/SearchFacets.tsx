@@ -146,7 +146,9 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
       >
         <Group gap="xs" justify="space-between" w="100%">
           <Group gap="xs" align="center" wrap="nowrap">
-            {value.includes(valueAsString) ? <Icon component={Check} /> : null}
+            {value.includes(valueAsString) ? (
+              <Icon size={12} component={Check} />
+            ) : null}
             {valueAsString}
           </Group>
           <Badge size="xs" variant="light">
@@ -174,7 +176,14 @@ export function FacetCombobox({ facet }: { facet: GFacetResult }) {
           pointer
           onClick={() => combobox.toggleDropdown()}
           aria-label={facet.name}
-          leftSection={<Icon component={CirclePlus} />}
+          leftSection={
+            <Icon
+              size={14}
+              component={CirclePlus}
+              cursor="pointer"
+              onClick={() => combobox.toggleDropdown()}
+            />
+          }
         >
           <Pill.Group>
             {facet.name}

@@ -17,7 +17,7 @@ import ResponseDrawer from "./ResponseDrawer";
 import AddToTransferList from "./AddToTransferList";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
-import z from "zod";
+import { z } from "zod";
 
 const GlobusTransferOptionsSchema = z.object({
   type: z

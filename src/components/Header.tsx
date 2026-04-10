@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import {
   Flex,
   Stack,
@@ -24,10 +23,8 @@ export default function Header() {
     `Search Index ${SEARCH_INDEX}`;
   const IMAGE = getStatic().data.attributes.content?.image || null;
 
-  const ref = useRef<HTMLDivElement>(null);
-
   return (
-    <Stack gap={0} ref={ref}>
+    <Stack gap={0}>
       <Flex
         component="header"
         mih={{ base: "50px", md: IMAGE ? "100px" : undefined }}
@@ -43,7 +40,7 @@ export default function Header() {
         <UnstyledButton component={Link} href="/" aria-label="Home">
           <Group gap="sm" align="center">
             {LOGO && (
-              <Box bg="primary.9" bdrs="xs" py="sm" px="md">
+              <Box bg="primary" bdrs="xs" py="sm" px="md">
                 <Image src={LOGO.src} alt={LOGO.alt} w="100px" />
               </Box>
             )}
@@ -52,8 +49,8 @@ export default function Header() {
               order={1}
               size="xl"
               bdrs={IMAGE ? 4 : 0}
-              py={IMAGE ? 2 : undefined}
-              px={IMAGE ? 4 : undefined}
+              py={IMAGE ? 4 : undefined}
+              px={IMAGE ? "sm" : undefined}
               bg={IMAGE ? "rgba(0,0,0,0.50)" : undefined}
             >
               {HEADLINE}

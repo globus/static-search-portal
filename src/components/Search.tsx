@@ -42,7 +42,6 @@ function getSearchPayload(
   query: string,
   state: SearchState["context"],
 ): GSearchRequest {
-  console.log(getStatic().data.attributes.globus.search.facets);
   return {
     q: query,
     facets: getStatic().data.attributes.globus.search.facets || [],

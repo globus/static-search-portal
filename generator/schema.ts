@@ -153,6 +153,7 @@ const DataSchema = z.object({
                 name: z.string().optional(),
                 field_name: z.string(),
                 type: z.enum(["terms"]).default("terms"),
+                size: z.number().optional(),
               }),
             )
             .optional(),

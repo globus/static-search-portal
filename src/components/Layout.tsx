@@ -10,10 +10,13 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <>
       <Header />
-      <Container component="main" role="main" my="xs">
+      <Container component="main" role="main" my="xs" size="xl">
         {children}
       </Container>
-      <Affix position={{ bottom: 0, left: 10, right: 0 }}>
+      <Affix
+        position={{ bottom: 0, left: 10, right: 0 }}
+        display={{ base: "none", lg: "block" }}
+      >
         <AnchorExternal href="https://www.globus.org/">
           <Group gap="xs" align="center">
             <Text fz="sm">Powered by Globus</Text>

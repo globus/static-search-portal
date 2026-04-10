@@ -2,18 +2,15 @@ import { PropsWithChildren } from "react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { Alert, Anchor } from "@mantine/core";
 import { useLogin } from "@/hooks/useOAuth";
-import { isFeatureEnabled } from "@from-static/generator-kit";
+import { isAuthenticationEnabled } from "@generator";
 
-export function RequireAuthentication({ children }: PropsWithChildren) {
-  const requireAuthentication = isFeatureEnabled("requireAuthentication");
+function CheckAuthentication({ children }: PropsWithChildren) {
   const auth = useGlobusAuth();
   const login = useLogin();
-  if (!requireAuthentication) {
+  if (auth?.isAuthenticated) {
     return children;
   }
-  return auth.isAuthenticated ? (
-    children
-  ) : (
+  return (
     <Alert variant="light" color="red" title="Authentication Required">
       You must{" "}
       <Anchor onClick={login} inherit>
@@ -22,4 +19,11 @@ export function RequireAuthentication({ children }: PropsWithChildren) {
       in order to access this section.
     </Alert>
   );
+}
+
+export function RequireAuthentication({ children }: PropsWithChildren) {
+  if (!isAuthenticationEnabled()) {
+    return children;
+  }
+  return <CheckAuthentication>{children}</CheckAuthentication>;
 }

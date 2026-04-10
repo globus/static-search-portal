@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { get } from "lodash";
 import { Title, Box } from "@mantine/core";
 import jsonata from "jsonata";
-import z from "zod";
+import { z } from "zod";
 
 import GlobusEmbedField from "./Fields/GlobusEmbedField";
 import RgbaField from "./Fields/RgbaField";

@@ -4,9 +4,10 @@ import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { z } from "zod";
 
-import { getStatic, withFeature } from "@from-static/generator-kit";
+import { getStatic } from "@from-static/generator-kit";
 import TransferDrawer from "./Transfer/Drawer";
 import { useLogin } from "@/hooks/useOAuth";
+import { isAuthenticationEnabled } from "@generator";
 
 const NavigationItemSchema = z.union([
   z.object({
@@ -46,7 +47,6 @@ const NavigationItemLink = (props: NavigationItem) => {
       </Anchor>
     );
   }
-
   /**
    * @todo This should probably check the hostname, not just the protocol.
    */
@@ -54,11 +54,44 @@ const NavigationItemLink = (props: NavigationItem) => {
   if (!isExternal) {
     return <Anchor href={props.href}>{props.label}</Anchor>;
   }
-
   return <AnchorExternal href={props.href}>{props.label}</AnchorExternal>;
 };
 
 export default function Navigation() {
+  return isAuthenticationEnabled() ? (
+    <NavigationWithAuthentication />
+  ) : (
+    <NavigationWithoutAuthentication />
+  );
+}
+
+function NavigationWithoutAuthentication() {
+  const nav = {
+    ...(getStatic().data.attributes.content?.navigation || {}),
+    items: [
+      ...(getStatic().data.attributes.content?.navigation?.items || []),
+      ...DEFAULT_NAVIGATION.items,
+    ],
+  };
+  return (
+    <Group fz="md">
+      <Group py={2} px={4}>
+        <Group component="nav" gap="xs">
+          {nav.items
+            .filter((item) => {
+              return item.authenticated !== true;
+            })
+            .map((item, index) => (
+              <NavigationItemLink key={index} {...item} />
+            ))}
+        </Group>
+        {isAuthenticationEnabled() && <Authentication />}
+      </Group>
+    </Group>
+  );
+}
+
+function NavigationWithAuthentication() {
   const auth = useGlobusAuth();
   const nav = {
     ...(getStatic().data.attributes.content?.navigation || {}),
@@ -82,9 +115,7 @@ export default function Navigation() {
               <NavigationItemLink key={index} {...item} />
             ))}
         </Group>
-        {withFeature("authentication", () => (
-          <Authentication />
-        ))}
+        <Authentication />
       </Group>
     </Group>
   );
@@ -107,7 +138,9 @@ export function Authentication() {
             withinPortal
           >
             <Menu.Target>
-              <Button size="sm">{user.preferred_username}</Button>
+              <Button size="sm" variant="default">
+                {user.preferred_username}
+              </Button>
             </Menu.Target>
             <Menu.Dropdown>
               <Group gap="sm" px="xs" py="sm">

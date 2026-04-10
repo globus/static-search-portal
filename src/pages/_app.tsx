@@ -52,7 +52,16 @@ function reset() {
   queryClient.clear();
 }
 
-const QueryProvider = ({ children }: PropsWithChildren) => {
+const UnauthenticatedQueryProvider = ({ children }: PropsWithChildren) => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+};
+
+const AuthenticatedQueryProvider = ({ children }: PropsWithChildren) => {
   const auth = useGlobusAuth();
   useEffect(() => {
     auth?.authorization?.events.revoke.addListener(reset);
@@ -64,12 +73,10 @@ const QueryProvider = ({ children }: PropsWithChildren) => {
   }, [auth?.authorization]);
 
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 
@@ -88,11 +95,11 @@ export function _App({ Component, pageProps }: AppProps) {
           <meta name="description" content={getMetadata().description} />
         </Head>
         <ThemeProvider>
-          <QueryProvider>
+          <UnauthenticatedQueryProvider>
             <Layout>
               <Component {...pageProps} />
             </Layout>
-          </QueryProvider>
+          </UnauthenticatedQueryProvider>
         </ThemeProvider>
       </>
     );
@@ -132,11 +139,11 @@ export function _App({ Component, pageProps }: AppProps) {
             scopes={scopes}
             storage={storage}
           >
-            <QueryProvider>
+            <AuthenticatedQueryProvider>
               <Layout>
                 <Component {...pageProps} />
               </Layout>
-            </QueryProvider>
+            </AuthenticatedQueryProvider>
           </GlobusAuthorizationManagerProvider>
         )}
       </ThemeProvider>

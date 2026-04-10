@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@globus/react-auth-context": "^0.4.0",
-    "@globus/sdk": "^6.2.0-canary.32.8a6e1c4",
+    "@globus/sdk": "^6.2.0-canary.94.dccd2a2",
     "@mantine/core": "^8",
     "@mantine/dates": "^8",
     "@mantine/hooks": "^8",
