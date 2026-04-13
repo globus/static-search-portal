@@ -13,7 +13,6 @@ const SECONDARY_COLOR =
   s.data.attributes.theme?.colors?.secondary?.[500] || "#718096";
 
 export default createTheme({
-  primaryColor: "primary",
   colors: {
     "primary.light": generateColors(PRIMARY_COLOR),
     "primary.dark": generateColors(PRIMARY_COLOR),

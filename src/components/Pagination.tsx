@@ -18,7 +18,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
   return (
     <Flex justify="space-between" align="center">
       <Group gap="xs">
-        <Text fz="xs" component="label" htmlFor="limit">
+        <Text size="sm" component="label" htmlFor="limit">
           Results per page:
         </Text>
         <Select
@@ -57,6 +57,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
             onClick={() => {
               actions.setOffset(0);
             }}
+            aria-label="First Page"
           >
             <Icon component={ChevronsLeft} />
           </Button>
@@ -67,6 +68,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
             onClick={() => {
               actions.setOffset(search.offset - search.limit);
             }}
+            aria-label="Previous Page"
           >
             <Icon component={ChevronLeft} />
           </Button>
@@ -79,6 +81,7 @@ export const Pagination = ({ result }: { result?: GSearchResult }) => {
             onClick={() => {
               actions.setOffset(search.offset + search.limit);
             }}
+            aria-label="Next Page"
           >
             <Icon component={ChevronRight} />
           </Button>

@@ -32,7 +32,7 @@
     "dayjs": "^1.11.19",
     "framer-motion": "^12.24.10",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.562.0",
+    "lucide-react": "^1.8.0",
     "next": "16.2.3",
     "plotly.js-dist-min": "^2.35.3",
     "react": "19.2.5",
