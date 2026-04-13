@@ -1,39 +1,34 @@
-import React from "react";
-import {
-  Box,
-  Button,
-  HStack,
-  Link,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Text,
-} from "@chakra-ui/react";
-import { ChevronDownIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+import { Group, Anchor, Button, Text, Avatar, Menu } from "@mantine/core";
+import { AnchorExternal } from "./private/AnchorExternal";
 import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
+import { z } from "zod";
 
-import { STATIC, withFeature } from "../../static";
+import { getStatic } from "@from-static/generator-kit";
 import TransferDrawer from "./Transfer/Drawer";
 import { useLogin } from "@/hooks/useOAuth";
+import { isAuthenticationEnabled } from "@generator";
 
-export type NavigationItem =
-  | {
-      label: string;
-      to: string;
-      authenticated?: boolean;
-    }
-  | {
-      label: string;
-      href: string;
-      authenticated?: boolean;
-    };
+const NavigationItemSchema = z.union([
+  z.object({
+    label: z.string(),
+    to: z.string(),
+    authenticated: z.boolean().optional(),
+  }),
+  z.object({
+    label: z.string(),
+    href: z.string(),
+    authenticated: z.boolean().optional(),
+  }),
+]);
 
-export type NavigationOptions = {
-  items: NavigationItem[];
-};
+export const NavigationOptionsSchema = z.object({
+  items: z.array(NavigationItemSchema),
+});
+
+export type NavigationItem = z.infer<typeof NavigationItemSchema>;
+
+export type NavigationOptions = z.infer<typeof NavigationOptionsSchema>;
 
 const DEFAULT_NAVIGATION: NavigationOptions = {
   items: [
@@ -44,52 +39,71 @@ const DEFAULT_NAVIGATION: NavigationOptions = {
   ],
 };
 
-const NAVIGATION = {
-  ...(STATIC.data.attributes.content?.navigation || {}),
-  items: [
-    ...(STATIC.data.attributes.content?.navigation?.items || []),
-    ...DEFAULT_NAVIGATION.items,
-  ],
-};
-
 const NavigationItemLink = (props: NavigationItem) => {
   if ("to" in props) {
     return (
-      <Link as={NextLink} href={props.to}>
+      <Anchor component={NextLink} href={props.to}>
         {props.label}
-      </Link>
+      </Anchor>
     );
   }
-
   /**
    * @todo This should probably check the hostname, not just the protocol.
    */
   const isExternal = props.href.startsWith("http");
   if (!isExternal) {
-    return <Link href={props.href}>{props.label}</Link>;
+    return <Anchor href={props.href}>{props.label}</Anchor>;
   }
-
-  return (
-    <Link href={props.href} position="relative" pr={4} isExternal>
-      {props.label}{" "}
-      <ExternalLinkIcon
-        as="sup"
-        position="absolute"
-        top={0}
-        right={0}
-        fontSize="xs"
-      />
-    </Link>
-  );
+  return <AnchorExternal href={props.href}>{props.label}</AnchorExternal>;
 };
 
 export default function Navigation() {
-  const auth = useGlobusAuth();
-  const nav = NAVIGATION;
+  return isAuthenticationEnabled() ? (
+    <NavigationWithAuthentication />
+  ) : (
+    <NavigationWithoutAuthentication />
+  );
+}
+
+function NavigationWithoutAuthentication() {
+  const nav = {
+    ...(getStatic().data.attributes.content?.navigation || {}),
+    items: [
+      ...(getStatic().data.attributes.content?.navigation?.items || []),
+      ...DEFAULT_NAVIGATION.items,
+    ],
+  };
   return (
-    <HStack justify="space-between" fontSize="md">
-      <HStack py={2} px={4}>
-        <HStack as="nav" spacing={4} textColor="white">
+    <Group fz="md">
+      <Group py={2} px={4}>
+        <Group component="nav" gap="xs">
+          {nav.items
+            .filter((item) => {
+              return item.authenticated !== true;
+            })
+            .map((item, index) => (
+              <NavigationItemLink key={index} {...item} />
+            ))}
+        </Group>
+        {isAuthenticationEnabled() && <Authentication />}
+      </Group>
+    </Group>
+  );
+}
+
+function NavigationWithAuthentication() {
+  const auth = useGlobusAuth();
+  const nav = {
+    ...(getStatic().data.attributes.content?.navigation || {}),
+    items: [
+      ...(getStatic().data.attributes.content?.navigation?.items || []),
+      ...DEFAULT_NAVIGATION.items,
+    ],
+  };
+  return (
+    <Group fz="md">
+      <Group py={2} px={4}>
+        <Group component="nav" gap="xs">
           {nav.items
             .filter((item) => {
               if (!item.authenticated) {
@@ -98,18 +112,12 @@ export default function Navigation() {
               return auth.isAuthenticated;
             })
             .map((item, index) => (
-              <Box key={index} fontWeight={500} p={2}>
-                <NavigationItemLink {...item} />
-              </Box>
+              <NavigationItemLink key={index} {...item} />
             ))}
-        </HStack>
-        {withFeature("authentication", () => (
-          <Box>
-            <Authentication />
-          </Box>
-        ))}
-      </HStack>
-    </HStack>
+        </Group>
+        <Authentication />
+      </Group>
+    </Group>
   );
 }
 
@@ -120,35 +128,41 @@ export function Authentication() {
   return (
     <>
       {auth.isAuthenticated && user ? (
-        <>
-          <HStack as="nav" spacing={4}>
-            <TransferDrawer />
-            <Menu placement="bottom-end">
-              <MenuButton
-                colorScheme="gray"
-                size="sm"
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
+        <Group component="nav" gap="xs">
+          <TransferDrawer />
+          <Menu
+            withArrow
+            width={300}
+            position="bottom"
+            transitionProps={{ transition: "pop" }}
+            withinPortal
+          >
+            <Menu.Target>
+              <Button size="xs" variant="default">
+                {user.preferred_username}
+              </Button>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Group gap="sm" px="xs" py="sm">
+                <Avatar radius="xs" name={user.name} color="initials" />
+                <div>
+                  <Text fw={500}>{user.name}</Text>
+                  <Text size="xs" c="dimmed">
+                    {user.email}
+                  </Text>
+                  <Text fz="xs">{user.organization}</Text>
+                </div>
+              </Group>
+              <Menu.Item
+                onClick={async () => await auth.authorization?.revoke()}
               >
-                {user?.preferred_username}
-              </MenuButton>
-              <MenuList zIndex={2}>
-                <Box px={2} textAlign="right">
-                  <Text>{user?.name}</Text>
-                  <Text fontSize="sm">{user?.organization}</Text>
-                </Box>
-                <MenuDivider />
-                <MenuItem
-                  onClick={async () => await auth.authorization?.revoke()}
-                >
-                  Log Out
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </HStack>
-        </>
+                Log Out
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
       ) : (
-        <Button size="sm" onClick={login} colorScheme="blue">
+        <Button size="sm" onClick={login}>
           Sign In
         </Button>
       )}

@@ -1,29 +1,29 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { useGlobusAuth } from "@globus/react-auth-context";
-import { isFeatureEnabled } from "../../static";
-import { Alert, AlertIcon, AlertTitle, Button } from "@chakra-ui/react";
+import { Alert, Anchor } from "@mantine/core";
 import { useLogin } from "@/hooks/useOAuth";
+import { isAuthenticationEnabled } from "@generator";
 
-const requireAuthentication = isFeatureEnabled("requireAuthentication");
-
-export function RequireAuthentication({ children }: PropsWithChildren) {
+function CheckAuthentication({ children }: PropsWithChildren) {
   const auth = useGlobusAuth();
   const login = useLogin();
-  if (!requireAuthentication) {
+  if (auth?.isAuthenticated) {
     return children;
   }
-  return auth.isAuthenticated ? (
-    children
-  ) : (
-    <Alert status="error" my={4}>
-      <AlertIcon />
-      <AlertTitle>
-        You must{" "}
-        <Button variant="link" onClick={login}>
-          Sign In
-        </Button>{" "}
-        in order to access this section.
-      </AlertTitle>
+  return (
+    <Alert variant="light" color="red" title="Authentication Required">
+      You must{" "}
+      <Anchor onClick={login} inherit>
+        sign in
+      </Anchor>{" "}
+      in order to access this section.
     </Alert>
   );
+}
+
+export function RequireAuthentication({ children }: PropsWithChildren) {
+  if (!isAuthenticationEnabled()) {
+    return children;
+  }
+  return <CheckAuthentication>{children}</CheckAuthentication>;
 }

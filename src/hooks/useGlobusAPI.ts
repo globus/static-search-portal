@@ -4,7 +4,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 
 import { type AuthorizationManager } from "@globus/sdk/core/authorization/AuthorizationManager";
 
-import { STATIC } from "../../static";
+import { getStatic } from "@from-static/generator-kit";
 import type { Renderers } from "@/components/Fields/GlobusEmbedField";
 
 async function fetchCollection(
@@ -33,7 +33,7 @@ async function fetchSubject(
   subject: string,
 ) {
   const response = await search.subject.get(
-    STATIC.data.attributes.globus.search.index,
+    getStatic().data.attributes.globus.search.index,
     {
       query: {
         subject,
@@ -129,7 +129,7 @@ type GCSAssetResponse = {
    * During actual rendering a user-provided `renderer` should take precedence over the inferred `renderer`.
    */
   renderer?: Renderers;
-  content: Promise<any>;
+  content: Promise<unknown>;
   /**
    * The `mime` type of the asset set by the user or inferred `mime` type based on the asset response.
    */

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Tooltip } from "@chakra-ui/react";
+import { Text, Tooltip } from "@mantine/core";
 
 type Value = string | number;
 
@@ -12,8 +12,8 @@ export default function DateField({ value }: { value: unknown }) {
     return;
   }
   return (
-    <Tooltip label={value} variant="outline" placement="bottom-start">
-      <Text _hover={{ cursor: "help" }}>
+    <Tooltip label={value}>
+      <Text>
         {Intl.DateTimeFormat(undefined, {
           dateStyle: "short",
           timeStyle: "short",

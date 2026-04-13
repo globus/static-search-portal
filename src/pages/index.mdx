@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Container, Center, Text, Button } from "@chakra-ui/react";
+import { Container } from "@mantine/core";
 import { Searchbox } from "@/components/Searchbox";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
 
-<Container maxW='container.lg'>
+<Container>
   <RequireAuthentication>
     <Searchbox />
   </RequireAuthentication>

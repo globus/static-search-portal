@@ -1,108 +1,32 @@
-import { STATIC } from "../static";
+import { createTheme, virtualColor } from "@mantine/core";
+import { generateColors } from "@mantine/colors-generator";
+import { getStatic } from "@from-static/generator-kit";
 
-import {
-  theme as baseTheme,
-  extendTheme,
-  withDefaultColorScheme,
-} from "@chakra-ui/react";
+const s = getStatic();
 
-import "@fontsource/ibm-plex-mono";
-import "@fontsource/ibm-plex-sans";
+const PRIMARY_COLOR =
+  s.data.attributes.theme?.colors?.brand?.[500] ||
+  s.data.attributes.theme?.colors?.primary?.[500] ||
+  "#007FFF";
 
-export type ColorDefinition =
-  | {
-      50: string;
-      100: string;
-      200: string;
-      300: string;
-      400: string;
-      500: string;
-      600: string;
-      700: string;
-      800: string;
-      900: string;
-    }
-  | string;
+const SECONDARY_COLOR =
+  s.data.attributes.theme?.colors?.secondary?.[500] || "#718096";
 
-export type ThemeSettings = {
-  /**
-   * Apply a default color scheme to all components.
-   * This supports all Chakra UI color schemes and is not provided by default.
-   * @see https://v2.chakra-ui.com/docs/styled-system/theme#colors for available color schemes.
-   */
-  colorScheme?: string;
-  /**
-   * Specific color definitions to use in the theme.
-   * The most common use case is to define a `primary` color.
-   * @example
-   * ```json
-   * {
-   *   "colors": {
-   *     "primary": {
-   *      "50": "#E5F2FF",
-   *      "100": "#B8DBFF",
-   *      "200": "#8AC4FF",
-   *      "300": "#5CADFF",
-   *      "400": "#2E96FF",
-   *      "500": "#007FFF",
-   *      "600": "#0066CC",
-   *      "700": "#004C99",
-   *      "800": "#00264c",
-   *      "900": "#001933"
-   *   }
-   *  }
-   * }
-   * ```
-   * @see https://v2.chakra-ui.com/docs/styled-system/theme#colors
-   */
-  colors?: Record<string, ColorDefinition>;
-  /**
-   * Extend the Chakra UI theme.
-   * @see https://v2.chakra-ui.com/docs/styled-system/customize-theme#using-theme-extensions
-   */
-  extendTheme?: Parameters<typeof extendTheme>[0];
-};
-
-const primary: ColorDefinition = {
-  "50": "#E5F2FF",
-  "100": "#B8DBFF",
-  "200": "#8AC4FF",
-  "300": "#5CADFF",
-  "400": "#2E96FF",
-  "500": "#007FFF",
-  "600": "#0066CC",
-  "700": "#004C99",
-  "800": "#00264c",
-  "900": "#001933",
-};
-
-const secondary = baseTheme.colors.gray;
-
-let colorScheme = {};
-if (STATIC.data.attributes.theme?.colorScheme) {
-  colorScheme = withDefaultColorScheme({
-    colorScheme: STATIC.data.attributes.theme?.colorScheme,
-  });
-}
-
-const theme = extendTheme(
-  {
-    fonts: {
-      heading: `'IBM Plex Sans', sans-serif`,
-      body: `'IBM Plex Sans', sans-serif`,
-      mono: `'IBM Plex Mono', monospace`,
-    },
-    colors: {
-      /**
-       * Allow the legacy "brand" to be used as the primary color.
-       */
-      primary: STATIC.data.attributes.theme?.colors?.brand || primary,
-      secondary,
-      ...(STATIC.data.attributes.theme?.colors || {}),
-    },
+export default createTheme({
+  colors: {
+    "primary.light": generateColors(PRIMARY_COLOR),
+    "primary.dark": generateColors(PRIMARY_COLOR),
+    "secondary.light": generateColors(SECONDARY_COLOR),
+    "secondary.dark": generateColors(SECONDARY_COLOR),
+    primary: virtualColor({
+      name: "primary",
+      dark: "primary.dark",
+      light: "primary.light",
+    }),
+    secondary: virtualColor({
+      name: "secondary",
+      dark: "secondary.dark",
+      light: "secondary.light",
+    }),
   },
-  colorScheme,
-  STATIC.data.attributes.theme?.extendTheme || {},
-);
-
-export default theme;
+});

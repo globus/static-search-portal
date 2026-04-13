@@ -1,98 +1,99 @@
 "use client";
 
 import React, { useEffect } from "react";
-import {
-  Heading,
-  Text,
-  Box,
-  Flex,
-  Button,
-  Divider,
-  Spacer,
-  ButtonGroup,
-  Link,
-} from "@chakra-ui/react";
+import { Title, Text, Button, Box, Divider, Group, Stack } from "@mantine/core";
 
 import {
-  getAttribute,
+  get,
+  getStatic,
   getValueFrom,
-  getValueFromAttribute,
-} from "../../static";
+  isObjectWithProperty,
+} from "@from-static/generator-kit";
 import { Error } from "./Error";
 import { isGError, type GError } from "@/globus/search";
-import { Field, type FieldDefinition } from "./Field";
+import { Field, FieldSchema, type FieldDefinition } from "./Field";
 import { JSONTree } from "./JSONTree";
 import ResponseDrawer from "./ResponseDrawer";
 import AddToTransferList from "./AddToTransferList";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
+import { z } from "zod";
 
-type LinkDefinition = {
-  /**
-   * The label that will be rendered as the link text.
-   */
-  label: string | { property: string; fallback?: string };
-  /**
-   * The location that will be used as the `href` for the link.
-   */
-  href:
-    | string
-    | {
-        property: string;
-        /**
-         * A fallback value that will be used if the property is not found.
-         */
-        fallback?: string;
-      };
-};
-
-export type GlobusTransferOptions = {
-  type?:
-    | string
-    | {
+const GlobusTransferOptionsSchema = z.object({
+  type: z
+    .union([
+      z.enum(["file", "directory"]),
+      z.object({
         /**
          * `property` can be used to reference a value from the result (subject) using JSONata.
          */
-        property: string;
-      };
+        property: z.string(),
+      }),
+    ])
+    .optional(),
   /**
    * The collection that will be used as the `source_endpoint` for the transfer.
    */
-  collection:
-    | string
-    | {
-        /**
-         * `property` can be used to reference a value from the result (subject) using JSONata.
-         */
-        property: string;
-      };
+  collection: z.union([
+    z.string(),
+    z.object({
+      /**
+       * `property` can be used to reference a value from the result (subject) using JSONata.
+       */
+      property: z.string(),
+    }),
+  ]),
   /**
    * The path that will be used as the `source_path` for the transfer.
    */
-  path:
-    | string
-    | {
-        /**
-         * `property` can be used to reference a value from the result (subject) using JSONata.
-         */
-        property: string;
-      };
-};
+  path: z.union([
+    z.string(),
+    z.object({
+      /**
+       * `property` can be used to reference a value from the result (subject) using JSONata.
+       */
+      property: z.string(),
+    }),
+  ]),
+});
 
-export type ResultComponentOptions = {
+const LinkSchema = z.object({
+  /**
+   * The label that will be rendered as the link text.
+   */
+  label: z.union([
+    z.string(),
+    z.object({
+      property: z.string(),
+      fallback: z.string().optional(),
+    }),
+  ]),
+  /**
+   * The location that will be used as the `href` for the link.
+   */
+  href: z.union([
+    z.string(),
+    z.object({
+      property: z.string(),
+      fallback: z.string().optional(),
+    }),
+  ]),
+});
+
+export const ResultOptionsSchema = z.object({
   /**
    * The field to use as the title for the result.
    * @default "subject"
    * @example "entries[0].content.title"
    * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
    */
-  heading?: string;
+  heading: z.string().optional().default("subject"),
   /**
    * The field to use as the summary for the result.
    * @example "entries[0].content.summary"
    * @see https://docs.globus.org/api/search/reference/get_subject/#gmetaresult
    */
-  summary?: string;
+  summary: z.string().optional(),
   /**
    * The fields to display in the result.
    * A field can be a string, an object with a `label` and `property`, or an object with a `label` and `value`.
@@ -105,15 +106,16 @@ export type ResultComponentOptions = {
    *    { label: "Note", value: "Lorem ipsum dolor sit amet."}
    * ]
    */
-  fields?: FieldDefinition[];
-  links?: LinkDefinition[];
-  globus?: {
-    /**
-     * Enables Globus Transfer UI for the result.
-     */
-    transfer?: GlobusTransferOptions;
-  };
-};
+  fields: z.array(FieldSchema).optional(),
+  links: z.array(LinkSchema).optional(),
+  globus: z
+    .object({
+      transfer: GlobusTransferOptionsSchema.optional(),
+    })
+    .optional(),
+});
+
+export type ResultComponentOptions = z.infer<typeof ResultOptionsSchema>;
 
 type ProcessedLink = {
   label: string | undefined;
@@ -135,17 +137,15 @@ export default function ResultWrapper({
   );
 }
 
-export async function getTransferDetailsFromResult(
-  result: GMetaResult,
-): Promise<{
-  collection: string;
-  path: string;
-  type: "file" | "directory";
-}> {
+/**
+ * Given a `GMetaResult`, extract the necessary information to add the result to a Globus Transfer list.
+ */
+export async function getTransferDetailsFromResult(result: GMetaResult) {
   /**
    * The configuration for Globus Transfer found in the `static.json` file.
    */
-  const config = getAttribute("components.Result.globus.transfer");
+  const config =
+    getStatic().data.attributes.components?.Result?.globus?.transfer;
   /**
    * Properties that can be set on the result itself that will take precedence over the configuration.
    */
@@ -156,37 +156,53 @@ export async function getTransferDetailsFromResult(
    * either using a string value or property reference.
    */
 
-  async function getTransferValue(property: "collection" | "path" | "type") {
+  async function getTransferValue(
+    property: "collection" | "path" | "type",
+  ): Promise<string | undefined> {
     /**
      * Attempt to get the value from the result itself.
      */
     const { globus } = result.entries[0].content;
-    const value = (globus as { transfer?: GlobusTransferOptions })?.transfer?.[
-      property
-    ];
-    if (value) {
-      return value;
+    if (
+      isObjectWithProperty(globus, "transfer") &&
+      isObjectWithProperty(globus.transfer, property) &&
+      typeof globus.transfer[property] === "string"
+    ) {
+      const value = globus.transfer[property];
+      if (typeof value === "string") {
+        return value;
+      }
     }
-    if (typeof config[property] === "string") {
-      /**
-       * If the `static.json` configuration for the property is a string, return that value.
-       */
-      return config[property];
+    if (config) {
+      const value = config[property];
+      if (value === undefined) {
+        return undefined;
+      }
+      if (typeof value === "string") {
+        /**
+         * If the `static.json` configuration for the property is a string, return that value.
+         */
+        return value;
+      }
+      return await getValueFrom<string>(result, value.property);
     }
     /**
      * Otherwise, attempt to get the value from the result using the property reference.
      */
-    return getValueFrom<string>(result, config[property]?.property);
+    return undefined;
   }
 
   const collection = await getTransferValue("collection");
   const path = await getTransferValue("path");
-  const type = await getTransferValue("type");
+
+  const typeValue = await getTransferValue("type");
+  const isValidType = typeValue === "file" || typeValue === "directory";
+  const type: "file" | "directory" = isValidType ? typeValue : "file";
 
   return {
     collection,
     path,
-    type: type || "file",
+    type,
   };
 }
 
@@ -198,19 +214,23 @@ function Result({ result }: { result: GMetaResult }) {
 
   useEffect(() => {
     async function bootstrap() {
-      const heading = await getValueFromAttribute<string>(
+      const heading = await getValueFrom<string>(
         result,
-        "components.Result.heading",
+        getStatic().data.attributes.components.Result.heading,
       );
 
-      const summary = await getValueFromAttribute<string>(
+      const summary = await getValueFrom<string>(
         result,
-        "components.Result.summary",
+        getStatic().data.attributes.components.Result.summary,
       );
-      const fields = getAttribute("components.Result.fields", []);
+      const fields = get(
+        getStatic().data.attributes?.components?.Result,
+        "fields",
+        [],
+      );
       const links = await Promise.all(
-        getAttribute("components.Result.links", []).map(
-          async (link: LinkDefinition) => {
+        get(getStatic().data.attributes?.components?.Result, "links", []).map(
+          async (link: z.infer<typeof LinkSchema>) => {
             const processedLink: ProcessedLink = {
               label: undefined,
               href: undefined,
@@ -246,51 +266,52 @@ function Result({ result }: { result: GMetaResult }) {
   }, [result]);
 
   return (
-    <>
-      <Heading as="h1" size="md" wordBreak="break-word">
-        {heading || (
-          <Text as="em" color="gray.500">
-            &mdash;
-          </Text>
-        )}
-      </Heading>
+    <Stack gap="xs">
+      <Title order={1} style={{ wordBreak: "break-word" }} size="h2">
+        {heading || <Text component="em">&mdash;</Text>}
+      </Title>
 
-      <Divider my={2} />
+      <Divider />
 
-      <Flex>
+      <Group justify="end" w="100%">
         <AddToTransferList result={result} />
-        <Spacer />
         <ResponseDrawer>
           <JSONTree data={result} />
         </ResponseDrawer>
-      </Flex>
+      </Group>
 
       {links.length > 0 && (
-        <ButtonGroup>
+        <Button.Group>
           {links.map((link: ProcessedLink, i: number) => {
             return (
-              <Button key={link.href || i} as={Link} href={link.href} size="sm">
+              <Button
+                key={link.href || i}
+                component="a"
+                href={link.href}
+                size="sm"
+                variant="subtle"
+              >
                 {link.label}
               </Button>
             );
           })}
-        </ButtonGroup>
+        </Button.Group>
       )}
 
-      {summary && (
-        <Box my="2">
-          <Heading as="h2" size="sm" my={2}>
-            Summary
-          </Heading>
-          <Text as="p">{summary}</Text>
-        </Box>
-      )}
+      <Stack gap="xs">
+        {summary && (
+          <Box>
+            <Title order={2} size="h4">
+              Summary
+            </Title>
+            <Text>{summary}</Text>
+          </Box>
+        )}
 
-      <Box>
         {fields.map((field: FieldDefinition, i: number) => (
           <Field key={i} field={field} gmeta={result} />
         ))}
-      </Box>
-    </>
+      </Stack>
+    </Stack>
   );
 }

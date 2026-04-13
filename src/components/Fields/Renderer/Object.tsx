@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
-
+import { useEffect, useState } from "react";
+import { Paper } from "@mantine/core";
 import { GlobusEmbedProps } from "../GlobusEmbedField";
 import { useGCSAsset } from "@/hooks/useGlobusAPI";
 
@@ -12,7 +11,6 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
   const { config, field } = props;
   const { width = "100%", height = "auto" } = config;
 
-  const [blob, setBlob] = useState<Blob>();
   const [objectUrl, setObjectURL] = useState<string>();
   const [type, setType] = useState<string | undefined>(config.mime);
 
@@ -25,34 +23,28 @@ export function ObjectRenderer(props: GlobusEmbedProps) {
     async function renderAsset() {
       if (!asset.data) return;
       const contents = await asset.data?.content;
-      setBlob(contents);
+      if (!contents || !(contents instanceof Blob)) return;
       setType(asset.data?.contentType ?? undefined);
-    }
-    renderAsset();
-  }, [asset.data]);
-
-  useEffect(() => {
-    if (blob) {
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(contents);
       setObjectURL(url);
     }
+    renderAsset();
     return () => {
       if (objectUrl) {
         URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [blob]);
+  }, [asset.data]);
 
   return (
     objectUrl &&
     type && (
-      <Box
+      <Paper
         w={`calc(${width} + 2em)`}
         h={`calc(${height} + 2em)`}
-        p={1}
-        border="1px solid"
-        rounded="md"
-        as="iframe"
+        withBorder
+        p="xs"
+        component="iframe"
         allow=""
         sandbox="allow-same-origin"
         referrerPolicy="no-referrer"

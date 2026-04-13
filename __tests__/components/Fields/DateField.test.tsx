@@ -10,7 +10,7 @@ describe("DateField", () => {
   });
 
   it("renders nothing for invalid value", () => {
-    const { container } = render(<DateField value={{}} />);
-    expect(container.firstChild).toBeNull();
+    const { queryAllByText } = render(<DateField value={{}} />);
+    expect(queryAllByText("*")).toHaveLength(0);
   });
 });

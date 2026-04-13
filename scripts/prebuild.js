@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Node.js script to be run before `npm run build`
  */
-
 const { stat, cp, rm } = require("node:fs/promises");
 const { join } = require("node:path");
 const { glob } = require("glob");

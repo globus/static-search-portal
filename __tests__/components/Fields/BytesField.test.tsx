@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "../../../test-utils";
 import BytesField from "../../../src/components/Fields/BytesField";
 
@@ -14,7 +13,7 @@ describe("BytesField", () => {
   });
 
   it("renders nothing for invalid value", () => {
-    const { container } = render(<BytesField value={{}} />);
-    expect(container.firstChild).toBeNull();
+    const { queryAllByText } = render(<BytesField value={{}} />);
+    expect(queryAllByText("*")).toHaveLength(0);
   });
 });

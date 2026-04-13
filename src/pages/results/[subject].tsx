@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import { Container, Text, Link, Flex, Divider } from "@chakra-ui/react";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { Button, Stack, Divider } from "@mantine/core";
+import { ChevronLeft } from "lucide-react";
 
 import { ClientSideResult } from "@/components/ClientSideResult";
 
@@ -10,7 +10,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { RequireAuthentication } from "@/components/RequireAuthentication";
 
 /**
- * @todo This page implementaiton and `getStaticPaths` should use the `areSEOResultsEnabled` flag to
+ * @todo This page implementation and `getStaticPaths` should use the `isFeatureEnabled('seoResults')` flag to
  * determine if a list of results paths should be generated at build time. For now, this route
  * exists as a bit of a fallback for existing portals, but will result in 404s when hard-refreshed.
  */
@@ -20,17 +20,19 @@ export default function ResultPage() {
     ? router.query.subject[0]
     : router.query.subject;
   return (
-    <Container maxW="container.xl" p={4}>
-      <RequireAuthentication>
-        <Link as={NextLink} href="/search">
-          <Flex alignItems="center" mb={4}>
-            <ChevronLeftIcon /> <Text fontSize="sm">Back</Text>
-          </Flex>
-        </Link>
-        <Divider my={2} />
+    <RequireAuthentication>
+      <Stack>
+        <Button
+          component={NextLink}
+          href="/search"
+          leftSection={<ChevronLeft />}
+        >
+          Back
+        </Button>
+        <Divider />
         {subject && <ClientSideResult subject={subject} />}
-      </RequireAuthentication>
-    </Container>
+      </Stack>
+    </RequireAuthentication>
   );
 }
 

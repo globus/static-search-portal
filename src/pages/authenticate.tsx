@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobusAuth } from "@globus/react-auth-context";
-import { Center, Spinner, Text } from "@chakra-ui/react";
-import { isFeatureEnabled } from "../../static";
+import { Center, Loader, Text, Group } from "@mantine/core";
 import { useOAuthStore } from "@/store/oauth";
+import { isAuthenticationEnabled } from "@generator";
 
 function Authenticate() {
   const auth = useGlobusAuth();
@@ -52,12 +52,14 @@ function Authenticate() {
 
   return (
     <>
-      <Center mt={4}>
-        <Spinner mr="2" />
-        <Text>Attempting to validate credentials...</Text>
+      <Center my="lg">
+        <Group gap="xs">
+          <Loader size="sm" />
+          <Text>Attempting to validate credentials...</Text>
+        </Group>
       </Center>
     </>
   );
 }
 
-export default isFeatureEnabled("authentication") ? Authenticate : () => null;
+export default isAuthenticationEnabled() ? Authenticate : () => null;
