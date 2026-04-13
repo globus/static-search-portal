@@ -69,6 +69,24 @@
       "globus": {
         "search": {
           "index": "6d222eba-980f-410c-9a58-52a785d660ea",
+          "filters": [
+            {
+              "type": "match_any",
+              "field_name": "contacts.firstName",
+              "ui": {
+                "label": "Contact First Name",
+                "description": "Filter by contact first name – this is an example of a custom filter added to the search configuration."
+              }
+            },
+            {
+              "type": "match_all",
+              "field_name": "contacts.primaryLocation.streetAddress.state",
+              "ui": {
+                "label": "Contact State",
+                "description": "Filter by contact state – this is an example of a custom filter added to the search configuration."
+              }
+            }
+          ],
           "facets": [
             {
               "name": "Tags",

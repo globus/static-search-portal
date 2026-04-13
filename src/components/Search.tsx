@@ -37,6 +37,7 @@ import { useRouter } from "next/router";
 import { AnchorExternal } from "./private/AnchorExternal";
 import { Icon } from "./private/Icon";
 import { SearchState, useSearchContext } from "@/store/search";
+import { Filters } from "@/components/Search/Filters";
 
 function getSearchPayload(
   query: string,
@@ -47,7 +48,9 @@ function getSearchPayload(
     facets: getStatic().data.attributes.globus.search.facets || [],
     offset: state.offset,
     limit: state.limit,
-    filters: Object.values(state.facetFilters).filter((f) => Boolean(f)),
+    filters: Object.values(state.facetFilters)
+      .filter((f) => Boolean(f))
+      .concat(state.filters),
   };
 }
 
@@ -70,11 +73,10 @@ export function Search() {
   useEffect(() => {
     const fetchResults = throttle(async () => {
       setIsLoading(true);
-
       const headers =
         isAuthenticationEnabled() &&
-        auth.isAuthenticated &&
-        auth.authorization?.tokens?.search?.access_token
+        auth?.isAuthenticated &&
+        auth?.authorization?.tokens?.search?.access_token
           ? {
               Authorization: `Bearer ${auth.authorization.tokens.search.access_token}`,
             }
@@ -94,12 +96,12 @@ export function Search() {
     fetchResults();
     return () => fetchResults.cancel();
   }, [
+    SEARCH_INDEX,
     query,
     search,
     isAdvanced,
-    isAuthenticationEnabled()
-      ? auth.authorization?.tokens?.search?.access_token
-      : undefined,
+    auth?.isAuthenticated,
+    auth?.authorization?.tokens?.search?.access_token,
   ]);
 
   return (
@@ -169,6 +171,7 @@ export function Search() {
               </Popover.Dropdown>
             </Popover>
           </Group>
+          <Filters />
           <SearchFacets result={result} />
           <Pagination result={result} />
           {isLoading && (

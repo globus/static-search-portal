@@ -1,4 +1,4 @@
-import _STATIC from "../../static.json" with { type: "json" };
+import _STATIC from "../../static-flows.json" with { type: "json" };
 import { get as _get, isObject as _isObject } from "lodash";
 
 import { GeneratorFeatures, GeneratorSchema } from "../../generator/schema";

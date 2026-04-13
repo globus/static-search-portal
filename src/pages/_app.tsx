@@ -1,8 +1,9 @@
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { info } from "@globus/sdk";
 
 import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 
 import { ThemeProvider } from "../providers/theme-provider";
@@ -28,6 +29,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import Head from "next/head";
+import { StaticProvider } from "@from-static/generator-kit/react/StaticProvider";
 
 declare global {
   var GLOBUS_SDK_ENVIRONMENT: string | undefined;
@@ -152,9 +154,15 @@ export function _App({ Component, pageProps }: AppProps) {
 }
 
 export default function App(props: AppProps) {
-  return (
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  return isClient ? (
     <StaticError>
-      <_App {...props} />
+      <StaticProvider state={{ config: getStatic() }}>
+        <_App {...props} />
+      </StaticProvider>
     </StaticError>
-  );
+  ) : null;
 }

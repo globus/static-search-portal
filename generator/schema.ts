@@ -4,6 +4,7 @@ import { ThemeSchema } from "@/theme-schema";
 import { ResultListingOptionsSchema } from "@/components/ResultListing";
 import { ResultOptionsSchema } from "@/components/Result";
 import { NavigationOptionsSchema } from "@/components/Navigation";
+import { FiltersSchema } from "@/components/Search/schemas";
 
 /**
  * The type used for `data` by the [@globus/static-search-portal generator](https://github.com/globus/static-search-portal).
@@ -157,6 +158,7 @@ const DataSchema = z.object({
               }),
             )
             .optional(),
+          filters: FiltersSchema.optional(),
         }),
       }),
     })
