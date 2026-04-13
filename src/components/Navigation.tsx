@@ -1,28 +1,34 @@
-import React from "react";
 import { Group, Anchor, Button, Text, Avatar, Menu } from "@mantine/core";
 import { AnchorExternal } from "./private/AnchorExternal";
 import NextLink from "next/link";
 import { useGlobusAuth } from "@globus/react-auth-context";
+import { z } from "zod";
 
-import { STATIC, withFeature } from "../../static";
+import { getStatic } from "@from-static/generator-kit";
 import TransferDrawer from "./Transfer/Drawer";
 import { useLogin } from "@/hooks/useOAuth";
+import { isAuthenticationEnabled } from "@generator";
 
-export type NavigationItem =
-  | {
-      label: string;
-      to: string;
-      authenticated?: boolean;
-    }
-  | {
-      label: string;
-      href: string;
-      authenticated?: boolean;
-    };
+const NavigationItemSchema = z.union([
+  z.object({
+    label: z.string(),
+    to: z.string(),
+    authenticated: z.boolean().optional(),
+  }),
+  z.object({
+    label: z.string(),
+    href: z.string(),
+    authenticated: z.boolean().optional(),
+  }),
+]);
 
-export type NavigationOptions = {
-  items: NavigationItem[];
-};
+export const NavigationOptionsSchema = z.object({
+  items: z.array(NavigationItemSchema),
+});
+
+export type NavigationItem = z.infer<typeof NavigationItemSchema>;
+
+export type NavigationOptions = z.infer<typeof NavigationOptionsSchema>;
 
 const DEFAULT_NAVIGATION: NavigationOptions = {
   items: [
@@ -30,14 +36,6 @@ const DEFAULT_NAVIGATION: NavigationOptions = {
       label: "Search",
       to: "/search",
     },
-  ],
-};
-
-const NAVIGATION = {
-  ...(STATIC.data.attributes.content?.navigation || {}),
-  items: [
-    ...(STATIC.data.attributes.content?.navigation?.items || []),
-    ...DEFAULT_NAVIGATION.items,
   ],
 };
 
@@ -49,7 +47,6 @@ const NavigationItemLink = (props: NavigationItem) => {
       </Anchor>
     );
   }
-
   /**
    * @todo This should probably check the hostname, not just the protocol.
    */
@@ -57,13 +54,52 @@ const NavigationItemLink = (props: NavigationItem) => {
   if (!isExternal) {
     return <Anchor href={props.href}>{props.label}</Anchor>;
   }
-
   return <AnchorExternal href={props.href}>{props.label}</AnchorExternal>;
 };
 
 export default function Navigation() {
+  return isAuthenticationEnabled() ? (
+    <NavigationWithAuthentication />
+  ) : (
+    <NavigationWithoutAuthentication />
+  );
+}
+
+function NavigationWithoutAuthentication() {
+  const nav = {
+    ...(getStatic().data.attributes.content?.navigation || {}),
+    items: [
+      ...(getStatic().data.attributes.content?.navigation?.items || []),
+      ...DEFAULT_NAVIGATION.items,
+    ],
+  };
+  return (
+    <Group fz="md">
+      <Group py={2} px={4}>
+        <Group component="nav" gap="xs">
+          {nav.items
+            .filter((item) => {
+              return item.authenticated !== true;
+            })
+            .map((item, index) => (
+              <NavigationItemLink key={index} {...item} />
+            ))}
+        </Group>
+        {isAuthenticationEnabled() && <Authentication />}
+      </Group>
+    </Group>
+  );
+}
+
+function NavigationWithAuthentication() {
   const auth = useGlobusAuth();
-  const nav = NAVIGATION;
+  const nav = {
+    ...(getStatic().data.attributes.content?.navigation || {}),
+    items: [
+      ...(getStatic().data.attributes.content?.navigation?.items || []),
+      ...DEFAULT_NAVIGATION.items,
+    ],
+  };
   return (
     <Group fz="md">
       <Group py={2} px={4}>
@@ -79,9 +115,7 @@ export default function Navigation() {
               <NavigationItemLink key={index} {...item} />
             ))}
         </Group>
-        {withFeature("authentication", () => (
-          <Authentication />
-        ))}
+        <Authentication />
       </Group>
     </Group>
   );
@@ -104,7 +138,9 @@ export function Authentication() {
             withinPortal
           >
             <Menu.Target>
-              <Button size="sm">{user.preferred_username}</Button>
+              <Button size="sm" variant="default">
+                {user.preferred_username}
+              </Button>
             </Menu.Target>
             <Menu.Dropdown>
               <Group gap="sm" px="xs" py="sm">

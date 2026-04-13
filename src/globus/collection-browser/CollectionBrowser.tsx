@@ -76,9 +76,7 @@ export function CollectionSearch({
 
   return (
     <Stack>
-      <Box
-        style={{ position: "sticky", top: 0, zIndex: 1, background: "white" }}
-      >
+      <Box style={{ position: "sticky", top: 0, zIndex: 1 }}>
         <TextInput
           label="Collection"
           onInput={(e) => handleSearch(e as React.FormEvent<HTMLInputElement>)}

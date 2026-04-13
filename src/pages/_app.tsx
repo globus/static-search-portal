@@ -1,20 +1,23 @@
-import React, { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ThemeProvider } from "../providers/theme-provider";
 import { info } from "@globus/sdk";
 
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 
+import { ThemeProvider } from "../providers/theme-provider";
+
 import {
   getEnvironment,
   getRedirectUri,
-  isTransferEnabled,
-  isAuthenticationEnabled,
+  getMetadata,
+  getStatic,
   isFeatureEnabled,
-  METADATA,
-  STATIC,
-} from "../../static";
+} from "@from-static/generator-kit";
+
+import { isAuthenticationEnabled, isTransferEnabled } from "@generator";
+
+import { StaticError } from "@from-static/generator-kit/react/StaticError";
 
 import {
   Provider as GlobusAuthorizationManagerProvider,
@@ -30,31 +33,7 @@ declare global {
   var GLOBUS_SDK_ENVIRONMENT: string | undefined;
 }
 
-const env = getEnvironment();
-if (env) {
-  globalThis.GLOBUS_SDK_ENVIRONMENT = env;
-}
-
 info.addClientInfo(CLIENT_INFO);
-
-const redirect = getRedirectUri();
-const client = STATIC.data.attributes.globus.application?.client_id;
-const storage = isFeatureEnabled("useLocalStorage")
-  ? globalThis.localStorage
-  : undefined;
-
-const scopes = [
-  "urn:globus:auth:scope:search.api.globus.org:search",
-  /**
-   * If Globus Transfer functionality is enabled, we'll need to ask for the Transfer scope.
-   */
-  isTransferEnabled
-    ? "urn:globus:auth:scope:transfer.api.globus.org:all"
-    : null,
-]
-  .concat(STATIC.data.attributes.globus.application?.scopes || [])
-  .filter(Boolean)
-  .join(" ");
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -73,7 +52,16 @@ function reset() {
   queryClient.clear();
 }
 
-const QueryProvider = ({ children }: PropsWithChildren) => {
+const UnauthenticatedQueryProvider = ({ children }: PropsWithChildren) => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+};
+
+const AuthenticatedQueryProvider = ({ children }: PropsWithChildren) => {
   const auth = useGlobusAuth();
   useEffect(() => {
     auth?.authorization?.events.revoke.addListener(reset);
@@ -85,56 +73,88 @@ const QueryProvider = ({ children }: PropsWithChildren) => {
   }, [auth?.authorization]);
 
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 
-export default function App({ Component, pageProps }: AppProps) {
-  if (!isAuthenticationEnabled) {
+export function _App({ Component, pageProps }: AppProps) {
+  const env = getEnvironment();
+  if (env) {
+    globalThis.GLOBUS_SDK_ENVIRONMENT = env;
+  }
+
+  if (!isAuthenticationEnabled()) {
     return (
       <>
         <Head>
-          <title>{METADATA.title}</title>
-          <meta property="og:title" content={METADATA.title} key="title" />
-          <meta name="description" content={METADATA.description} />
+          <title>{getMetadata().title}</title>
+          <meta property="og:title" content={getMetadata().title} key="title" />
+          <meta name="description" content={getMetadata().description} />
         </Head>
         <ThemeProvider>
-          <QueryProvider>
+          <UnauthenticatedQueryProvider>
             <Layout>
               <Component {...pageProps} />
             </Layout>
-          </QueryProvider>
+          </UnauthenticatedQueryProvider>
         </ThemeProvider>
       </>
     );
   }
 
+  const redirect = getRedirectUri();
+  const client = getStatic().data.attributes.globus.application?.client_id;
+  const storage = isFeatureEnabled("useLocalStorage")
+    ? globalThis.localStorage
+    : undefined;
+
+  const scopes = [
+    "urn:globus:auth:scope:search.api.globus.org:search",
+    /**
+     * If Globus Transfer functionality is enabled, we'll need to ask for the Transfer scope.
+     */
+    isTransferEnabled()
+      ? "urn:globus:auth:scope:transfer.api.globus.org:all"
+      : null,
+  ]
+    .concat(getStatic().data.attributes.globus.application?.scopes || [])
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
       <Head>
-        <title>{METADATA.title}</title>
-        <meta property="og:title" content={METADATA.title} key="title" />
-        <meta name="description" content={METADATA.description} />
+        <title>{getMetadata().title}</title>
+        <meta property="og:title" content={getMetadata().title} key="title" />
+        <meta name="description" content={getMetadata().description} />
       </Head>
       <ThemeProvider>
-        <GlobusAuthorizationManagerProvider
-          redirect={redirect}
-          client={client}
-          scopes={scopes}
-          storage={storage}
-        >
-          <QueryProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </QueryProvider>
-        </GlobusAuthorizationManagerProvider>
+        {client && redirect && (
+          <GlobusAuthorizationManagerProvider
+            redirect={redirect}
+            client={client}
+            scopes={scopes}
+            storage={storage}
+          >
+            <AuthenticatedQueryProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </AuthenticatedQueryProvider>
+          </GlobusAuthorizationManagerProvider>
+        )}
       </ThemeProvider>
     </>
+  );
+}
+
+export default function App(props: AppProps) {
+  return (
+    <StaticError>
+      <_App {...props} />
+    </StaticError>
   );
 }

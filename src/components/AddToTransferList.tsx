@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, ButtonProps } from "@mantine/core";
 
 import { useGlobusTransferStore } from "@/store/globus-transfer";
 import { getTransferDetailsFromResult } from "./Result";
 
-import { getValueFromAttribute, isTransferEnabled } from "../../static";
+import { getValueFrom, getStatic } from "@from-static/generator-kit";
+
+import { isTransferEnabled } from "@generator";
 
 import type { GMetaResult } from "@globus/sdk/services/search/service/query";
 import { useGlobusAuth } from "@globus/react-auth-context";
@@ -30,16 +32,16 @@ export default function AddToTransferList({
 
   useEffect(() => {
     async function bootstrap() {
-      const heading = await getValueFromAttribute<string>(
+      const heading = await getValueFrom<string>(
         result,
-        "components.Result.heading",
+        getStatic().data.attributes.components.Result.heading,
       );
       setItemLabel(heading);
     }
     bootstrap();
   }, [result]);
 
-  return isTransferEnabled && auth.isAuthenticated ? (
+  return isTransferEnabled() && auth.isAuthenticated ? (
     <Button
       size="xs"
       variant="subtle"
@@ -50,6 +52,10 @@ export default function AddToTransferList({
 
               const { collection, path, type } =
                 await getTransferDetailsFromResult(result);
+
+              if (!collection || !path || !type) {
+                return;
+              }
 
               addTransferItem({
                 label: itemLabel || result.subject,

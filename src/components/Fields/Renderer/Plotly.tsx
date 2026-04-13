@@ -23,7 +23,9 @@ export function PlotlyRenderer(props: GlobusEmbedProps) {
       let data: Parameters<typeof Plotly.newPlot>[1] = [];
       const content = await asset.data?.content;
       if (asset.data.type === "csv") {
+        // @ts-expect-error @TODO
         const cells = content.columns.map((col: string) => {
+          // @ts-expect-error @TODO
           return content.map((row: Record<string, unknown>) => row[col]);
         });
         data = [
@@ -31,6 +33,7 @@ export function PlotlyRenderer(props: GlobusEmbedProps) {
             type: "table",
             // @ts-expect-error `header` seems to be missing from the type definition, but is supported by Plotly.
             header: {
+              // @ts-expect-error @TODO
               values: content.columns.map((col: string) => [col]),
               align: "center",
               line: { width: 1, color: "rgb(50, 50, 50)" },

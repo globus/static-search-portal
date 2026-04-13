@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { Center, Loader, Text, Group } from "@mantine/core";
-import { isFeatureEnabled } from "../../static";
 import { useOAuthStore } from "@/store/oauth";
+import { isAuthenticationEnabled } from "@generator";
 
 function Authenticate() {
   const auth = useGlobusAuth();
@@ -62,4 +62,4 @@ function Authenticate() {
   );
 }
 
-export default isFeatureEnabled("authentication") ? Authenticate : () => null;
+export default isAuthenticationEnabled() ? Authenticate : () => null;

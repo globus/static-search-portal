@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <GlobusAuthorizationManagerProvider client="abc" redirect="#">
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider env="test">{children}</ThemeProvider>
     </GlobusAuthorizationManagerProvider>
   );
 };

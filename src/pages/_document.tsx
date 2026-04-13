@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import { STATIC } from "../../static";
+import { safeParse } from "@from-static/generator-kit";
 
 /**
  * Content Security Policy (CSP) for the portal. This policy attempts to be as strict as possible,
@@ -20,10 +20,15 @@ const DEFAULT_CSP = `
     upgrade-insecure-requests;
 `;
 
-const CSP =
-  "contentSecurityPolicy" in STATIC.data.attributes
-    ? STATIC.data.attributes.contentSecurityPolicy
-    : DEFAULT_CSP;
+let CSP: string | false = DEFAULT_CSP;
+const result = safeParse();
+if (
+  result.success &&
+  "contentSecurityPolicy" in result.data.data.attributes &&
+  result.data.data.attributes.contentSecurityPolicy !== undefined
+) {
+  CSP = result.data.data.attributes.contentSecurityPolicy;
+}
 
 export default function Document() {
   return (

@@ -25,7 +25,7 @@ import { CollectionName } from "@/globus/Collection";
 import { useStat } from "@/hooks/useGlobusAPI";
 import { readableBytes } from "@globus/sdk/services/transfer/utils";
 
-import { isTransferEnabled } from "../../../static";
+import { isTransferEnabled } from "@generator";
 import { getResultLink } from "@/utils/results";
 import { Icon } from "../private/Icon";
 
@@ -105,14 +105,15 @@ export default function TransferDrawer() {
     {},
   );
 
-  return isTransferEnabled ? (
+  return isTransferEnabled() ? (
     <>
       <Button
         disabled={pathname === "/transfer"}
         size="sm"
+        variant="subtle"
         onClick={open}
         rightSection={
-          <Badge variant="default" circle>
+          <Badge variant="filled" color="red" circle size="sm">
             {items.length}
           </Badge>
         }

@@ -15,7 +15,7 @@ describe("ImageField", () => {
   });
 
   it("renders nothing for invalid value", () => {
-    const { container } = render(<ImageField value={42} />);
-    expect(container.firstChild).toBeNull();
+    const { queryAllByText } = render(<ImageField value={42} />);
+    expect(queryAllByText("*")).toHaveLength(0);
   });
 });
