@@ -138,7 +138,7 @@ export function Authentication() {
             withinPortal
           >
             <Menu.Target>
-              <Button size="sm" variant="default">
+              <Button size="xs" variant="default">
                 {user.preferred_username}
               </Button>
             </Menu.Target>

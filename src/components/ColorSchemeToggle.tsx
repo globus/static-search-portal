@@ -22,8 +22,7 @@ export function ColorSchemeToggle() {
         setColorScheme(computedColorScheme === "light" ? "dark" : "light")
       }
       variant="subtle"
-      color="primary"
-      size="sm"
+      size="md"
       aria-label="Toggle color scheme"
     >
       <Icon
