@@ -2,10 +2,10 @@ import { createContext, useContext, PropsWithChildren, useMemo } from "react";
 import { StaticConfiguration } from "../schemas/static";
 import { isFeatureEnabled } from "../index";
 
-interface StaticAPI {
+interface StaticAPI<TConfig extends StaticConfiguration> {
   state: {
     preview: boolean;
-    config: StaticConfiguration;
+    config: TConfig;
   };
 
   helpers: {
@@ -13,18 +13,20 @@ interface StaticAPI {
   };
 }
 
-const StaticContext = createContext<StaticAPI | null>(null);
+const StaticContext = createContext<StaticAPI<StaticConfiguration> | null>(
+  null,
+);
 
-export function StaticProvider({
+export function StaticProvider<TConfig extends StaticConfiguration>({
   state,
   children,
 }: PropsWithChildren<{
   state: {
-    preview?: StaticAPI["state"]["preview"];
-    config: StaticAPI["state"]["config"];
+    preview?: StaticAPI<TConfig>["state"]["preview"];
+    config: TConfig;
   };
 }>) {
-  const api = useMemo<StaticAPI>(() => {
+  const api = useMemo<StaticAPI<TConfig>>(() => {
     return {
       state: {
         preview: state?.preview || false,
@@ -41,7 +43,7 @@ export function StaticProvider({
   );
 }
 
-export function useStatic(): StaticAPI {
+export function useStatic() {
   const context = useContext(StaticContext);
   if (!context) {
     throw new Error("useStatic must be used within a StaticProvider");

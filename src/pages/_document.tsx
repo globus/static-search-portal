@@ -1,5 +1,6 @@
 import { Html, Head, Main, NextScript } from "next/document";
 import { safeParse } from "@from-static/generator-kit";
+import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
 
 /**
  * Content Security Policy (CSP) for the portal. This policy attempts to be as strict as possible,
@@ -32,11 +33,12 @@ if (
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="en" {...mantineHtmlProps}>
       <Head>
         {CSP !== false && (
           <meta httpEquiv="Content-Security-Policy" content={CSP} />
         )}
+        <ColorSchemeScript defaultColorScheme="auto" />
       </Head>
       <body>
         <Main />

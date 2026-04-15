@@ -2,7 +2,10 @@ import { create } from "zustand";
 
 import { getStatic } from "@from-static/generator-kit";
 
-import type { GFacetResult } from "@globus/sdk/services/search/service/query";
+import type {
+  GFacetResult,
+  GFilter,
+} from "@globus/sdk/services/search/service/query";
 
 const FACETS = getStatic().data.attributes.globus.search.facets || [];
 
@@ -23,6 +26,7 @@ export type SearchState = {
   context: {
     limit: number;
     offset: number;
+    filters: GFilter[];
     facetFilters: Record<
       string,
       {
@@ -35,6 +39,7 @@ export type SearchState = {
   actions: {
     setLimit: (limit: number) => void;
     setOffset: (offset: number) => void;
+    setFilter: (filter: GFilter) => void;
     setFacetFilter: (facet: GFacetResult, value: string[]) => void;
     resetFacetFilters: () => void;
   };
@@ -44,6 +49,7 @@ export const useSearchStore = create<SearchState>()((set) => ({
   context: {
     limit: 25,
     offset: 0,
+    filters: [],
     facetFilters: {},
   },
   actions: {
@@ -62,6 +68,28 @@ export const useSearchStore = create<SearchState>()((set) => ({
           offset,
         },
       })),
+    setFilter: (filter: GFilter) =>
+      set((state) => {
+        const existingFilterIndex = state.context.filters.findIndex(
+          (f) => f.field_name === filter.field_name,
+        );
+        let newFilters = [...state.context.filters];
+        if (!filter.values || filter.values.length === 0) {
+          if (existingFilterIndex !== -1) {
+            newFilters.splice(existingFilterIndex, 1);
+          }
+        } else if (existingFilterIndex !== -1) {
+          newFilters[existingFilterIndex] = filter;
+        } else {
+          newFilters.push(filter);
+        }
+        return {
+          context: {
+            ...state.context,
+            filters: newFilters,
+          },
+        };
+      }),
     setFacetFilter: (facet: GFacetResult, value: string[]) =>
       set((state) => {
         const fieldName = getFacetFieldNameByName(facet.name);
