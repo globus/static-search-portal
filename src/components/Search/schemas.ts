@@ -100,11 +100,13 @@ const GLikeFilter = z.object({
 
 const UITypes = z.enum(["date", "datetime", "number", "string"]);
 
-const UIPropsSchema = z.object({
-  label: z.string().optional(),
-  description: z.string().optional(),
-  type: UITypes.optional(),
-});
+const UIPropsSchema = z
+  .object({
+    label: z.string().optional(),
+    description: z.string().optional(),
+    type: UITypes.optional(),
+  })
+  .and(z.looseRecord(z.string(), z.unknown()).optional());
 
 export const FilterComponentSchema = z.discriminatedUnion("type", [
   MatchAnyFilter.extend({

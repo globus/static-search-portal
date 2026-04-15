@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchActions } from "@/store/search";
 import { useStatic } from "@from-static/generator-kit/react/StaticProvider";
 import {
@@ -9,9 +10,9 @@ import {
   Group,
 } from "@mantine/core";
 import { DatePickerInput, DateTimePicker } from "@mantine/dates";
-import { useCallback, useMemo, useState } from "react";
 import z from "zod";
 import { FilterComponentSchema } from "./schemas";
+import dayjs from "dayjs";
 
 type FilterComponentProps = z.infer<typeof FilterComponentSchema>;
 
@@ -87,6 +88,29 @@ function DateRange({ ui, field_name, type }: FilterComponentProps) {
       placeholder="Select date range"
       clearable
       onChange={onChange}
+      presets={[
+        {
+          value: [
+            dayjs().subtract(60, "day").format("YYYY-MM-DD"),
+            dayjs().format("YYYY-MM-DD"),
+          ],
+          label: "Last 60 days",
+        },
+        {
+          value: [
+            dayjs().subtract(30, "day").format("YYYY-MM-DD"),
+            dayjs().format("YYYY-MM-DD"),
+          ],
+          label: "Last 30 days",
+        },
+        {
+          value: [
+            dayjs().subtract(7, "day").format("YYYY-MM-DD"),
+            dayjs().format("YYYY-MM-DD"),
+          ],
+          label: "Last 7 days",
+        },
+      ]}
       {...componentProps}
     />
   );
@@ -94,35 +118,71 @@ function DateRange({ ui, field_name, type }: FilterComponentProps) {
 
 function DateTimeRange({ ui, field_name, type }: FilterComponentProps) {
   const actions = useSearchActions();
+  const [from, setFrom] = useState<string | null>(null);
+  const [to, setTo] = useState<string | null>(null);
+
   const { label, type: _uiType, ...componentProps } = ui || {};
 
-  const onChange = useCallback(
-    ([from, to]: [string, string]) => {
-      actions.setFilter({
-        field_name,
-        type: "range",
-        values: [
-          {
-            from,
-            to,
-          },
-        ],
-      });
+  useEffect(() => {
+    const values = from || to ? [{ from: from ?? "*", to: to ?? "*" }] : [];
+
+    actions.setFilter({
+      field_name,
+      type: "range",
+      values,
+    });
+  }, [actions, field_name, from, to]);
+
+  const presets = [
+    {
+      value: dayjs().subtract(60, "day").format("YYYY-MM-DD HH:mm:ss"),
+      label: "60 days ago",
     },
-    [actions, field_name],
-  );
+    {
+      value: dayjs().subtract(30, "day").format("YYYY-MM-DD HH:mm:ss"),
+      label: "30 days ago",
+    },
+    {
+      value: dayjs().subtract(1, "month").format("YYYY-MM-DD HH:mm:ss"),
+      label: "Last month",
+    },
+    {
+      value: dayjs().subtract(1, "day").format("YYYY-MM-DD HH:mm:ss"),
+      label: "Yesterday",
+    },
+    {
+      value: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+      label: "Now",
+    },
+  ];
 
   return (
-    <Group grow>
-      <DateTimePicker
-        label="From"
-        onChange={(value) => onChange([value?.toISOString() || "", ""])}
-      />
-      <DateTimePicker
-        label="To"
-        onChange={(value) => onChange(["", value?.toISOString() || ""])}
-      />
-    </Group>
+    <InputWrapper label={label ?? field_name} description={ui?.description}>
+      <Group grow mx="xs">
+        <DateTimePicker
+          valueFormat="YYYY-MM-DD HH:mm:ss"
+          size="xs"
+          label="From"
+          name="from"
+          onChange={setFrom}
+          maxDate={to ?? undefined}
+          defaultDate={to ?? undefined}
+          clearable
+          presets={presets}
+        />
+        <DateTimePicker
+          valueFormat="YYYY-MM-DD HH:mm:ss"
+          size="xs"
+          label="To"
+          name="to"
+          defaultDate={from ?? undefined}
+          onChange={setTo}
+          minDate={from ?? undefined}
+          clearable
+          presets={presets}
+        />
+      </Group>
+    </InputWrapper>
   );
 }
 
