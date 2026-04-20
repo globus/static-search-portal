@@ -1,10 +1,12 @@
-import _STATIC from "./static.json";
+import _STATIC from "./static.json" with { type: "json" };
 import { defaultsDeep, get as _get } from "lodash";
 import { ThemeSettings } from "@/theme";
 
 import type { ResultListingComponentOptions } from "@/components/ResultListing";
 import type { ResultComponentOptions } from "@/components/Result";
 import { NavigationOptions } from "@/components/Navigation";
+
+import type { GFacet } from "@globus/sdk/services/search/service/query";
 
 /**
  * The base type for a `static.json` file.
@@ -145,12 +147,7 @@ export type Data = {
          * The UUID of the Globus Search Index that will be used as the data source.
          */
         index: string;
-        facets?: {
-          name?: string;
-          field_name: string;
-          type: string;
-          size: number;
-        }[];
+        facets?: GFacet[];
       };
     };
   };
