@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.3](https://github.com/globus/static-search-portal/compare/1.7.2...1.7.3) (2026-11-16)
+
+
+### Fixes
+
+* Adds gaccess.io to the default Content-Security Policy ([#454](https://github.com/globus/static-search-portal/issues/454)) ([c7fc5bd](https://github.com/globus/static-search-portal/commit/c7fc5bdf550f8ed637e05b525277789ef414db7d))
+
 ## [1.7.2](https://github.com/globus/static-search-portal/compare/1.7.1...1.7.2) (2025-12-15)
 
 
