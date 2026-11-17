@@ -1,7 +1,10 @@
 {
   "name": "@globus/static-search-portal",
   "version": "1.7.4",
-  "repository": "github:globus/static-search-portal",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/globus/static-search-portal.git"
+  },
   "files": [],
   "license": "Apache-2.0",
   "scripts": {
