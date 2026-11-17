@@ -22,14 +22,14 @@ jobs:
       # Publish to NPM
       - uses: actions/checkout@v7
         # Only run if a release was created
-        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v7
         with:
           node-version: lts/lithium
           registry-url: "https://registry.npmjs.org"
           scope: "@globus"
-        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        if: ${{ steps.release.outputs.release_created }}
       - run: npm ci
-        if: ${{ steps.release.outputs.releases_created == 'true'  }}
+        if: ${{ steps.release.outputs.release_created  }}
       - run: npm publish --access public
-        if: ${{ steps.release.outputs.releases_created == 'true' }}
+        if: ${{ steps.release.outputs.release_created }}
