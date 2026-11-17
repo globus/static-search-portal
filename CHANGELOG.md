@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.5](https://github.com/globus/static-search-portal/compare/1.7.4...1.7.5) (2026-11-17)
+
+
+### Fixes
+
+* Publishing Updates ([9c74f1b](https://github.com/globus/static-search-portal/commit/9c74f1bfd129689b173989187fecb15eb5df2ed4))
+
 ## [1.7.4](https://github.com/globus/static-search-portal/compare/1.7.3...1.7.4) (2026-11-17)
 
 
