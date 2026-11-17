@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.6](https://github.com/globus/static-search-portal/compare/1.7.5...1.7.6) (2026-11-17)
+
+
+### Fixes
+
+* Update browserslist and fix for invalid @globus/sdk type ([cffe55a](https://github.com/globus/static-search-portal/commit/cffe55a4ad4c836fd1485e753c0814b2cdb7a929))
+
 ## [1.7.5](https://github.com/globus/static-search-portal/compare/1.7.4...1.7.5) (2026-11-17)
 
 
