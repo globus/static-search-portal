@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.4](https://github.com/globus/static-search-portal/compare/1.7.3...1.7.4) (2026-11-17)
+
+
+### Fixes
+
+* Update @globus/sdk ([bf8f039](https://github.com/globus/static-search-portal/commit/bf8f039997046363604278e573b8d4ae390becab))
+
 ## [1.7.3](https://github.com/globus/static-search-portal/compare/1.7.2...1.7.3) (2026-11-16)
 
 
